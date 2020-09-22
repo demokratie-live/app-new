@@ -3,7 +3,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import styled from 'styled-components/native';
 import { ProcedureList } from 'screens/ProcedureList';
 import { ListType } from 'generated/graphql';
-import { getTheme } from 'styles/theme';
 
 export type BundestagTabNavigatorParamList = {
   Sitzungswoche: { list: ListType };
@@ -32,9 +31,7 @@ const Navigator = styled(Tab.Navigator).attrs(({ theme }) => ({
 
 export const BundestagTabNavigator: React.FC = () => {
   return (
-    <Navigator
-      lazy={true}
-      sceneContainerStyle={{ backgroundColor: getTheme().backgroundColor }}>
+    <Navigator lazy={true}>
       <Tab.Screen
         name="Sitzungswoche"
         component={ProcedureList}

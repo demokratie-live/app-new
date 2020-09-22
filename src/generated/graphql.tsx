@@ -1,9 +1,7 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -37,18 +35,22 @@ export type Query = {
   voteStatistic?: Maybe<VoteStatistic>;
 };
 
+
 export type QueryActivityIndexArgs = {
   procedureId: Scalars['String'];
 };
+
 
 export type QueryDeputiesOfConstituencyArgs = {
   constituency: Scalars['String'];
   directCandidate?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type QueryProcedureArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryProceduresArgs = {
   listTypes?: Maybe<Array<ListType>>;
@@ -59,11 +61,13 @@ export type QueryProceduresArgs = {
   filter?: Maybe<ProcedureFilter>;
 };
 
+
 export type QueryProceduresByIdArgs = {
   ids: Array<Scalars['String']>;
   pageSize?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
 };
+
 
 export type QueryProceduresByIdHavingVoteResultsArgs = {
   procedureIds?: Maybe<Array<Scalars['String']>>;
@@ -73,22 +77,27 @@ export type QueryProceduresByIdHavingVoteResultsArgs = {
   filter?: Maybe<ProcedureWomFilter>;
 };
 
+
 export type QuerySearchProceduresArgs = {
   term: Scalars['String'];
 };
+
 
 export type QuerySearchProceduresAutocompleteArgs = {
   term: Scalars['String'];
 };
 
+
 export type QueryProceduresWithVoteResultsArgs = {
   procedureIds: Array<Scalars['String']>;
 };
+
 
 export type QueryVotesArgs = {
   procedure: Scalars['ID'];
   constituencies?: Maybe<Array<Scalars['String']>>;
 };
+
 
 export type QueryCommunityVotesArgs = {
   procedure: Scalars['ID'];
@@ -108,6 +117,7 @@ export type ConferenceWeek = {
   calendarWeek: Scalars['Int'];
 };
 
+
 export type Deputy = {
   __typename?: 'Deputy';
   _id: Scalars['ID'];
@@ -123,6 +133,7 @@ export type Deputy = {
   totalProcedures?: Maybe<Scalars['Int']>;
   procedures: Array<DeputyProcedure>;
 };
+
 
 export type DeputyProceduresArgs = {
   procedureIds?: Maybe<Array<Scalars['String']>>;
@@ -154,7 +165,7 @@ export enum VoteSelection {
   Yes = 'YES',
   No = 'NO',
   Abstination = 'ABSTINATION',
-  Notvoted = 'NOTVOTED',
+  Notvoted = 'NOTVOTED'
 }
 
 export type Procedure = {
@@ -190,6 +201,7 @@ export type Procedure = {
   verified?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type ProcedureCommunityVotesArgs = {
   constituencies?: Maybe<Array<Scalars['String']>>;
 };
@@ -217,6 +229,7 @@ export type VoteResult = {
   partyVotes: Array<PartyVote>;
   deputyVotes: Array<DeputyVote>;
 };
+
 
 export type VoteResultDeputyVotesArgs = {
   constituencies?: Maybe<Array<Scalars['String']>>;
@@ -267,7 +280,7 @@ export enum ProcedureType {
   Preparation = 'PREPARATION',
   Voting = 'VOTING',
   Past = 'PAST',
-  Hot = 'HOT',
+  Hot = 'HOT'
 }
 
 export enum ListType {
@@ -276,7 +289,7 @@ export enum ListType {
   Past = 'PAST',
   Hot = 'HOT',
   Top100 = 'TOP100',
-  ConferenceweeksPlanned = 'CONFERENCEWEEKS_PLANNED',
+  ConferenceweeksPlanned = 'CONFERENCEWEEKS_PLANNED'
 }
 
 export type NotificationSettings = {
@@ -309,7 +322,7 @@ export enum VotedTimeSpan {
   LastQuarter = 'LastQuarter',
   CurrentYear = 'CurrentYear',
   LastYear = 'LastYear',
-  Period = 'Period',
+  Period = 'Period'
 }
 
 export type ProcedureWomFilter = {
@@ -367,14 +380,17 @@ export type Mutation = {
   vote: Vote;
 };
 
+
 export type MutationIncreaseActivityArgs = {
   procedureId: Scalars['String'];
 };
+
 
 export type MutationRequestCodeArgs = {
   newPhone: Scalars['String'];
   oldPhoneHash?: Maybe<Scalars['String']>;
 };
+
 
 export type MutationRequestVerificationArgs = {
   code: Scalars['String'];
@@ -382,10 +398,12 @@ export type MutationRequestVerificationArgs = {
   newUser?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type MutationAddTokenArgs = {
   token: Scalars['String'];
   os: Scalars['String'];
 };
+
 
 export type MutationUpdateNotificationSettingsArgs = {
   enabled?: Maybe<Scalars['Boolean']>;
@@ -401,17 +419,21 @@ export type MutationUpdateNotificationSettingsArgs = {
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+
 export type MutationToggleNotificationArgs = {
   procedureId: Scalars['String'];
 };
+
 
 export type MutationFinishSearchArgs = {
   term: Scalars['String'];
 };
 
+
 export type MutationSignUpArgs = {
   deviceHashEncrypted: Scalars['String'];
 };
+
 
 export type MutationVoteArgs = {
   procedure: Scalars['ID'];
@@ -454,16 +476,33 @@ export type Schema = {
   query?: Maybe<Query>;
 };
 
-export type ListItemFragment = { __typename?: 'Procedure' } & Pick<
-  Procedure,
-  'procedureId' | 'title' | 'sessionTOPHeading' | 'voteDate'
-> &
-  VoteIndexFragment;
+export type ListItemFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId' | 'title' | 'sessionTOPHeading' | 'voteDate'>
+  & VoteIndexFragment
+);
 
-export type VoteIndexFragment = { __typename?: 'Procedure' } & Pick<
-  Procedure,
-  'voted' | 'votes'
->;
+export type VoteIndexFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'voted' | 'votes'>
+);
+
+export type CommunityVotesPieChartFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'voted'>
+  & { communityVotes?: Maybe<(
+    { __typename?: 'CommunityVotes' }
+    & Pick<CommunityVotes, 'yes' | 'abstination' | 'no'>
+  )> }
+);
+
+export type GovernmentVotesPieChartFragment = (
+  { __typename?: 'Procedure' }
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'notVoted'>
+  )> }
+);
 
 export type ProceduresListQueryVariables = Exact<{
   offset?: Maybe<Scalars['Int']>;
@@ -472,48 +511,65 @@ export type ProceduresListQueryVariables = Exact<{
   filter?: Maybe<ProcedureFilter>;
 }>;
 
-export type ProceduresListQuery = { __typename?: 'Query' } & {
-  procedures: Array<
-    { __typename?: 'Procedure' } & Pick<Procedure, 'procedureId'> &
-      ListItemFragment
-  >;
-};
+
+export type ProceduresListQuery = (
+  { __typename?: 'Query' }
+  & { procedures: Array<(
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId'>
+    & ListItemFragment
+    & CommunityVotesPieChartFragment
+    & GovernmentVotesPieChartFragment
+  )> }
+);
 
 export const VoteIndexFragmentDoc = gql`
-  fragment VoteIndex on Procedure {
-    voted
-    votes
-  }
-`;
+    fragment VoteIndex on Procedure {
+  voted
+  votes
+}
+    `;
 export const ListItemFragmentDoc = gql`
-  fragment ListItem on Procedure {
-    procedureId
-    title
-    sessionTOPHeading
-    voteDate
-    ...VoteIndex
+    fragment ListItem on Procedure {
+  procedureId
+  title
+  sessionTOPHeading
+  voteDate
+  ...VoteIndex
+}
+    ${VoteIndexFragmentDoc}`;
+export const CommunityVotesPieChartFragmentDoc = gql`
+    fragment CommunityVotesPieChart on Procedure {
+  communityVotes {
+    yes
+    abstination
+    no
   }
-  ${VoteIndexFragmentDoc}
-`;
+  voted
+}
+    `;
+export const GovernmentVotesPieChartFragmentDoc = gql`
+    fragment GovernmentVotesPieChart on Procedure {
+  voteResults {
+    yes
+    abstination
+    no
+    notVoted
+  }
+}
+    `;
 export const ProceduresListDocument = gql`
-  query ProceduresList(
-    $offset: Int
-    $pageSize: Int
-    $listTypes: [ListType!]
-    $filter: ProcedureFilter
-  ) {
-    procedures(
-      offset: $offset
-      pageSize: $pageSize
-      listTypes: $listTypes
-      filter: $filter
-    ) {
-      procedureId
-      ...ListItem
-    }
+    query ProceduresList($offset: Int, $pageSize: Int, $listTypes: [ListType!], $filter: ProcedureFilter) {
+  procedures(offset: $offset, pageSize: $pageSize, listTypes: $listTypes, filter: $filter) {
+    procedureId
+    ...ListItem
+    ...CommunityVotesPieChart
+    ...GovernmentVotesPieChart
   }
-  ${ListItemFragmentDoc}
-`;
+}
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
 
 /**
  * __useProceduresListQuery__
@@ -534,53 +590,31 @@ export const ProceduresListDocument = gql`
  *   },
  * });
  */
-export function useProceduresListQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ProceduresListQuery,
-    ProceduresListQueryVariables
-  >,
-) {
-  return Apollo.useQuery<ProceduresListQuery, ProceduresListQueryVariables>(
-    ProceduresListDocument,
-    baseOptions,
-  );
-}
-export function useProceduresListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProceduresListQuery,
-    ProceduresListQueryVariables
-  >,
-) {
-  return Apollo.useLazyQuery<ProceduresListQuery, ProceduresListQueryVariables>(
-    ProceduresListDocument,
-    baseOptions,
-  );
-}
-export type ProceduresListQueryHookResult = ReturnType<
-  typeof useProceduresListQuery
->;
-export type ProceduresListLazyQueryHookResult = ReturnType<
-  typeof useProceduresListLazyQuery
->;
-export type ProceduresListQueryResult = Apollo.QueryResult<
-  ProceduresListQuery,
-  ProceduresListQueryVariables
->;
+export function useProceduresListQuery(baseOptions?: Apollo.QueryHookOptions<ProceduresListQuery, ProceduresListQueryVariables>) {
+        return Apollo.useQuery<ProceduresListQuery, ProceduresListQueryVariables>(ProceduresListDocument, baseOptions);
+      }
+export function useProceduresListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProceduresListQuery, ProceduresListQueryVariables>) {
+          return Apollo.useLazyQuery<ProceduresListQuery, ProceduresListQueryVariables>(ProceduresListDocument, baseOptions);
+        }
+export type ProceduresListQueryHookResult = ReturnType<typeof useProceduresListQuery>;
+export type ProceduresListLazyQueryHookResult = ReturnType<typeof useProceduresListLazyQuery>;
+export type ProceduresListQueryResult = Apollo.QueryResult<ProceduresListQuery, ProceduresListQueryVariables>;
 
-export interface IntrospectionResultData {
-  __schema: {
-    types: {
-      kind: string;
-      name: string;
-      possibleTypes: {
-        name: string;
-      }[];
-    }[];
-  };
-}
-const result: IntrospectionResultData = {
-  __schema: {
-    types: [],
-  },
+      export interface IntrospectionResultData {
+        __schema: {
+          types: {
+            kind: string;
+            name: string;
+            possibleTypes: {
+              name: string;
+            }[];
+          }[];
+        };
+      }
+      const result: IntrospectionResultData = {
+  "__schema": {
+    "types": []
+  }
 };
-export default result;
+      export default result;
+    

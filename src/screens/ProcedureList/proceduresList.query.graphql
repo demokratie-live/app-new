@@ -12,5 +12,7 @@ query ProceduresList(
   ) {
     procedureId
     ...ListItem
+    ...CommunityVotesPieChart
+    ...GovernmentVotesPieChart
   }
 }

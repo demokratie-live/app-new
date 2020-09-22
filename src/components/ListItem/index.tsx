@@ -10,6 +10,8 @@ import { filter } from 'graphql-anywhere';
 
 const Container = styled.View`
   flex-direction: row;
+  padding-horizontal: ${({ theme }) => theme.paddings.outer};
+  padding-vertical: ${({ theme }) => theme.paddings.outer};
 `;
 
 const TextContainer = styled.View`
@@ -34,8 +36,15 @@ const SideContainer = styled.View`
   justify-content: space-between;
 `;
 
+const PieChartContainer = styled.View`
+  flex-direction: row;
+  width: 45px;
+  justify-content: space-between;
+`;
+
 interface Props extends ListItemFragment {
   isIntro?: boolean;
+  renderPieCharts?: React.ReactNode[];
 }
 
 export const ListItem: React.FC<Props> = ({
@@ -44,6 +53,7 @@ export const ListItem: React.FC<Props> = ({
   sessionTOPHeading,
   voted,
   votes,
+  renderPieCharts,
 }) => {
   return (
     <Container>
@@ -57,6 +67,7 @@ export const ListItem: React.FC<Props> = ({
       </TextContainer>
       <SideContainer>
         <VotesIndex {...filter(VoteIndexFragmentDoc, { voted, votes })} />
+        <PieChartContainer>{renderPieCharts}</PieChartContainer>
       </SideContainer>
     </Container>
   );

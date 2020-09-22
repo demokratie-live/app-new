@@ -7,6 +7,8 @@ import { Instructions, InstructionsScreenOptions } from './instructions';
 import { InstructionsContext } from '../context/instructions';
 import { getReadableVersion } from 'react-native-device-info';
 import { Sidebar } from './Sidebar';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
 
 export type RootStackParamList = {
   Sidebar: undefined;
@@ -31,7 +33,6 @@ export const Navigation = () => {
   if (showInstructions === undefined) {
     return <ActivityIndicator size="large" />;
   }
-  // setLastStartWithVersion('1.0.0');
 
   return (
     <NavigationContainer>

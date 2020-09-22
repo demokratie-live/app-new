@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { BundestagTabNavigator } from './TabNavigation';
 import styled from 'styled-components/native';
-import { getTheme } from 'styles/theme';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
