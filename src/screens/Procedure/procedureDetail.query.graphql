@@ -1,0 +1,8 @@
+query ProcedureDetail($id: ID!) {
+  procedure(id: $id) {
+    procedureId
+    ...ListItem
+    ...CommunityVotesPieChart
+    ...GovernmentVotesPieChart
+  }
+}

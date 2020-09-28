@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { BundestagTabNavigator } from './TabNavigation';
 import styled from 'styled-components/native';
+import { ProcedureDetailScreen } from 'screens/Procedure';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
@@ -43,6 +44,7 @@ export const BundestagStackNavigator: React.FC = () => {
           title: 'Bundestag',
         }}
       />
+      <Stack.Screen name="Procedure" component={ProcedureDetailScreen} />
     </Navigator>
   );
 };

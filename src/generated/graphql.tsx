@@ -478,18 +478,51 @@ export type Schema = {
 
 export type ListItemFragment = (
   { __typename?: 'Procedure' }
-  & Pick<Procedure, 'procedureId' | 'title' | 'sessionTOPHeading' | 'voteDate'>
+  & Pick<Procedure, 'procedureId' | 'title' | 'sessionTOPHeading'>
   & VoteIndexFragment
+  & VoteDateFragment
+);
+
+export type VoteDateFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'voteDate' | 'voteEnd'>
 );
 
 export type VoteIndexFragment = (
   { __typename?: 'Procedure' }
-  & Pick<Procedure, 'voted' | 'votes'>
+  & Pick<Procedure, 'votes' | 'voted'>
+);
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'verified'>
+  )> }
+);
+
+export type ProcedureDetailQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ProcedureDetailQuery = (
+  { __typename?: 'Query' }
+  & { procedure: (
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId'>
+    & ListItemFragment
+    & CommunityVotesPieChartFragment
+    & GovernmentVotesPieChartFragment
+  ) }
 );
 
 export type CommunityVotesPieChartFragment = (
   { __typename?: 'Procedure' }
-  & Pick<Procedure, 'voted'>
+  & Pick<Procedure, 'procedureId' | 'voted'>
   & { communityVotes?: Maybe<(
     { __typename?: 'CommunityVotes' }
     & Pick<CommunityVotes, 'yes' | 'abstination' | 'no'>
@@ -516,7 +549,7 @@ export type ProceduresListQuery = (
   { __typename?: 'Query' }
   & { procedures: Array<(
     { __typename?: 'Procedure' }
-    & Pick<Procedure, 'procedureId'>
+    & Pick<Procedure, 'procedureId' | 'title'>
     & ListItemFragment
     & CommunityVotesPieChartFragment
     & GovernmentVotesPieChartFragment
@@ -525,8 +558,14 @@ export type ProceduresListQuery = (
 
 export const VoteIndexFragmentDoc = gql`
     fragment VoteIndex on Procedure {
-  voted
   votes
+  voted
+}
+    `;
+export const VoteDateFragmentDoc = gql`
+    fragment VoteDate on Procedure {
+  voteDate
+  voteEnd
 }
     `;
 export const ListItemFragmentDoc = gql`
@@ -534,12 +573,14 @@ export const ListItemFragmentDoc = gql`
   procedureId
   title
   sessionTOPHeading
-  voteDate
   ...VoteIndex
+  ...VoteDate
 }
-    ${VoteIndexFragmentDoc}`;
+    ${VoteIndexFragmentDoc}
+${VoteDateFragmentDoc}`;
 export const CommunityVotesPieChartFragmentDoc = gql`
     fragment CommunityVotesPieChart on Procedure {
+  procedureId
   communityVotes {
     yes
     abstination
@@ -558,10 +599,82 @@ export const GovernmentVotesPieChartFragmentDoc = gql`
   }
 }
     `;
+export const MeDocument = gql`
+    query Me {
+  me {
+    _id
+    verified
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ProcedureDetailDocument = gql`
+    query ProcedureDetail($id: ID!) {
+  procedure(id: $id) {
+    procedureId
+    ...ListItem
+    ...CommunityVotesPieChart
+    ...GovernmentVotesPieChart
+  }
+}
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
+
+/**
+ * __useProcedureDetailQuery__
+ *
+ * To run a query within a React component, call `useProcedureDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProcedureDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProcedureDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProcedureDetailQuery(baseOptions?: Apollo.QueryHookOptions<ProcedureDetailQuery, ProcedureDetailQueryVariables>) {
+        return Apollo.useQuery<ProcedureDetailQuery, ProcedureDetailQueryVariables>(ProcedureDetailDocument, baseOptions);
+      }
+export function useProcedureDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProcedureDetailQuery, ProcedureDetailQueryVariables>) {
+          return Apollo.useLazyQuery<ProcedureDetailQuery, ProcedureDetailQueryVariables>(ProcedureDetailDocument, baseOptions);
+        }
+export type ProcedureDetailQueryHookResult = ReturnType<typeof useProcedureDetailQuery>;
+export type ProcedureDetailLazyQueryHookResult = ReturnType<typeof useProcedureDetailLazyQuery>;
+export type ProcedureDetailQueryResult = Apollo.QueryResult<ProcedureDetailQuery, ProcedureDetailQueryVariables>;
 export const ProceduresListDocument = gql`
     query ProceduresList($offset: Int, $pageSize: Int, $listTypes: [ListType!], $filter: ProcedureFilter) {
   procedures(offset: $offset, pageSize: $pageSize, listTypes: $listTypes, filter: $filter) {
     procedureId
+    title
     ...ListItem
     ...CommunityVotesPieChart
     ...GovernmentVotesPieChart

@@ -15,20 +15,24 @@ import {
 } from 'generated/graphql';
 import { ListItem } from 'components/ListItem';
 import { filter } from 'graphql-anywhere';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { BundestagTabNavigatorParamList } from 'navigation/Sidebar/Bundestag/TabNavigation';
+import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import { CommunityPieChart } from './components/CommunityPieChart';
 import { GovernmentPieChart } from './components/GovernmentPieChart';
 import { ListItemSeperator } from 'components/ListItem/components/ListItemSeperator';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagTabNavigatorParamList,
   'Sitzungswoche' | 'Top' | 'Vergangen'
 >;
 
-type Props = {
-  route: ProfileScreenRouteProp;
-};
+type NavigationProp = StackNavigationProp<
+  BundestagStackNavigatorParamList,
+  'Procedure'
+>;
 
 const LoadingContainer = styled.View`
   flex: 1;
@@ -40,7 +44,12 @@ const Container = styled(FlatList as new () => FlatList<Procedure>)`
   background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
+type Props = {
+  route: ProfileScreenRouteProp;
+};
+
 export const ProcedureList: React.FC<Props> = ({ route }) => {
+  const navigation = useNavigation<NavigationProp>();
   const { data, loading, fetchMore } = useProceduresListQuery({
     variables: {
       listTypes: [route.params.list],
@@ -57,20 +66,28 @@ export const ProcedureList: React.FC<Props> = ({ route }) => {
   }
 
   const renderItem: ListRenderItem<Procedure> = ({ item }) => (
-    <ListItem
+    <TouchableOpacity
       key={item.procedureId}
-      {...filter(ListItemFragmentDoc, item)}
-      renderPieCharts={[
-        <GovernmentPieChart
-          key={`government-piechart-${item.procedureId}`}
-          {...filter(GovernmentVotesPieChartFragmentDoc, item)}
-        />,
-        <CommunityPieChart
-          key={`community-piechart-${item.procedureId}`}
-          {...filter(CommunityVotesPieChartFragmentDoc, item)}
-        />,
-      ]}
-    />
+      onPress={() =>
+        navigation.navigate('Procedure', {
+          procedureId: item.procedureId,
+          title: item.title,
+        })
+      }>
+      <ListItem
+        {...filter(ListItemFragmentDoc, item)}
+        renderPieCharts={[
+          <GovernmentPieChart
+            key={`government-piechart-${item.procedureId}`}
+            {...filter(GovernmentVotesPieChartFragmentDoc, item)}
+          />,
+          <CommunityPieChart
+            key={`community-piechart-${item.procedureId}`}
+            {...filter(CommunityVotesPieChartFragmentDoc, item)}
+          />,
+        ]}
+      />
+    </TouchableOpacity>
   );
 
   const renderListFooterComponent = () => {

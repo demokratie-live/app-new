@@ -11,6 +11,7 @@ query ProceduresList(
     filter: $filter
   ) {
     procedureId
+    title
     ...ListItem
     ...CommunityVotesPieChart
     ...GovernmentVotesPieChart

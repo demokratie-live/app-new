@@ -1,4 +1,4 @@
 fragment VoteIndex on Procedure {
-  voted
   votes
+  voted
 }

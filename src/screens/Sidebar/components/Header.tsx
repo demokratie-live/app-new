@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { HeadLogo } from './HeadLogo';
-import { ActivityIndicator } from 'react-native';
-import { ConstituencyContext } from '../../../context/constituency';
+import { ConstituencyContext } from 'context/constituency';
 import constituencies from '../../../assets/svgs/constituencies';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthContext } from 'context/Auth';
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -22,12 +25,18 @@ const HeadText = styled.Text`
   padding-left: 16px;
 `;
 
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Sidebar'>;
+
 interface Props {}
 
 export const Header: React.FC<Props> = ({}) => {
-  const onPress = () => {};
-  const label: string = true ? 'label' : 'label-false';
+  const navigation = useNavigation<NavigationProp>();
+  const { isVerified, loading } = useContext(AuthContext);
   const { constituency } = useContext(ConstituencyContext);
+  const onPress = () => {
+    navigation.navigate('Verification');
+  };
+  const label: string = isVerified ? 'verifizierter Nutzer' : 'verifizieren';
 
   const getConstituency = (wk: string) => {
     const DynComp = constituencies(wk);
@@ -39,12 +48,19 @@ export const Header: React.FC<Props> = ({}) => {
       />
     );
   };
+
+  if (loading) {
+    return (
+      <Container onPress={() => {}}>
+        <HeadLogo />
+        <HeadTextWrapper>
+          <HeadText>verbindet…</HeadText>
+        </HeadTextWrapper>
+      </Container>
+    );
+  }
   return (
     <Container onPress={onPress}>
-      {!constituency && label !== 'verbindet…' && <HeadLogo />}
-      {!constituency && label === 'verbindet…' && (
-        <ActivityIndicator size="large" />
-      )}
       {!!constituency && getConstituency(constituency)}
       <HeadTextWrapper>
         <HeadText>{label}</HeadText>

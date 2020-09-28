@@ -6,6 +6,10 @@ import { ThemeProvider } from 'styled-components';
 import { useColorScheme } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
 import { client } from 'lib/apollo';
+import { VerificationProvider } from 'context/Verification';
+import { AuthProvider } from 'context/Auth';
+import { ConstituencyProvider } from 'context/constituency';
+import { LocalVotesProvider } from 'context/LocalVotes';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -16,7 +20,15 @@ const App = () => {
     <InstructionsProvider>
       <ThemeProvider theme={themeMode === 'dark' ? darkTheme : lightTheme}>
         <ApolloProvider client={client}>
-          <Navigation />
+          <LocalVotesProvider>
+            <AuthProvider>
+              <VerificationProvider>
+                <ConstituencyProvider>
+                  <Navigation />
+                </ConstituencyProvider>
+              </VerificationProvider>
+            </AuthProvider>
+          </LocalVotesProvider>
         </ApolloProvider>
       </ThemeProvider>
     </InstructionsProvider>

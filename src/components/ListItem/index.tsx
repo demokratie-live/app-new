@@ -4,9 +4,11 @@ import {
   ListItemFragmentDoc,
   ListItemFragment,
   VoteIndexFragmentDoc,
+  VoteDateFragmentDoc,
 } from 'generated/graphql';
 import { VotesIndex } from 'components/ListItem/components/VoteIndex';
 import { filter } from 'graphql-anywhere';
+import { VoteDate } from './components/VoteDate/VoteDate';
 
 const Container = styled.View`
   flex-direction: row;
@@ -54,6 +56,8 @@ export const ListItem: React.FC<Props> = ({
   voted,
   votes,
   renderPieCharts,
+  voteDate,
+  voteEnd,
 }) => {
   return (
     <Container>
@@ -68,6 +72,7 @@ export const ListItem: React.FC<Props> = ({
       <SideContainer>
         <VotesIndex {...filter(VoteIndexFragmentDoc, { voted, votes })} />
         <PieChartContainer>{renderPieCharts}</PieChartContainer>
+        <VoteDate {...filter(VoteDateFragmentDoc, { voteDate, voteEnd })} />
       </SideContainer>
     </Container>
   );

@@ -4,6 +4,7 @@ import { arc, pie, scaleOrdinal } from 'd3';
 import { PieArcDatum } from 'd3-shape';
 import { Group, Shape, Surface } from '@react-native-community/art';
 import { CommunityVotesPieChartFragment } from 'generated/graphql';
+import { LocalVotesContext } from 'context/LocalVotes';
 
 const Container = styled.View`
   width: 20px;
@@ -22,26 +23,35 @@ const domain = ['yes', 'abstination', 'no'];
 export const CommunityPieChart: React.FC<Props> = ({
   communityVotes,
   voted,
+  procedureId,
 }) => {
   const themeContext = useContext(ThemeContext);
+  const { getLocalVoteSelection } = useContext(LocalVotesContext);
   const [dimensions, setDimensions] = useState<{
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
 
+  const voteDecision = useMemo(() => {
+    if (voted) {
+      return getLocalVoteSelection(procedureId);
+    }
+    return;
+  }, [getLocalVoteSelection, procedureId, voted]);
+
   const preparedData = useMemo<ChartEntry[]>(() => {
     if (communityVotes) {
       return [
         {
-          name: 'yes',
+          name: 'YES',
           value: communityVotes.yes,
         },
         {
-          name: 'abstination',
+          name: 'ABSTINATION',
           value: communityVotes.abstination,
         },
         {
-          name: 'no',
+          name: 'NO',
           value: communityVotes.no,
         },
       ];
@@ -57,12 +67,12 @@ export const CommunityPieChart: React.FC<Props> = ({
 
   const arcs = pieObj(preparedData);
 
-  const paths = arcs.map((value, i) => {
+  const paths = arcs.map((value) => {
     const path = arc<PieArcDatum<ChartEntry>>()
       .outerRadius(
         dimensions.width / 2 -
-          dimensions.width / 15 +
-          (i === 0 ? dimensions.width / 15 : 0),
+          dimensions.width / 10 +
+          (value.data.name === voteDecision ? dimensions.width / 10 : 0),
       )
       .innerRadius(0)(value);
     //
@@ -79,7 +89,7 @@ export const CommunityPieChart: React.FC<Props> = ({
     : [notVotedColors.yes, notVotedColors.abstination, notVotedColors.no];
 
   const communityColors = scaleOrdinal<string>()
-    .domain(['yes', 'abstination', 'no'])
+    .domain(['YES', 'ABSTINATION', 'NO'])
     .range(colorRange);
 
   return (

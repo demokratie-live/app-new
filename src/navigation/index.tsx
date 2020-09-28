@@ -14,6 +14,7 @@ export type RootStackParamList = {
   Sidebar: undefined;
   FistStartInstructions: undefined;
   Instructions: undefined;
+  Verification: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -48,6 +49,11 @@ export const Navigation = () => {
             <Stack.Screen name="Sidebar" component={Sidebar} />
             <Stack.Screen
               name="Instructions"
+              component={Instructions}
+              options={InstructionsScreenOptions}
+            />
+            <Stack.Screen
+              name="Verification"
               component={Instructions}
               options={InstructionsScreenOptions}
             />

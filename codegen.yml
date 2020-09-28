@@ -1,5 +1,7 @@
 overwrite: true
-schema: 'https://internal.api.democracy-app.de'
+schema:
+  - 'https://internal.api.democracy-app.de'
+  # - 'src/lib/apollo/clientSchema.graphql'
 documents: 'src/**/*.graphql'
 generates:
   src/generated/graphql.tsx:
