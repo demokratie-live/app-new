@@ -3,9 +3,7 @@ import styled from 'styled-components/native';
 import m from 'moment';
 import { VoteDateFragment } from 'generated/graphql';
 
-interface Props extends VoteDateFragment {
-  long?: boolean;
-}
+interface Props extends VoteDateFragment {}
 
 const DateText = styled.Text<Pick<Props, 'voteDate'> & { running: boolean }>`
   color: ${({ voteDate, running }) => {
@@ -16,10 +14,10 @@ const DateText = styled.Text<Pick<Props, 'voteDate'> & { running: boolean }>`
     }
     return 'red';
   }};
-  font-size: 12;
+  font-size: 12px;
 `;
 
-const formatDate = ({ voteDate, voteEnd, long }: Props) => {
+const formatDate = ({ voteDate, voteEnd }: Props) => {
   if (voteDate) {
     // Laufende Abstimmung
     if (
@@ -27,9 +25,6 @@ const formatDate = ({ voteDate, voteEnd, long }: Props) => {
       new Date(voteDate) <= new Date() &&
       new Date(voteEnd) >= new Date()
     ) {
-      if (long) {
-        return 'Abstimmung läuft derzeit';
-      }
       return 'läuft';
     }
 
@@ -42,14 +37,8 @@ const formatDate = ({ voteDate, voteEnd, long }: Props) => {
     const days = Math.floor(m.duration(daysDate.diff(m())).asDays());
 
     if (days > 1) {
-      if (long) {
-        return `Abstimmung in ${days} Tagen`;
-      }
       return `${days} Tage`;
     } else if (days === 1) {
-      if (long) {
-        return 'Abstimmung morgen';
-      }
       return 'morgen';
     }
 
@@ -64,17 +53,15 @@ const formatDate = ({ voteDate, voteEnd, long }: Props) => {
   return null;
 };
 
-export const VoteDate: React.FC<Props> = ({ voteDate, voteEnd, long }) => {
-  const [timeLeft, setTimeLeft] = useState(
-    formatDate({ voteDate, voteEnd, long }),
-  );
+export const VoteDate: React.FC<Props> = ({ voteDate, voteEnd }) => {
+  const [timeLeft, setTimeLeft] = useState(formatDate({ voteDate, voteEnd }));
 
   useEffect(() => {
     // TODO check this interval function (should run only on feature procedures)
     if ((voteEnd && voteEnd > new Date()) || voteDate < new Date()) {
       const intervalId = setInterval(() => {
         if (intervalId) {
-          setTimeLeft(formatDate({ voteDate, voteEnd, long }));
+          setTimeLeft(formatDate({ voteDate, voteEnd }));
         }
       }, 10000);
       return () => {
