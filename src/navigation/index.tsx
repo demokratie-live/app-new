@@ -8,6 +8,7 @@ import { InstructionsContext } from '../context/instructions';
 import { getReadableVersion } from 'react-native-device-info';
 import { Sidebar } from './Sidebar';
 import { enableScreens } from 'react-native-screens';
+import { PdfScreen, PdfScreenOptions } from 'screens/Pdf';
 enableScreens();
 
 export type RootStackParamList = {
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   FistStartInstructions: undefined;
   Instructions: undefined;
   Verification: undefined;
+  Pdf: { url: string; title: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -37,7 +39,7 @@ export const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none">
+      <Stack.Navigator mode="modal">
         {showInstructions ? (
           <Stack.Screen
             name="FistStartInstructions"
@@ -46,7 +48,11 @@ export const Navigation = () => {
           />
         ) : (
           <>
-            <Stack.Screen name="Sidebar" component={Sidebar} />
+            <Stack.Screen
+              name="Sidebar"
+              component={Sidebar}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Instructions"
               component={Instructions}
@@ -56,6 +62,11 @@ export const Navigation = () => {
               name="Verification"
               component={Instructions}
               options={InstructionsScreenOptions}
+            />
+            <Stack.Screen
+              name="Pdf"
+              component={PdfScreen}
+              options={PdfScreenOptions}
             />
           </>
         )}

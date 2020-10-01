@@ -1,19 +1,30 @@
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { ListItem } from 'components/ListItem';
+import { ListItemSeperator } from 'components/ListItem/components/ListItemSeperator';
 import {
   ListItemFragmentDoc,
   useProcedureDetailQuery,
   CommunityVotesPieChartFragmentDoc,
   GovernmentVotesPieChartFragmentDoc,
+  ProcedureDetailsFragmentDoc,
+  ImportantDocumentsFragmentDoc,
 } from 'generated/graphql';
 import { filter } from 'graphql-anywhere';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CommunityPieChart } from 'screens/ProcedureList/components/CommunityPieChart';
 import { GovernmentPieChart } from 'screens/ProcedureList/components/GovernmentPieChart';
 import styled from 'styled-components/native';
+import { ProcedureDetails } from './components/Details';
+import Documents from './components/Documents';
 
 type ProfileScreenRouteProp = RouteProp<
+  BundestagStackNavigatorParamList,
+  'Procedure'
+>;
+
+type ProfileScreenNavigationProps = StackNavigationProp<
   BundestagStackNavigatorParamList,
   'Procedure'
 >;
@@ -27,22 +38,31 @@ const Text = styled.Text``;
 
 type Props = {
   route: ProfileScreenRouteProp;
+  navigation: ProfileScreenNavigationProps;
 };
 
 export const ProcedureDetailScreen: React.FC<Props> = ({
   route: {
     params: { title, procedureId },
   },
+  navigation,
 }) => {
   const { data } = useProcedureDetailQuery({
     variables: {
       id: procedureId,
     },
   });
+  useEffect(() => {
+    if (title) {
+      navigation.setOptions({ title });
+    }
+  }, [navigation, title]);
+
   if (!data) {
     return <Text>…loading</Text>;
   }
   const { procedure } = data;
+
   return (
     <Container>
       <ListItem
@@ -58,8 +78,10 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
           />,
         ]}
       />
-      <Text>{title}</Text>
-      <Text>{procedure.procedureId}</Text>
+      <ListItemSeperator />
+      <ProcedureDetails {...filter(ProcedureDetailsFragmentDoc, procedure)} />
+      <ListItemSeperator />
+      <Documents {...filter(ImportantDocumentsFragmentDoc, procedure)} />
     </Container>
   );
 };

@@ -504,6 +504,25 @@ export type MeQuery = (
   )> }
 );
 
+export type ImportantDocumentFragment = (
+  { __typename?: 'Document' }
+  & Pick<Document, 'editor' | 'type' | 'url' | 'number'>
+);
+
+export type ImportantDocumentsFragment = (
+  { __typename?: 'Procedure' }
+  & { importantDocuments: Array<(
+    { __typename?: 'Document' }
+    & ImportantDocumentFragment
+  )> }
+);
+
+export type ProcedureDetailsFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId' | 'subjectGroups' | 'currentStatus' | 'type' | 'submissionDate' | 'voteDate' | 'abstract'>
+  & ImportantDocumentsFragment
+);
+
 export type ProcedureDetailQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -517,6 +536,7 @@ export type ProcedureDetailQuery = (
     & ListItemFragment
     & CommunityVotesPieChartFragment
     & GovernmentVotesPieChartFragment
+    & ProcedureDetailsFragment
   ) }
 );
 
@@ -578,6 +598,33 @@ export const ListItemFragmentDoc = gql`
 }
     ${VoteIndexFragmentDoc}
 ${VoteDateFragmentDoc}`;
+export const ImportantDocumentFragmentDoc = gql`
+    fragment ImportantDocument on Document {
+  editor
+  type
+  url
+  number
+}
+    `;
+export const ImportantDocumentsFragmentDoc = gql`
+    fragment ImportantDocuments on Procedure {
+  importantDocuments {
+    ...ImportantDocument
+  }
+}
+    ${ImportantDocumentFragmentDoc}`;
+export const ProcedureDetailsFragmentDoc = gql`
+    fragment ProcedureDetails on Procedure {
+  procedureId
+  subjectGroups
+  currentStatus
+  type
+  submissionDate
+  voteDate
+  abstract
+  ...ImportantDocuments
+}
+    ${ImportantDocumentsFragmentDoc}`;
 export const CommunityVotesPieChartFragmentDoc = gql`
     fragment CommunityVotesPieChart on Procedure {
   procedureId
@@ -639,11 +686,13 @@ export const ProcedureDetailDocument = gql`
     ...ListItem
     ...CommunityVotesPieChart
     ...GovernmentVotesPieChart
+    ...ProcedureDetails
   }
 }
     ${ListItemFragmentDoc}
 ${CommunityVotesPieChartFragmentDoc}
-${GovernmentVotesPieChartFragmentDoc}`;
+${GovernmentVotesPieChartFragmentDoc}
+${ProcedureDetailsFragmentDoc}`;
 
 /**
  * __useProcedureDetailQuery__

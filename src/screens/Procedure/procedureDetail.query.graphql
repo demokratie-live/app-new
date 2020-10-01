@@ -4,5 +4,6 @@ query ProcedureDetail($id: ID!) {
     ...ListItem
     ...CommunityVotesPieChart
     ...GovernmentVotesPieChart
+    ...ProcedureDetails
   }
 }

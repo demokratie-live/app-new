@@ -30,6 +30,11 @@ declare module 'styled-components' {
         no: string;
         notVoted: string;
       };
+      date: {
+        soon: string;
+        current: string;
+        past: string;
+      };
     };
     paddings: {
       outer: string;
@@ -69,6 +74,11 @@ export const lightTheme: DefaultTheme = {
       no: '#C24392',
       notVoted: '#AFB4B4',
     },
+    date: {
+      soon: '#59BC6C',
+      current: '#F5A623',
+      past: '#DA4C3D',
+    },
   },
   paddings,
 };
@@ -80,7 +90,7 @@ export const darkTheme: DefaultTheme = {
   colors: {
     header: '#224b6b',
     white: '#fffb',
-    primaryText: '#fff',
+    primaryText: '#fffd',
     secondaryText: '#fff8',
     primaryColoredText: '#4494d3bb',
     communityVotes: {
@@ -100,6 +110,11 @@ export const darkTheme: DefaultTheme = {
       abstination: '#65AED4aa',
       no: '#C24392aa',
       notVoted: '#AFB4B4aa',
+    },
+    date: {
+      soon: '#59BC6Caa',
+      current: '#F5A623aa',
+      past: '#DA4C3Daa',
     },
   },
   paddings,

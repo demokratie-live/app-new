@@ -6,13 +6,13 @@ import { VoteDateFragment } from 'generated/graphql';
 interface Props extends VoteDateFragment {}
 
 const DateText = styled.Text<Pick<Props, 'voteDate'> & { running: boolean }>`
-  color: ${({ voteDate, running }) => {
+  color: ${({ voteDate, running, theme }) => {
     if (running) {
-      return '#f5a623';
+      return theme.colors.date.current;
     } else if (new Date(voteDate) > new Date()) {
-      return '#20a736';
+      return theme.colors.date.soon;
     }
-    return 'red';
+    return theme.colors.date.past;
   }};
   font-size: 12px;
 `;
