@@ -504,6 +504,28 @@ export type MeQuery = (
   )> }
 );
 
+export type CommunityVoteResultsQueryVariables = Exact<{
+  procedureId: Scalars['ID'];
+  constituencies?: Maybe<Array<Scalars['String']>>;
+}>;
+
+
+export type CommunityVoteResultsQuery = (
+  { __typename?: 'Query' }
+  & { procedure: (
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId'>
+    & { communityVotes?: Maybe<(
+      { __typename?: 'CommunityVotes' }
+      & Pick<CommunityVotes, 'yes' | 'no' | 'abstination'>
+      & { constituencies: Array<(
+        { __typename?: 'CommunityConstituencyVotes' }
+        & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'constituency'>
+      )> }
+    )> }
+  ) }
+);
+
 export type ImportantDocumentFragment = (
   { __typename?: 'Document' }
   & Pick<Document, 'editor' | 'type' | 'url' | 'number'>
@@ -515,6 +537,11 @@ export type ImportantDocumentsFragment = (
     { __typename?: 'Document' }
     & ImportantDocumentFragment
   )> }
+);
+
+export type ProcedureHistoryFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'currentStatus' | 'currentStatusHistory'>
 );
 
 export type ProcedureDetailsFragment = (
@@ -537,6 +564,7 @@ export type ProcedureDetailQuery = (
     & CommunityVotesPieChartFragment
     & GovernmentVotesPieChartFragment
     & ProcedureDetailsFragment
+    & ProcedureHistoryFragment
   ) }
 );
 
@@ -598,6 +626,12 @@ export const ListItemFragmentDoc = gql`
 }
     ${VoteIndexFragmentDoc}
 ${VoteDateFragmentDoc}`;
+export const ProcedureHistoryFragmentDoc = gql`
+    fragment ProcedureHistory on Procedure {
+  currentStatus
+  currentStatusHistory
+}
+    `;
 export const ImportantDocumentFragmentDoc = gql`
     fragment ImportantDocument on Document {
   editor
@@ -679,6 +713,51 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const CommunityVoteResultsDocument = gql`
+    query CommunityVoteResults($procedureId: ID!, $constituencies: [String!]) {
+  procedure(id: $procedureId) {
+    procedureId
+    communityVotes(constituencies: $constituencies) {
+      yes
+      no
+      abstination
+      constituencies {
+        yes
+        no
+        abstination
+        constituency
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCommunityVoteResultsQuery__
+ *
+ * To run a query within a React component, call `useCommunityVoteResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCommunityVoteResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCommunityVoteResultsQuery({
+ *   variables: {
+ *      procedureId: // value for 'procedureId'
+ *      constituencies: // value for 'constituencies'
+ *   },
+ * });
+ */
+export function useCommunityVoteResultsQuery(baseOptions?: Apollo.QueryHookOptions<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>) {
+        return Apollo.useQuery<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>(CommunityVoteResultsDocument, baseOptions);
+      }
+export function useCommunityVoteResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>) {
+          return Apollo.useLazyQuery<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>(CommunityVoteResultsDocument, baseOptions);
+        }
+export type CommunityVoteResultsQueryHookResult = ReturnType<typeof useCommunityVoteResultsQuery>;
+export type CommunityVoteResultsLazyQueryHookResult = ReturnType<typeof useCommunityVoteResultsLazyQuery>;
+export type CommunityVoteResultsQueryResult = Apollo.QueryResult<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>;
 export const ProcedureDetailDocument = gql`
     query ProcedureDetail($id: ID!) {
   procedure(id: $id) {
@@ -687,12 +766,14 @@ export const ProcedureDetailDocument = gql`
     ...CommunityVotesPieChart
     ...GovernmentVotesPieChart
     ...ProcedureDetails
+    ...ProcedureHistory
   }
 }
     ${ListItemFragmentDoc}
 ${CommunityVotesPieChartFragmentDoc}
 ${GovernmentVotesPieChartFragmentDoc}
-${ProcedureDetailsFragmentDoc}`;
+${ProcedureDetailsFragmentDoc}
+${ProcedureHistoryFragmentDoc}`;
 
 /**
  * __useProcedureDetailQuery__

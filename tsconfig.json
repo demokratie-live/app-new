@@ -74,8 +74,9 @@
           "validProperties": [
             "tint-color",
             "padding-horizontal",
-            "margin-horizontal",
             "padding-vertical",
+            "margin-horizontal",
+            "margin-vertical",
             "resize-mode"
           ]
         }

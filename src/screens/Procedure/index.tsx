@@ -9,6 +9,7 @@ import {
   GovernmentVotesPieChartFragmentDoc,
   ProcedureDetailsFragmentDoc,
   ImportantDocumentsFragmentDoc,
+  ProcedureHistoryFragmentDoc,
 } from 'generated/graphql';
 import { filter } from 'graphql-anywhere';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
@@ -16,8 +17,10 @@ import React, { useEffect } from 'react';
 import { CommunityPieChart } from 'screens/ProcedureList/components/CommunityPieChart';
 import { GovernmentPieChart } from 'screens/ProcedureList/components/GovernmentPieChart';
 import styled from 'styled-components/native';
+import { CommuntiyVoteResults } from './components/CommunityVoteResults';
 import { ProcedureDetails } from './components/Details';
 import Documents from './components/Documents';
+import { History } from './components/History';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagStackNavigatorParamList,
@@ -82,6 +85,8 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
       <ProcedureDetails {...filter(ProcedureDetailsFragmentDoc, procedure)} />
       <ListItemSeperator />
       <Documents {...filter(ImportantDocumentsFragmentDoc, procedure)} />
+      <History {...filter(ProcedureHistoryFragmentDoc, procedure)} />
+      <CommuntiyVoteResults procedureId={procedureId} />
     </Container>
   );
 };

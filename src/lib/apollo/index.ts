@@ -39,6 +39,9 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       Procedure: {
         keyFields: ['procedureId'],
       },
+      CommunityConstituencyVotes: {
+        keyFields: ['constituency'],
+      },
     },
   }),
 });
