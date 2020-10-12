@@ -1,0 +1,17 @@
+query GovernmentVoteResults($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    procedureId
+    votedGovernment
+    voted
+    voteResults {
+      yes
+      abstination
+      no
+      notVoted
+      namedVote
+      partyVotes {
+        party
+      }
+    }
+  }
+}

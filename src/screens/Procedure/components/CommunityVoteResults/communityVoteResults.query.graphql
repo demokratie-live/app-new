@@ -1,14 +1,17 @@
 query CommunityVoteResults($procedureId: ID!, $constituencies: [String!]) {
   procedure(id: $procedureId) {
     procedureId
+    voted
     communityVotes(constituencies: $constituencies) {
       yes
       no
       abstination
+      total
       constituencies {
         yes
         no
         abstination
+        total
         constituency
       }
     }

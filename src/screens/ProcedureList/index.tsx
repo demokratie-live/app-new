@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,7 +15,7 @@ import {
 } from 'generated/graphql';
 import { ListItem } from 'components/ListItem';
 import { filter } from 'graphql-anywhere';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BundestagTabNavigatorParamList } from 'navigation/Sidebar/Bundestag/TabNavigation';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import { CommunityPieChart } from './components/CommunityPieChart';
@@ -23,6 +23,7 @@ import { GovernmentPieChart } from './components/GovernmentPieChart';
 import { ListItemSeperator } from 'components/ListItem/components/ListItemSeperator';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NetworkStatus } from '@apollo/client';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagTabNavigatorParamList,
@@ -44,18 +45,76 @@ const Container = styled(FlatList as new () => FlatList<Procedure>)`
   background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
-type Props = {
-  route: ProfileScreenRouteProp;
-};
+type Props = {};
 
-export const ProcedureList: React.FC<Props> = ({ route }) => {
+export const ProcedureList: React.FC<Props> = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { data, loading, fetchMore } = useProceduresListQuery({
+  const route = useRoute<ProfileScreenRouteProp>();
+
+  const {
+    data,
+    loading,
+    fetchMore,
+    refetch,
+    networkStatus,
+  } = useProceduresListQuery({
     variables: {
       listTypes: [route.params.list],
     },
     notifyOnNetworkStatusChange: true,
   });
+
+  const currentProcedureLength = data?.procedures.length || 0;
+
+  const keyExtractor = useCallback(({ procedureId }) => procedureId, []);
+  const onEndReached = useCallback(() => {
+    if (!loading) {
+      fetchMore({
+        variables: {
+          offset: currentProcedureLength,
+        },
+      });
+    }
+  }, [currentProcedureLength, fetchMore, loading]);
+
+  const renderItem: ListRenderItem<Procedure> = useCallback(
+    ({ item }) => {
+      return (
+        <TouchableOpacity
+          key={item.procedureId}
+          onPress={() =>
+            navigation.navigate('Procedure', {
+              procedureId: item.procedureId,
+              title: item.title,
+            })
+          }>
+          <ListItem
+            {...filter(ListItemFragmentDoc, item)}
+            renderPieCharts={[
+              <GovernmentPieChart
+                key={`government-piechart-${item.procedureId}`}
+                {...filter(GovernmentVotesPieChartFragmentDoc, item)}
+              />,
+              <CommunityPieChart
+                key={`community-piechart-${item.procedureId}`}
+                {...filter(CommunityVotesPieChartFragmentDoc, item)}
+              />,
+            ]}
+          />
+        </TouchableOpacity>
+      );
+    },
+    [navigation],
+  );
+
+  const renderListFooterComponent = useCallback(() => {
+    if (loading) {
+      return <ActivityIndicator />;
+    }
+    return null;
+  }, [loading]);
+
+  const refreshing = networkStatus === NetworkStatus.refetch;
 
   if (!data) {
     return (
@@ -65,55 +124,18 @@ export const ProcedureList: React.FC<Props> = ({ route }) => {
     );
   }
 
-  const renderItem: ListRenderItem<Procedure> = ({ item }) => (
-    <TouchableOpacity
-      key={item.procedureId}
-      onPress={() =>
-        navigation.navigate('Procedure', {
-          procedureId: item.procedureId,
-          title: item.title,
-        })
-      }>
-      <ListItem
-        {...filter(ListItemFragmentDoc, item)}
-        renderPieCharts={[
-          <GovernmentPieChart
-            key={`government-piechart-${item.procedureId}`}
-            {...filter(GovernmentVotesPieChartFragmentDoc, item)}
-          />,
-          <CommunityPieChart
-            key={`community-piechart-${item.procedureId}`}
-            {...filter(CommunityVotesPieChartFragmentDoc, item)}
-          />,
-        ]}
-      />
-    </TouchableOpacity>
-  );
-
-  const renderListFooterComponent = () => {
-    if (loading) {
-      return <ActivityIndicator />;
-    }
-    return null;
-  };
-
   return (
     <Container
       data={data.procedures as Procedure[]}
       renderItem={renderItem}
-      keyExtractor={({ procedureId }) => procedureId}
+      onRefresh={refetch}
+      refreshing={refreshing}
+      keyExtractor={keyExtractor}
       ListFooterComponent={renderListFooterComponent}
       scrollIndicatorInsets={{ right: 1 }}
       ItemSeparatorComponent={ListItemSeperator}
-      onResponderEnd={() => {
-        if (!loading) {
-          fetchMore({
-            variables: {
-              offset: data.procedures.length,
-            },
-          });
-        }
-      }}
+      onEndReachedThreshold={1}
+      onEndReached={onEndReached}
     />
   );
 };

@@ -21,6 +21,8 @@ import { CommuntiyVoteResults } from './components/CommunityVoteResults';
 import { ProcedureDetails } from './components/Details';
 import Documents from './components/Documents';
 import { History } from './components/History';
+import { SafeAreaView } from 'react-native';
+import { GovernmentVoteResults } from './components/GovernmentVoteResults';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagStackNavigatorParamList,
@@ -65,28 +67,32 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
     return <Text>…loading</Text>;
   }
   const { procedure } = data;
+  console.log('render Procedure');
 
   return (
-    <Container>
-      <ListItem
-        {...filter(ListItemFragmentDoc, procedure)}
-        renderPieCharts={[
-          <GovernmentPieChart
-            key={`government-piechart-${procedure.procedureId}`}
-            {...filter(GovernmentVotesPieChartFragmentDoc, procedure)}
-          />,
-          <CommunityPieChart
-            key={`community-piechart-${procedure.procedureId}`}
-            {...filter(CommunityVotesPieChartFragmentDoc, procedure)}
-          />,
-        ]}
-      />
-      <ListItemSeperator />
-      <ProcedureDetails {...filter(ProcedureDetailsFragmentDoc, procedure)} />
-      <ListItemSeperator />
-      <Documents {...filter(ImportantDocumentsFragmentDoc, procedure)} />
-      <History {...filter(ProcedureHistoryFragmentDoc, procedure)} />
-      <CommuntiyVoteResults procedureId={procedureId} />
+    <Container scrollIndicatorInsets={{ right: 1 }}>
+      <SafeAreaView>
+        <ListItem
+          {...filter(ListItemFragmentDoc, procedure)}
+          renderPieCharts={[
+            <GovernmentPieChart
+              key={`government-piechart-${procedure.procedureId}`}
+              {...filter(GovernmentVotesPieChartFragmentDoc, procedure)}
+            />,
+            <CommunityPieChart
+              key={`community-piechart-${procedure.procedureId}`}
+              {...filter(CommunityVotesPieChartFragmentDoc, procedure)}
+            />,
+          ]}
+        />
+        <ListItemSeperator />
+        <ProcedureDetails {...filter(ProcedureDetailsFragmentDoc, procedure)} />
+        <ListItemSeperator />
+        <Documents {...filter(ImportantDocumentsFragmentDoc, procedure)} />
+        <History {...filter(ProcedureHistoryFragmentDoc, procedure)} />
+        <CommuntiyVoteResults procedureId={procedureId} />
+        <GovernmentVoteResults procedureId={procedureId} />
+      </SafeAreaView>
     </Container>
   );
 };

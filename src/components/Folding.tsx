@@ -5,13 +5,12 @@ import styled from 'styled-components/native';
 import { ListItemSeperator } from './ListItem/components/ListItemSeperator';
 
 const Wrapper = styled.View`
-  margin-top: ${({ theme }) => theme.paddings.outer};
   border-radius: 5px;
 `;
 
 const Header = styled.TouchableOpacity`
   flex-direction: row;
-  padding-bottom: ${({ theme }) => theme.paddings.outer};
+  padding-vertical: ${({ theme }) => theme.paddings.outer};
   padding-horizontal: ${({ theme }) => theme.paddings.outer};
 `;
 

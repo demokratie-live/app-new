@@ -1,4 +1,5 @@
 import React from 'react';
+import 'lib/wdyr';
 import { Navigation } from './navigation';
 import { InstructionsProvider } from './context/instructions';
 import { lightTheme, darkTheme } from './styles/theme';

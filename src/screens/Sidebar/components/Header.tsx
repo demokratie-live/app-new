@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { HeadLogo } from './HeadLogo';
 import { ConstituencyContext } from 'context/constituency';
-import constituencies from '../../../assets/svgs/constituencies';
+import { getConstituencySvg } from '../../../assets/svgs/constituencies';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from 'navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -39,7 +39,7 @@ export const Header: React.FC<Props> = ({}) => {
   const label: string = isVerified ? 'verifizierter Nutzer' : 'verifizieren';
 
   const getConstituency = (wk: string) => {
-    const DynComp = constituencies(wk);
+    const DynComp = getConstituencySvg(wk);
     return (
       <DynComp.default
         width={60}

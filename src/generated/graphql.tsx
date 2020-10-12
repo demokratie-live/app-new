@@ -514,13 +514,13 @@ export type CommunityVoteResultsQuery = (
   { __typename?: 'Query' }
   & { procedure: (
     { __typename?: 'Procedure' }
-    & Pick<Procedure, 'procedureId'>
+    & Pick<Procedure, 'procedureId' | 'voted'>
     & { communityVotes?: Maybe<(
       { __typename?: 'CommunityVotes' }
-      & Pick<CommunityVotes, 'yes' | 'no' | 'abstination'>
+      & Pick<CommunityVotes, 'yes' | 'no' | 'abstination' | 'total'>
       & { constituencies: Array<(
         { __typename?: 'CommunityConstituencyVotes' }
-        & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'constituency'>
+        & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'total' | 'constituency'>
       )> }
     )> }
   ) }
@@ -537,6 +537,27 @@ export type ImportantDocumentsFragment = (
     { __typename?: 'Document' }
     & ImportantDocumentFragment
   )> }
+);
+
+export type GovernmentVoteResultsQueryVariables = Exact<{
+  procedureId: Scalars['ID'];
+}>;
+
+
+export type GovernmentVoteResultsQuery = (
+  { __typename?: 'Query' }
+  & { procedure: (
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId' | 'votedGovernment' | 'voted'>
+    & { voteResults?: Maybe<(
+      { __typename?: 'VoteResult' }
+      & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'notVoted' | 'namedVote'>
+      & { partyVotes: Array<(
+        { __typename?: 'PartyVote' }
+        & Pick<PartyVote, 'party'>
+      )> }
+    )> }
+  ) }
 );
 
 export type ProcedureHistoryFragment = (
@@ -717,14 +738,17 @@ export const CommunityVoteResultsDocument = gql`
     query CommunityVoteResults($procedureId: ID!, $constituencies: [String!]) {
   procedure(id: $procedureId) {
     procedureId
+    voted
     communityVotes(constituencies: $constituencies) {
       yes
       no
       abstination
+      total
       constituencies {
         yes
         no
         abstination
+        total
         constituency
       }
     }
@@ -758,6 +782,51 @@ export function useCommunityVoteResultsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type CommunityVoteResultsQueryHookResult = ReturnType<typeof useCommunityVoteResultsQuery>;
 export type CommunityVoteResultsLazyQueryHookResult = ReturnType<typeof useCommunityVoteResultsLazyQuery>;
 export type CommunityVoteResultsQueryResult = Apollo.QueryResult<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>;
+export const GovernmentVoteResultsDocument = gql`
+    query GovernmentVoteResults($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    procedureId
+    votedGovernment
+    voted
+    voteResults {
+      yes
+      abstination
+      no
+      notVoted
+      namedVote
+      partyVotes {
+        party
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGovernmentVoteResultsQuery__
+ *
+ * To run a query within a React component, call `useGovernmentVoteResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGovernmentVoteResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGovernmentVoteResultsQuery({
+ *   variables: {
+ *      procedureId: // value for 'procedureId'
+ *   },
+ * });
+ */
+export function useGovernmentVoteResultsQuery(baseOptions?: Apollo.QueryHookOptions<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>) {
+        return Apollo.useQuery<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>(GovernmentVoteResultsDocument, baseOptions);
+      }
+export function useGovernmentVoteResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>) {
+          return Apollo.useLazyQuery<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>(GovernmentVoteResultsDocument, baseOptions);
+        }
+export type GovernmentVoteResultsQueryHookResult = ReturnType<typeof useGovernmentVoteResultsQuery>;
+export type GovernmentVoteResultsLazyQueryHookResult = ReturnType<typeof useGovernmentVoteResultsLazyQuery>;
+export type GovernmentVoteResultsQueryResult = Apollo.QueryResult<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>;
 export const ProcedureDetailDocument = gql`
     query ProcedureDetail($id: ID!) {
   procedure(id: $id) {

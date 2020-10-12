@@ -1,5 +1,3 @@
-// @ts-ignore
-
 const constituencies: { [key: string]: any } = {
   '1': require('./constituencies/1.tsx'),
   '10': require('./constituencies/10.tsx'),
@@ -302,4 +300,4 @@ const constituencies: { [key: string]: any } = {
   '99': require('./constituencies/99.tsx'),
 };
 
-export default (key: string) => constituencies[key];
+export const getConstituencySvg = (key: string) => constituencies[key];

@@ -15,6 +15,12 @@ const DonationTouch = styled.TouchableOpacity`
   height: 68px;
 `;
 
+const DonationBarBox = styled(DonationBar).attrs({
+  style: { backgroundColor: '#4494d390' },
+  descriptionTextStyle: { color: '#fff' },
+  moneyTextStyle: { color: '#fff' },
+})``;
+
 export const DonationBox: React.FC = () => {
   const navigation = useNavigation<SidebarNavigationProps>();
   const [isLoading, setLoading] = useState(true);
@@ -34,10 +40,7 @@ export const DonationBox: React.FC = () => {
   return (
     <DonateBoxWrapper>
       <DonationTouch onPress={() => navigation.navigate('Donate')}>
-        <DonationBar
-          style={{ backgroundColor: '#4494d390' }}
-          descriptionTextStyle={{ color: '#fff' }}
-          moneyTextStyle={{ color: '#fff' }}
+        <DonationBarBox
           target={data.donation_value_goal}
           occupied={data.donation_value}
         />
