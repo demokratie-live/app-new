@@ -539,6 +539,36 @@ export type ImportantDocumentsFragment = (
   )> }
 );
 
+export type DetailGovernmentPieChartFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId'>
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'notVoted' | 'namedVote'>
+    & { partyVotes: Array<(
+      { __typename?: 'PartyVote' }
+      & Pick<PartyVote, 'party'>
+    )> }
+  )> }
+);
+
+export type DetailFractionChartFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId'>
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'namedVote'>
+    & { partyVotes: Array<(
+      { __typename?: 'PartyVote' }
+      & Pick<PartyVote, 'party'>
+      & { deviants: (
+        { __typename?: 'Deviants' }
+        & Pick<Deviants, 'yes' | 'abstination' | 'no' | 'notVoted'>
+      ) }
+    )> }
+  )> }
+);
+
 export type GovernmentVoteResultsQueryVariables = Exact<{
   procedureId: Scalars['ID'];
 }>;
@@ -548,15 +578,8 @@ export type GovernmentVoteResultsQuery = (
   { __typename?: 'Query' }
   & { procedure: (
     { __typename?: 'Procedure' }
-    & Pick<Procedure, 'procedureId' | 'votedGovernment' | 'voted'>
-    & { voteResults?: Maybe<(
-      { __typename?: 'VoteResult' }
-      & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'notVoted' | 'namedVote'>
-      & { partyVotes: Array<(
-        { __typename?: 'PartyVote' }
-        & Pick<PartyVote, 'party'>
-      )> }
-    )> }
+    & DetailGovernmentPieChartFragment
+    & DetailFractionChartFragment
   ) }
 );
 
@@ -647,6 +670,38 @@ export const ListItemFragmentDoc = gql`
 }
     ${VoteIndexFragmentDoc}
 ${VoteDateFragmentDoc}`;
+export const DetailGovernmentPieChartFragmentDoc = gql`
+    fragment DetailGovernmentPieChart on Procedure {
+  procedureId
+  voteResults {
+    yes
+    abstination
+    no
+    notVoted
+    namedVote
+    partyVotes {
+      party
+    }
+  }
+}
+    `;
+export const DetailFractionChartFragmentDoc = gql`
+    fragment DetailFractionChart on Procedure {
+  procedureId
+  voteResults {
+    namedVote
+    partyVotes {
+      party
+      deviants {
+        yes
+        abstination
+        no
+        notVoted
+      }
+    }
+  }
+}
+    `;
 export const ProcedureHistoryFragmentDoc = gql`
     fragment ProcedureHistory on Procedure {
   currentStatus
@@ -785,22 +840,12 @@ export type CommunityVoteResultsQueryResult = Apollo.QueryResult<CommunityVoteRe
 export const GovernmentVoteResultsDocument = gql`
     query GovernmentVoteResults($procedureId: ID!) {
   procedure(id: $procedureId) {
-    procedureId
-    votedGovernment
-    voted
-    voteResults {
-      yes
-      abstination
-      no
-      notVoted
-      namedVote
-      partyVotes {
-        party
-      }
-    }
+    ...DetailGovernmentPieChart
+    ...DetailFractionChart
   }
 }
-    `;
+    ${DetailGovernmentPieChartFragmentDoc}
+${DetailFractionChartFragmentDoc}`;
 
 /**
  * __useGovernmentVoteResultsQuery__

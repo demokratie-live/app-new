@@ -21,8 +21,9 @@ import { CommuntiyVoteResults } from './components/CommunityVoteResults';
 import { ProcedureDetails } from './components/Details';
 import Documents from './components/Documents';
 import { History } from './components/History';
-import { SafeAreaView } from 'react-native';
+import { RefreshControl, SafeAreaView } from 'react-native';
 import { GovernmentVoteResults } from './components/GovernmentVoteResults';
+import { NetworkStatus } from '@apollo/client';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagStackNavigatorParamList,
@@ -52,7 +53,7 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
   },
   navigation,
 }) => {
-  const { data } = useProcedureDetailQuery({
+  const { data, refetch, networkStatus } = useProcedureDetailQuery({
     variables: {
       id: procedureId,
     },
@@ -66,11 +67,17 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
   if (!data) {
     return <Text>…loading</Text>;
   }
+
+  const refreshing = networkStatus === NetworkStatus.refetch;
+
   const { procedure } = data;
-  console.log('render Procedure');
 
   return (
-    <Container scrollIndicatorInsets={{ right: 1 }}>
+    <Container
+      scrollIndicatorInsets={{ right: 1 }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={refetch} />
+      }>
       <SafeAreaView>
         <ListItem
           {...filter(ListItemFragmentDoc, procedure)}
