@@ -1,6 +1,6 @@
 import { scaleBand } from 'd3';
 import React, { useContext } from 'react';
-import Svg, { G, Text } from 'react-native-svg';
+import Svg, { G, Rect, Text } from 'react-native-svg';
 import { ThemeContext } from 'styled-components';
 import { FractionBar } from './FractionBar';
 
@@ -46,24 +46,10 @@ export const FractionBarChart: React.FC<Props> = ({
 
   return (
     <Svg width={size} height={size - 13}>
-      <G translate={[margin.left, margin.top]}>
-        {data.map(({ party, deviants }, i) => (
-          <FractionBar
-            onPress={() => setSelectedParty(i)}
-            active={i === selectedParty}
-            key={`bar-${party}`}
-            y={yScale(party)}
-            data={deviants}
-            width={innerWidth}
-            height={yScale.bandwidth()}
-          />
-        ))}
-      </G>
       <G y={margin.top + 3}>
         {data.map(({ party }, i) => (
           <Text
             opacity={i === selectedParty ? 1 : 0.5}
-            onPress={() => setSelectedParty(i)}
             key={`axis-${party}`}
             y={
               yScale.bandwidth() +
@@ -72,6 +58,28 @@ export const FractionBarChart: React.FC<Props> = ({
             fill={themeContext.colors.primaryText}>
             {party}
           </Text>
+        ))}
+      </G>
+      <G translate={[margin.left, margin.top]}>
+        {data.map(({ party, deviants }, i) => (
+          <>
+            <FractionBar
+              active={i === selectedParty}
+              key={`bar-${party}`}
+              y={yScale(party)}
+              data={deviants}
+              width={innerWidth}
+              height={yScale.bandwidth()}
+            />
+            <Rect // onPress overlay
+              onPress={() => setSelectedParty(i)}
+              y={yScale(party)}
+              x={-margin.left}
+              width={size}
+              height={yScale.bandwidth()}
+              //   fill="#ff0"
+            />
+          </>
         ))}
       </G>
     </Svg>

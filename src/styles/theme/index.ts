@@ -30,6 +30,9 @@ declare module 'styled-components' {
         no: string;
         notVoted: string;
       };
+      charts: {
+        piePercentage: string;
+      };
       date: {
         soon: string;
         current: string;
@@ -74,6 +77,9 @@ export const lightTheme: DefaultTheme = {
       no: '#C24392',
       notVoted: '#AFB4B4',
     },
+    charts: {
+      piePercentage: '#fff',
+    },
     date: {
       soon: '#59BC6C',
       current: '#F5A623',
@@ -110,6 +116,9 @@ export const darkTheme: DefaultTheme = {
       abstination: '#65AED4aa',
       no: '#C24392aa',
       notVoted: '#AFB4B4aa',
+    },
+    charts: {
+      piePercentage: '#fffb',
     },
     date: {
       soon: '#59BC6Caa',

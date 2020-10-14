@@ -1,6 +1,6 @@
 import { scaleLinear, scaleOrdinal, sum } from 'd3';
 import React, { useContext } from 'react';
-import { G, Rect } from 'react-native-svg';
+import { G, Rect, Text } from 'react-native-svg';
 import { ThemeContext } from 'styled-components';
 
 interface Props {
@@ -14,7 +14,6 @@ interface Props {
   height: number;
   y?: number;
   active: boolean;
-  onPress: () => void;
 }
 
 export const FractionBar: React.FC<Props> = ({
@@ -23,7 +22,6 @@ export const FractionBar: React.FC<Props> = ({
   height,
   y,
   active,
-  onPress,
 }) => {
   const themeContext = useContext(ThemeContext);
   const total = sum([yes, abstination, no, notVoted]);
@@ -44,36 +42,55 @@ export const FractionBar: React.FC<Props> = ({
   const xNo = xAbstination + (xScale(abstination) || 0);
   const xNotVoted = xNo + (xScale(no) || 0);
 
+  const getPercentage = (value: number, { x }: { x?: number } = {}) => {
+    const percentage = Math.round((value / total) * 100);
+    if (!active || percentage < 12) {
+      return null;
+    }
+    return (
+      <Text
+        x={(xScale(value) || 0) + (x || 0) - 4}
+        y={height / 2 + 5}
+        fontSize={14}
+        textAnchor="end"
+        fill={
+          themeContext.colors.charts.piePercentage
+        }>{`${percentage}%`}</Text>
+    );
+  };
+
   return (
-    <G y={y} opacity={active ? 1 : 0.5} onPress={onPress}>
+    <G y={y} opacity={active ? 1 : 0.5}>
       <Rect
         width={xScale(yes)}
         height={height}
         fill={deviantColorRange('yes')}
-        onPress={onPress}
       />
+      {getPercentage(yes)}
       <Rect
         x={xAbstination}
         width={xScale(abstination)}
         height={height}
         fill={deviantColorRange('abstination')}
-        onPress={onPress}
       />
+      {getPercentage(abstination, { x: xAbstination })}
       <Rect
         x={xNo}
         width={xScale(no)}
         height={height}
         fill={deviantColorRange('no')}
-        onPress={onPress}
       />
+      {getPercentage(no, { x: xNo })}
       {!!notVoted && (
-        <Rect
-          x={xNotVoted}
-          width={xScale(notVoted)}
-          height={height}
-          fill={deviantColorRange('notVoted')}
-          onPress={onPress}
-        />
+        <>
+          <Rect
+            x={xNotVoted}
+            width={xScale(notVoted)}
+            height={height}
+            fill={deviantColorRange('notVoted')}
+          />
+          {getPercentage(notVoted, { x: xNotVoted })}
+        </>
       )}
     </G>
   );
