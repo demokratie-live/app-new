@@ -1,5 +1,6 @@
 import Folding from 'components/Folding';
 import {
+  DetailDecisionBarChartFragmentDoc,
   DetailFractionChartFragmentDoc,
   DetailGovernmentPieChartFragmentDoc,
   useGovernmentVoteResultsQuery,
@@ -7,15 +8,15 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import Carousel from 'pinar';
-import { getTheme } from 'styles/theme';
 import { Dimensions } from 'react-native';
 import { DetailGovernmentPieChart } from './BundestagPieChart';
 import { filter } from 'graphql-anywhere';
 import { DetailFractionChart } from './DetailFractionChart';
+import { DetailDecisionBarChart } from './DetailDecisionBarChart';
 
-const Container = styled(Carousel).attrs({
+const Container = styled(Carousel).attrs(({ theme }) => ({
   activeDotStyle: {
-    backgroundColor: getTheme().colors.primaryText,
+    backgroundColor: theme.colors.primaryText,
     width: 8,
     height: 8,
     marginLeft: 3,
@@ -35,7 +36,7 @@ const Container = styled(Carousel).attrs({
     alignItems: 'center',
   },
   dotStyle: {
-    backgroundColor: getTheme().colors.secondaryText,
+    backgroundColor: theme.colors.secondaryText,
     width: 8,
     height: 8,
     marginLeft: 3,
@@ -43,7 +44,7 @@ const Container = styled(Carousel).attrs({
     marginTop: 3,
     marginBottom: 3,
   },
-})``;
+}))``;
 
 const Description = styled.Text`
   align-self: center;
@@ -100,6 +101,16 @@ export const GovernmentVoteResults: React.FC<Props> = ({ procedureId }) => {
       <DetailFractionChart
         key="fractionChart"
         {...filter(DetailFractionChartFragmentDoc, {
+          ...data.procedure,
+          size: dimensions.width,
+        })}
+        size={dimensions.width}
+      />,
+    );
+    charts.push(
+      <DetailDecisionBarChart
+        key="fractionChart"
+        {...filter(DetailDecisionBarChartFragmentDoc, {
           ...data.procedure,
           size: dimensions.width,
         })}

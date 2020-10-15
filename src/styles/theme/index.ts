@@ -72,10 +72,10 @@ export const lightTheme: DefaultTheme = {
       },
     },
     governmentVotes: {
-      yes: '#A1C655',
-      abstination: '#65AED4',
-      no: '#C24392',
-      notVoted: '#AFB4B4',
+      yes: '#8CBA39',
+      abstination: '#46A0C3',
+      no: '#D43194',
+      notVoted: '#9FA2A3',
     },
     charts: {
       piePercentage: '#fff',
@@ -112,10 +112,10 @@ export const darkTheme: DefaultTheme = {
       },
     },
     governmentVotes: {
-      yes: '#A1C655aa',
-      abstination: '#65AED4aa',
-      no: '#C24392aa',
-      notVoted: '#AFB4B4aa',
+      yes: '#8CBA39aa',
+      abstination: '#46A0C3aa',
+      no: '#D43194aa',
+      notVoted: '#9FA2A3aa',
     },
     charts: {
       piePercentage: '#fffb',

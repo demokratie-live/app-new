@@ -552,6 +552,23 @@ export type DetailGovernmentPieChartFragment = (
   )> }
 );
 
+export type DetailDecisionBarChartFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId'>
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'namedVote'>
+    & { partyVotes: Array<(
+      { __typename?: 'PartyVote' }
+      & Pick<PartyVote, 'party'>
+      & { deviants: (
+        { __typename?: 'Deviants' }
+        & Pick<Deviants, 'yes' | 'abstination' | 'no' | 'notVoted'>
+      ) }
+    )> }
+  )> }
+);
+
 export type DetailFractionChartFragment = (
   { __typename?: 'Procedure' }
   & Pick<Procedure, 'procedureId'>
@@ -580,6 +597,7 @@ export type GovernmentVoteResultsQuery = (
     { __typename?: 'Procedure' }
     & DetailGovernmentPieChartFragment
     & DetailFractionChartFragment
+    & DetailDecisionBarChartFragment
   ) }
 );
 
@@ -681,6 +699,23 @@ export const DetailGovernmentPieChartFragmentDoc = gql`
     namedVote
     partyVotes {
       party
+    }
+  }
+}
+    `;
+export const DetailDecisionBarChartFragmentDoc = gql`
+    fragment DetailDecisionBarChart on Procedure {
+  procedureId
+  voteResults {
+    namedVote
+    partyVotes {
+      party
+      deviants {
+        yes
+        abstination
+        no
+        notVoted
+      }
     }
   }
 }
@@ -842,10 +877,12 @@ export const GovernmentVoteResultsDocument = gql`
   procedure(id: $procedureId) {
     ...DetailGovernmentPieChart
     ...DetailFractionChart
+    ...DetailDecisionBarChart
   }
 }
     ${DetailGovernmentPieChartFragmentDoc}
-${DetailFractionChartFragmentDoc}`;
+${DetailFractionChartFragmentDoc}
+${DetailDecisionBarChartFragmentDoc}`;
 
 /**
  * __useGovernmentVoteResultsQuery__

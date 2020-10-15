@@ -70,9 +70,7 @@ export const GovernmentPieChart: React.FC<Props> = ({ voteResults }) => {
 
   const colorRange = [votedColors.yes, votedColors.abstination, votedColors.no];
 
-  const communityColors = scaleOrdinal<string>()
-    .domain(domain)
-    .range(colorRange);
+  const voteColors = scaleOrdinal<string>().domain(domain).range(colorRange);
 
   return (
     <Container>
@@ -84,7 +82,7 @@ export const GovernmentPieChart: React.FC<Props> = ({ voteResults }) => {
               item ? (
                 <Path
                   key={'pie_shape_' + index}
-                  fill={communityColors(preparedData[index].name)}
+                  fill={voteColors(preparedData[index].name)}
                   strokeWidth={dimensions.width / 100}
                   d={item}
                 />
