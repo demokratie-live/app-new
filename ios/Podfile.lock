@@ -314,7 +314,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNDeviceInfo (6.2.1):
+  - RNDeviceInfo (7.0.2):
     - React-Core
   - RNGestureHandler (1.8.0):
     - React
@@ -554,7 +554,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNDeviceInfo: 9b6aba9ffaed69ecb72bd13c7bcb0debf277bc9f
+  RNDeviceInfo: e1d82a27d0c1ea6278e3b141784dc38e51fc90f4
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
