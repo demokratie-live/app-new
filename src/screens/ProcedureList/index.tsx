@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -50,6 +50,7 @@ type Props = {};
 export const ProcedureList: React.FC<Props> = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ProfileScreenRouteProp>();
+  const [hasMoreData, setHasMoreData] = useState(true);
 
   const {
     data,
@@ -60,6 +61,7 @@ export const ProcedureList: React.FC<Props> = () => {
   } = useProceduresListQuery({
     variables: {
       listTypes: [route.params.list],
+      pageSize: 10,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -68,14 +70,18 @@ export const ProcedureList: React.FC<Props> = () => {
 
   const keyExtractor = useCallback(({ procedureId }) => procedureId, []);
   const onEndReached = useCallback(() => {
-    if (!loading) {
+    if (!loading && hasMoreData) {
       fetchMore({
         variables: {
           offset: currentProcedureLength,
         },
+      }).then(({ data: fetchMoreData }) => {
+        if (fetchMoreData.procedures.length === 0) {
+          setHasMoreData(false);
+        }
       });
     }
-  }, [currentProcedureLength, fetchMore, loading]);
+  }, [currentProcedureLength, fetchMore, hasMoreData, loading]);
 
   const renderItem: ListRenderItem<Procedure> = useCallback(
     ({ item }) => {
@@ -134,7 +140,7 @@ export const ProcedureList: React.FC<Props> = () => {
       ListFooterComponent={renderListFooterComponent}
       scrollIndicatorInsets={{ right: 1 }}
       ItemSeparatorComponent={ListItemSeperator}
-      onEndReachedThreshold={1}
+      // onEndReachedThreshold={1}
       onEndReached={onEndReached}
     />
   );

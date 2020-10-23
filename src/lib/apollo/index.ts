@@ -10,7 +10,7 @@ import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
 
 const httpLink: any = new HttpLink({
-  uri: 'https://internal.api.democracy-app.de',
+  uri: 'https://api.democracy-app.de',
 });
 
 const link = ApolloLink.from([
@@ -30,7 +30,7 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
         fields: {
           procedures: {
             keyArgs: ['listTypes'],
-            merge(existing = [], incoming: Procedure[]) {
+            merge(existing: Procedure[] = [], incoming: Procedure[]) {
               return [...existing, ...incoming];
             },
           },
@@ -38,6 +38,16 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       },
       Procedure: {
         keyFields: ['procedureId'],
+        fields: {
+          communityVotes: {
+            merge(existing, incoming: any) {
+              if (!existing && !incoming) {
+                return null;
+              }
+              return { ...existing, ...incoming };
+            },
+          },
+        },
       },
       CommunityConstituencyVotes: {
         keyFields: ['constituency'],

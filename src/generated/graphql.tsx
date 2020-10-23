@@ -504,6 +504,26 @@ export type MeQuery = (
   )> }
 );
 
+export type CountryMapConstituenciesQueryVariables = Exact<{
+  procedureId: Scalars['ID'];
+}>;
+
+
+export type CountryMapConstituenciesQuery = (
+  { __typename?: 'Query' }
+  & { procedure: (
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId' | 'voted'>
+    & { communityVotes?: Maybe<(
+      { __typename?: 'CommunityVotes' }
+      & { constituencies: Array<(
+        { __typename?: 'CommunityConstituencyVotes' }
+        & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'total' | 'constituency'>
+      )> }
+    )> }
+  ) }
+);
+
 export type CommunityVoteResultsQueryVariables = Exact<{
   procedureId: Scalars['ID'];
   constituencies?: Maybe<Array<Scalars['String']>>;
@@ -824,6 +844,49 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const CountryMapConstituenciesDocument = gql`
+    query CountryMapConstituencies($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    procedureId
+    voted
+    communityVotes {
+      constituencies {
+        yes
+        no
+        abstination
+        total
+        constituency
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCountryMapConstituenciesQuery__
+ *
+ * To run a query within a React component, call `useCountryMapConstituenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountryMapConstituenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountryMapConstituenciesQuery({
+ *   variables: {
+ *      procedureId: // value for 'procedureId'
+ *   },
+ * });
+ */
+export function useCountryMapConstituenciesQuery(baseOptions?: Apollo.QueryHookOptions<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>) {
+        return Apollo.useQuery<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>(CountryMapConstituenciesDocument, baseOptions);
+      }
+export function useCountryMapConstituenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>) {
+          return Apollo.useLazyQuery<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>(CountryMapConstituenciesDocument, baseOptions);
+        }
+export type CountryMapConstituenciesQueryHookResult = ReturnType<typeof useCountryMapConstituenciesQuery>;
+export type CountryMapConstituenciesLazyQueryHookResult = ReturnType<typeof useCountryMapConstituenciesLazyQuery>;
+export type CountryMapConstituenciesQueryResult = Apollo.QueryResult<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>;
 export const CommunityVoteResultsDocument = gql`
     query CommunityVoteResults($procedureId: ID!, $constituencies: [String!]) {
   procedure(id: $procedureId) {

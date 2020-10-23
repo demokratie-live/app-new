@@ -10,10 +10,12 @@ import { getTheme } from 'styles/theme';
 import GermanySvgComponent from 'assets/svgs/GermanySVG';
 import { Dimensions, View } from 'react-native';
 import { ChartLegend, ChartLegendData } from 'components/Charts/ChartLegend';
+import { CountryMap } from './CountryMap';
+import { scaleLinear } from 'd3';
 
-const Container = styled(Carousel).attrs({
+const Container = styled(Carousel).attrs(({ theme }) => ({
   activeDotStyle: {
-    backgroundColor: getTheme().colors.primaryText,
+    backgroundColor: theme.colors.primaryText,
     width: 8,
     height: 8,
     marginLeft: 3,
@@ -33,7 +35,7 @@ const Container = styled(Carousel).attrs({
     alignItems: 'center',
   },
   dotStyle: {
-    backgroundColor: getTheme().colors.secondaryText,
+    backgroundColor: theme.colors.secondaryText,
     width: 8,
     height: 8,
     marginLeft: 3,
@@ -41,7 +43,7 @@ const Container = styled(Carousel).attrs({
     marginTop: 3,
     marginBottom: 3,
   },
-})``;
+}))``;
 
 const Description = styled.Text`
   align-self: center;
@@ -55,7 +57,7 @@ interface Props {
 }
 
 export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
-  const themeContext = useContext(ThemeContext);
+  const theme = useContext(ThemeContext);
   const { constituency } = useContext(ConstituencyContext);
   const [dimensions, setDimensions] = useState<{
     width: number;
@@ -73,7 +75,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     setDimensions({ width, height: width });
   }, []);
 
-  const { voted: votedColors } = themeContext.colors.communityVotes;
+  const { voted: votedColors } = theme.colors.communityVotes;
 
   const colorRange = [votedColors.yes, votedColors.abstination, votedColors.no];
 
@@ -106,6 +108,14 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
         no: 0,
       };
 
+  const colorGenerator = scaleLinear()
+    .domain([-1, 0, 1])
+    .range([
+      theme.colors.communityVotes.voted.no,
+      theme.colors.communityVotes.voted.abstination,
+      theme.colors.communityVotes.voted.yes,
+    ]);
+
   const charts: any[] = [];
   if (data.procedure.communityVotes) {
     const legendData: ChartLegendData[] = [
@@ -126,6 +136,16 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
       },
     ];
 
+    const countryTotal = data.procedure.communityVotes.total;
+    const countryYesNoValue = (votesData.yes - votesData.no) / countryTotal;
+    const countryAbstinationValue = votesData.abstination / countryTotal / 2;
+    const countryColorValue =
+      countryYesNoValue === 0
+        ? 0
+        : countryYesNoValue > 0
+        ? countryYesNoValue - countryAbstinationValue
+        : countryYesNoValue + countryAbstinationValue;
+
     charts.push(
       <View key="communityChart">
         <PieChart
@@ -141,9 +161,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
               width={60}
               height={50}
               childProps={{
-                fill: `${getTheme().colors.secondaryText}`,
-                stroke: getTheme().colors.secondaryText,
-                strokeWidth: '2%',
+                fill: `${colorGenerator(countryColorValue)}`,
               }}
             />
           }
@@ -151,7 +169,10 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
         <ChartLegend data={legendData} />
       </View>,
     );
+
+    charts.push(<CountryMap key="countryMap" procedureId={procedureId} />);
   }
+
   if (data.procedure.communityVotes?.constituencies[0]) {
     const DynComp = getConstituencySvg(
       data.procedure.communityVotes?.constituencies[0].constituency,
@@ -174,6 +195,20 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
       },
     ];
 
+    const constituencyTotal =
+      data.procedure.communityVotes?.constituencies[0].total;
+    const constituencyYesNoValue =
+      (votesDataConstituency.yes - votesDataConstituency.no) /
+      constituencyTotal;
+    const constituencyAbstinationValue =
+      votesDataConstituency.abstination / constituencyTotal / 2;
+    const constituencyColorValue =
+      constituencyYesNoValue === 0
+        ? 0
+        : constituencyYesNoValue > 0
+        ? constituencyYesNoValue - constituencyAbstinationValue
+        : constituencyYesNoValue + constituencyAbstinationValue;
+
     charts.push(
       <View key="communityConstituencyChart">
         <PieChart
@@ -189,9 +224,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
               width={60}
               height={50}
               childProps={{
-                fill: `${getTheme().colors.secondaryText}`,
-                stroke: getTheme().colors.secondaryText,
-                strokeWidth: '2%',
+                fill: `${colorGenerator(constituencyColorValue)}`,
               }}
             />
           }
@@ -201,7 +234,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     );
   }
   return (
-    <Folding title="Communityergebis" opened={data.procedure.voted}>
+    <Folding title="Communityergebis" opened={data.procedure.voted || true}>
       <Container
         showsControls={false}
         style={{ height: dimensions.width + 30 }}>

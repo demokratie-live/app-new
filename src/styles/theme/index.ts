@@ -1,6 +1,11 @@
 import { Appearance } from 'react-native';
 import { DefaultTheme } from 'styled-components/native';
 
+interface FractionColor {
+  background: string;
+  text: string;
+}
+
 declare module 'styled-components' {
   export interface DefaultTheme {
     primaryColor: string;
@@ -37,6 +42,15 @@ declare module 'styled-components' {
         soon: string;
         current: string;
         past: string;
+      };
+      fractions: {
+        Union: FractionColor;
+        SPD: FractionColor;
+        AfD: FractionColor;
+        FDP: FractionColor;
+        Linke: FractionColor;
+        Grüne: FractionColor;
+        fraktionslos: FractionColor;
       };
     };
     paddings: {
@@ -85,6 +99,36 @@ export const lightTheme: DefaultTheme = {
       current: '#F5A623',
       past: '#DA4C3D',
     },
+    fractions: {
+      Union: {
+        background: '#32302e',
+        text: '#dad9d4',
+      },
+      SPD: {
+        background: '#E3000F',
+        text: '#fff',
+      },
+      AfD: {
+        background: '#009ee0',
+        text: '#fff',
+      },
+      FDP: {
+        background: '#ffed00',
+        text: '#e5007d',
+      },
+      Linke: {
+        background: '#CE2C55',
+        text: '#fff',
+      },
+      Grüne: {
+        background: '#46962b',
+        text: '#fff',
+      },
+      fraktionslos: {
+        background: '#aaa',
+        text: 'white',
+      },
+    },
   },
   paddings,
 };
@@ -124,6 +168,36 @@ export const darkTheme: DefaultTheme = {
       soon: '#59BC6Caa',
       current: '#F5A623aa',
       past: '#DA4C3Daa',
+    },
+    fractions: {
+      Union: {
+        background: '#000000aa',
+        text: '#fffb',
+      },
+      SPD: {
+        background: '#E3000Faa',
+        text: '#fffb',
+      },
+      AfD: {
+        background: '#009ee0aa',
+        text: '#fffb',
+      },
+      FDP: {
+        background: '#ffed00aa',
+        text: '#e5007dbb',
+      },
+      Linke: {
+        background: '#CE2C55aa',
+        text: '#fffb',
+      },
+      Grüne: {
+        background: '#46962baa',
+        text: '#fffb',
+      },
+      fraktionslos: {
+        background: '#aaab',
+        text: '#ffffffbb',
+      },
     },
   },
   paddings,

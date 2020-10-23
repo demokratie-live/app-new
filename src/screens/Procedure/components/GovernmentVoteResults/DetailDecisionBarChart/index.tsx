@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { DetailDecisionBarChartFragment } from 'generated/graphql';
-import { FractionBarChart } from './FractionBarChart';
+import { DecisionBarChart } from './DecisionBarChart';
 import styled, { ThemeContext } from 'styled-components/native';
 import { ChartLegend } from 'components/Charts/ChartLegend';
 import { ChartLegendData } from '../../../../../components/Charts/ChartLegend';
 
-interface DecitionBarPart {
+export interface DecitionBarPart {
   party: string;
   sum: number;
 }
 
-interface DecitionChartData {
+export interface DecitionChartData {
   yes: DecitionBarPart[];
   abstination: DecitionBarPart[];
   no: DecitionBarPart[];
@@ -29,7 +29,6 @@ export const DetailDecisionBarChart: React.FC<Props> = ({
   voteResults,
   size,
 }) => {
-  const [selectedParty, setSelectedParty] = useState(0);
   const themeContext = useContext(ThemeContext);
   if (!voteResults) {
     return null;
@@ -119,12 +118,7 @@ export const DetailDecisionBarChart: React.FC<Props> = ({
 
   return (
     <Container>
-      <FractionBarChart
-        data={voteResults.partyVotes}
-        size={size - 48}
-        setSelectedParty={setSelectedParty}
-        selectedParty={selectedParty}
-      />
+      <DecisionBarChart data={decisionData} size={size} />
       <ChartLegend data={chartLegendData} />
     </Container>
   );
