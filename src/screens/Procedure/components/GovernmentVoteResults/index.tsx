@@ -1,6 +1,7 @@
 import Folding from 'components/Folding';
 import {
   DetailDecisionBarChartFragmentDoc,
+  DetailDecisionTextFragmentDoc,
   DetailFractionChartFragmentDoc,
   DetailGovernmentPieChartFragmentDoc,
   useGovernmentVoteResultsQuery,
@@ -13,6 +14,7 @@ import { DetailGovernmentPieChart } from './BundestagPieChart';
 import { filter } from 'graphql-anywhere';
 import { DetailFractionChart } from './DetailFractionChart';
 import { DetailDecisionBarChart } from './DetailDecisionBarChart';
+import { DetailDecisionText } from './DetailDecisionText';
 
 const Container = styled(Carousel).attrs(({ theme }) => ({
   activeDotStyle: {
@@ -117,13 +119,20 @@ export const GovernmentVoteResults: React.FC<Props> = ({ procedureId }) => {
         size={dimensions.width}
       />,
     );
+    if (!data.procedure.voteResults.namedVote) {
+      charts.push(
+        <DetailDecisionText
+          key="fractionChart"
+          {...filter(DetailDecisionTextFragmentDoc, {
+            ...data.procedure,
+          })}
+        />,
+      );
+    }
   }
 
   return (
-    <Folding
-      title="Bundestagsergebnis"
-      // opened={data.procedure.voted}
-      opened>
+    <Folding title="Bundestagsergebnis" opened={data.procedure.voted}>
       <Container
         showsControls={false}
         style={{ height: dimensions.width + 30 }}>

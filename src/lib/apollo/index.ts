@@ -10,7 +10,7 @@ import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
 
 const httpLink: any = new HttpLink({
-  uri: 'https://api.democracy-app.de',
+  uri: 'https://internal.api.democracy-app.de',
 });
 
 const link = ApolloLink.from([

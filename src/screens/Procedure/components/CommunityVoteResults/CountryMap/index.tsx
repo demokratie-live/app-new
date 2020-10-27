@@ -5,9 +5,11 @@ import { G } from 'react-native-svg';
 import styled, { ThemeContext } from 'styled-components/native';
 import { constituencySvgs } from './Constituencies';
 import { CountryMapSvg } from './CountryMapSvg';
+import { useWindowDimensions } from 'react-native';
 
 const Container = styled.View`
   align-items: center;
+  flex: 1;
 `;
 
 interface Props {
@@ -15,6 +17,7 @@ interface Props {
 }
 
 export const CountryMap: React.FC<Props> = ({ procedureId }) => {
+  const { width } = useWindowDimensions();
   const [loadConstituencies, { data }] = useCountryMapConstituenciesLazyQuery({
     variables: {
       procedureId,
@@ -36,7 +39,7 @@ export const CountryMap: React.FC<Props> = ({ procedureId }) => {
 
   return (
     <Container>
-      <CountryMapSvg width={300}>
+      <CountryMapSvg width={width / 1.5}>
         {allConstituencies.constituencies.map(
           ({ constituency, yes, abstination, no, total }) => {
             const yesNoValue = (yes - no) / total;
@@ -48,21 +51,24 @@ export const CountryMap: React.FC<Props> = ({ procedureId }) => {
                 : yesNoValue > 0
                 ? yesNoValue - abstinationValue
                 : yesNoValue + abstinationValue;
-            const colorRange = scaleLinear()
-              .domain([-1, 0, 1])
-              .range([
-                theme.colors.communityVotes.voted.no,
-                theme.colors.communityVotes.voted.abstination,
-                theme.colors.communityVotes.voted.yes,
-              ]);
-            const opacityRange = scaleLinear().domain([0, 1]).range([0.1, 1]);
+            const colorRange = scaleLinear().domain([-1, 0, 1]).range([
+              // @ts-ignore
+              theme.colors.communityVotes.voted.no,
+              // @ts-ignore
+              theme.colors.communityVotes.voted.abstination,
+              // @ts-ignore
+              theme.colors.communityVotes.voted.yes,
+            ]);
+            const opacityRange = scaleLinear().domain([0, 1]).range([0.3, 1]);
             return (
               <G
                 key={`constituency-${procedureId}-${constituency}`}
                 opacity={opacityRange(
                   total / (maxVotersConstituency as number),
                 )}>
-                {constituencySvgs[constituency](colorRange(colorValue))}
+                {(constituencySvgs as any)[constituency](
+                  colorRange(colorValue),
+                )}
               </G>
             );
           },

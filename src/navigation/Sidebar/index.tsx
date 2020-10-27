@@ -25,7 +25,7 @@ const Drawer = createDrawerNavigator<SidebarNavigatorParamList>();
 export const Sidebar: React.FC = () => {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <SidebarScreen {...props} />}
+      drawerContent={(props: any) => <SidebarScreen {...props} />}
       drawerType={'back'}
       overlayColor="1"
       drawerContentOptions={{

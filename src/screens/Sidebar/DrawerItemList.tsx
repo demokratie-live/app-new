@@ -13,13 +13,14 @@ import {
   DrawerDescriptorMap,
 } from '@react-navigation/drawer/lib/typescript/src/types';
 import styled from 'styled-components/native';
+import { SidebarNavigatorParamList } from 'navigation/Sidebar';
 
 const Space = styled.View`
   padding-bottom: 18px;
 `;
 
 type Props = Omit<DrawerContentOptions, 'contentContainerStyle' | 'style'> & {
-  state: DrawerNavigationState;
+  state: DrawerNavigationState<SidebarNavigatorParamList>;
   navigation: DrawerNavigationHelpers;
   descriptors: DrawerDescriptorMap;
 };

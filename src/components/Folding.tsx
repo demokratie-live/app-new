@@ -39,12 +39,18 @@ const Content = styled.View`
 `;
 
 interface Props {
-  title: string;
+  title: string | JSX.Element;
   opened?: boolean;
+  disableCollapseing?: boolean;
 }
 
-const Folding: React.FC<Props> = ({ title, opened = false, children }) => {
-  const [open, setOpen] = useState(opened);
+const Folding: React.FC<Props> = ({
+  title,
+  opened = false,
+  children,
+  disableCollapseing = false,
+}) => {
+  const [open, setOpen] = useState(opened || disableCollapseing);
 
   useEffect(() => {
     setOpen(opened);
@@ -52,9 +58,9 @@ const Folding: React.FC<Props> = ({ title, opened = false, children }) => {
 
   return (
     <Wrapper>
-      <Header onPress={() => setOpen(!open)}>
+      <Header onPress={() => !disableCollapseing && setOpen(!open)}>
         <Headline>{title}</Headline>
-        <CollapseIcon open={open} />
+        {!disableCollapseing && <CollapseIcon open={open} />}
       </Header>
       {open && (
         <>

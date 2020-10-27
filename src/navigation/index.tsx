@@ -9,6 +9,7 @@ import { getReadableVersion } from 'react-native-device-info';
 import { Sidebar } from './Sidebar';
 import { enableScreens } from 'react-native-screens';
 import { PdfScreen, PdfScreenOptions } from 'screens/Pdf';
+import { VerificationNavigation } from './verification';
 enableScreens();
 
 export type RootStackParamList = {
@@ -60,8 +61,8 @@ export const Navigation = () => {
             />
             <Stack.Screen
               name="Verification"
-              component={Instructions}
-              options={InstructionsScreenOptions}
+              component={VerificationNavigation}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Pdf"

@@ -1,7 +1,9 @@
 query GovernmentVoteResults($procedureId: ID!) {
   procedure(id: $procedureId) {
+    voted
     ...DetailGovernmentPieChart
     ...DetailFractionChart
     ...DetailDecisionBarChart
+    ...DetailDecisionText
   }
 }

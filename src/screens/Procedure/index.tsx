@@ -10,6 +10,7 @@ import {
   ProcedureDetailsFragmentDoc,
   ImportantDocumentsFragmentDoc,
   ProcedureHistoryFragmentDoc,
+  DetailActionBarFragmentDoc,
 } from 'generated/graphql';
 import { filter } from 'graphql-anywhere';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
@@ -24,6 +25,7 @@ import { History } from './components/History';
 import { RefreshControl, SafeAreaView } from 'react-native';
 import { GovernmentVoteResults } from './components/GovernmentVoteResults';
 import { NetworkStatus } from '@apollo/client';
+import { ActionBar } from './components/ActionBar';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagStackNavigatorParamList,
@@ -99,6 +101,7 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
         <History {...filter(ProcedureHistoryFragmentDoc, procedure)} />
         <CommuntiyVoteResults procedureId={procedureId} />
         <GovernmentVoteResults procedureId={procedureId} />
+        <ActionBar {...filter(DetailActionBarFragmentDoc, procedure)} />
       </SafeAreaView>
     </Container>
   );

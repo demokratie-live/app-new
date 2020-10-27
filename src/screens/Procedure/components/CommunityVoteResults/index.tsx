@@ -1,14 +1,13 @@
 import Folding from 'components/Folding';
 import { ConstituencyContext } from 'context/constituency';
 import { useCommunityVoteResultsQuery } from 'generated/graphql';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
 import { PieChart } from '../PieChart';
 import Carousel from 'pinar';
 import { getConstituencySvg } from 'assets/svgs/constituencies';
-import { getTheme } from 'styles/theme';
 import GermanySvgComponent from 'assets/svgs/GermanySVG';
-import { Dimensions, View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { ChartLegend, ChartLegendData } from 'components/Charts/ChartLegend';
 import { CountryMap } from './CountryMap';
 import { scaleLinear } from 'd3';
@@ -59,21 +58,13 @@ interface Props {
 export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
   const theme = useContext(ThemeContext);
   const { constituency } = useContext(ConstituencyContext);
-  const [dimensions, setDimensions] = useState<{
-    width: number;
-    height: number;
-  }>({ width: 0, height: 0 });
+  const { width } = useWindowDimensions();
   const { data } = useCommunityVoteResultsQuery({
     variables: {
       procedureId,
       constituencies: constituency ? [constituency] : [],
     },
   });
-
-  useEffect(() => {
-    const width = Dimensions.get('window').width;
-    setDimensions({ width, height: width });
-  }, []);
 
   const { voted: votedColors } = theme.colors.communityVotes;
 
@@ -108,13 +99,14 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
         no: 0,
       };
 
-  const colorGenerator = scaleLinear()
-    .domain([-1, 0, 1])
-    .range([
-      theme.colors.communityVotes.voted.no,
-      theme.colors.communityVotes.voted.abstination,
-      theme.colors.communityVotes.voted.yes,
-    ]);
+  const colorGenerator = scaleLinear().domain([-1, 0, 1]).range([
+    // @ts-ignore
+    theme.colors.communityVotes.voted.no,
+    // @ts-ignore
+    theme.colors.communityVotes.voted.abstination,
+    // @ts-ignore
+    theme.colors.communityVotes.voted.yes,
+  ]);
 
   const charts: any[] = [];
   if (data.procedure.communityVotes) {
@@ -154,7 +146,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
           innerTextTop={`${data.procedure.communityVotes.total}`}
           votesData={votesData}
           colors={colorRange}
-          size={dimensions.width}
+          size={width}
           total={data.procedure.communityVotes.total}
           topRightSvg={
             <GermanySvgComponent
@@ -218,7 +210,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
           innerTextTop={`${data.procedure.communityVotes?.constituencies[0].total}`}
           total={data.procedure.communityVotes?.constituencies[0].total}
           votesData={votesDataConstituency}
-          size={dimensions.width}
+          size={width}
           topRightSvg={
             <DynComp.default
               width={60}
@@ -234,10 +226,8 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     );
   }
   return (
-    <Folding title="Communityergebis" opened={data.procedure.voted || true}>
-      <Container
-        showsControls={false}
-        style={{ height: dimensions.width + 30 }}>
+    <Folding title="Communityergebis" opened={data.procedure.voted}>
+      <Container showsControls={false} style={{ height: width + 30 }}>
         {charts}
       </Container>
       <Description>

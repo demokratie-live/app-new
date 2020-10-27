@@ -504,6 +504,11 @@ export type MeQuery = (
   )> }
 );
 
+export type DetailActionBarFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId' | 'type' | 'voted'>
+);
+
 export type CountryMapConstituenciesQueryVariables = Exact<{
   procedureId: Scalars['ID'];
 }>;
@@ -589,6 +594,15 @@ export type DetailDecisionBarChartFragment = (
   )> }
 );
 
+export type DetailDecisionTextFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId'>
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'decisionText'>
+  )> }
+);
+
 export type DetailFractionChartFragment = (
   { __typename?: 'Procedure' }
   & Pick<Procedure, 'procedureId'>
@@ -615,9 +629,11 @@ export type GovernmentVoteResultsQuery = (
   { __typename?: 'Query' }
   & { procedure: (
     { __typename?: 'Procedure' }
+    & Pick<Procedure, 'voted'>
     & DetailGovernmentPieChartFragment
     & DetailFractionChartFragment
     & DetailDecisionBarChartFragment
+    & DetailDecisionTextFragment
   ) }
 );
 
@@ -708,6 +724,13 @@ export const ListItemFragmentDoc = gql`
 }
     ${VoteIndexFragmentDoc}
 ${VoteDateFragmentDoc}`;
+export const DetailActionBarFragmentDoc = gql`
+    fragment DetailActionBar on Procedure {
+  procedureId
+  type
+  voted
+}
+    `;
 export const DetailGovernmentPieChartFragmentDoc = gql`
     fragment DetailGovernmentPieChart on Procedure {
   procedureId
@@ -737,6 +760,14 @@ export const DetailDecisionBarChartFragmentDoc = gql`
         notVoted
       }
     }
+  }
+}
+    `;
+export const DetailDecisionTextFragmentDoc = gql`
+    fragment DetailDecisionText on Procedure {
+  procedureId
+  voteResults {
+    decisionText
   }
 }
     `;
@@ -938,14 +969,17 @@ export type CommunityVoteResultsQueryResult = Apollo.QueryResult<CommunityVoteRe
 export const GovernmentVoteResultsDocument = gql`
     query GovernmentVoteResults($procedureId: ID!) {
   procedure(id: $procedureId) {
+    voted
     ...DetailGovernmentPieChart
     ...DetailFractionChart
     ...DetailDecisionBarChart
+    ...DetailDecisionText
   }
 }
     ${DetailGovernmentPieChartFragmentDoc}
 ${DetailFractionChartFragmentDoc}
-${DetailDecisionBarChartFragmentDoc}`;
+${DetailDecisionBarChartFragmentDoc}
+${DetailDecisionTextFragmentDoc}`;
 
 /**
  * __useGovernmentVoteResultsQuery__

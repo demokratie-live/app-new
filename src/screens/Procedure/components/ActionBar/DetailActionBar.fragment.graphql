@@ -1,0 +1,5 @@
+fragment DetailActionBar on Procedure {
+  procedureId
+  type
+  voted
+}
