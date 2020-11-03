@@ -506,7 +506,7 @@ export type MeQuery = (
 
 export type DetailActionBarFragment = (
   { __typename?: 'Procedure' }
-  & Pick<Procedure, 'procedureId' | 'type' | 'voted'>
+  & Pick<Procedure, 'procedureId' | 'title' | 'type' | 'voted'>
 );
 
 export type CountryMapConstituenciesQueryVariables = Exact<{
@@ -727,6 +727,7 @@ ${VoteDateFragmentDoc}`;
 export const DetailActionBarFragmentDoc = gql`
     fragment DetailActionBar on Procedure {
   procedureId
+  title
   type
   voted
 }
@@ -1050,7 +1051,12 @@ export type ProcedureDetailLazyQueryHookResult = ReturnType<typeof useProcedureD
 export type ProcedureDetailQueryResult = Apollo.QueryResult<ProcedureDetailQuery, ProcedureDetailQueryVariables>;
 export const ProceduresListDocument = gql`
     query ProceduresList($offset: Int, $pageSize: Int, $listTypes: [ListType!], $filter: ProcedureFilter) {
-  procedures(offset: $offset, pageSize: $pageSize, listTypes: $listTypes, filter: $filter) {
+  procedures(
+    offset: $offset
+    pageSize: $pageSize
+    listTypes: $listTypes
+    filter: $filter
+  ) {
     procedureId
     title
     ...ListItem

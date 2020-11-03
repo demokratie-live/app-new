@@ -87,14 +87,13 @@ export const PhoneNumber: React.FC = () => {
             const res = await requestCode({
               variables: { newPhone: preparedPhoneNumber },
             });
+            console.log('res.data', res.data);
             if (res.data && !res.data.requestCode.succeeded) {
               setExpireTime(res.data.requestCode.expireTime);
               setResendTime(res.data.requestCode.resendTime);
               showNotification(res.data.requestCode.reason || '');
               refetchMe();
             } else if (res.data) {
-              // TODO: Navigate to Code Input if aut_code_expires is not yet expired
-              // Contains a Date (String)
               setExpireTime(res.data.requestCode.expireTime);
               setResendTime(res.data.requestCode.resendTime);
               navigation.push('VerificationCodeInput', {});

@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { DetailActionBarFragment } from 'generated/graphql';
+import {
+  DetailActionBarFragment,
+  DetailActionBarFragmentDoc,
+} from 'generated/graphql';
 import Folding from 'components/Folding';
 import { VerifyOverlay } from './components/VerifyOverlay';
 import { VoteButtons } from './components/VoteButtons';
 import { PostVotedButtons } from './components/PostVotedButtons';
+import { filter } from 'graphql-anywhere';
 
 const Container = styled.View`
   /* margin-top: ${({ theme }) => theme.paddings.outer}; */
@@ -24,7 +28,7 @@ const TitleAddition = styled.Text`
 interface Props extends DetailActionBarFragment {}
 
 export const ActionBar: React.FC<Props> = (props) => {
-  const { type, voted } = props;
+  const { type, voted, procedureId } = props;
 
   return (
     <Folding
@@ -37,7 +41,13 @@ export const ActionBar: React.FC<Props> = (props) => {
         </>
       }>
       <VerifyOverlay />
-      <Container>{!voted ? <VoteButtons /> : <PostVotedButtons />}</Container>
+      <Container>
+        {!voted ? (
+          <VoteButtons {...filter(DetailActionBarFragmentDoc, props)} />
+        ) : (
+          <PostVotedButtons procedureId={procedureId} />
+        )}
+      </Container>
     </Folding>
   );
 };

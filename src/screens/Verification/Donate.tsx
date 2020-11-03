@@ -7,6 +7,8 @@ import styled from 'styled-components/native';
 import { AuthContext } from 'context/Auth';
 import SvgIconappios from 'assets/svgs/icons/IconAppIos';
 import { Button } from 'components/Botton';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { VerificationStackParamList } from 'navigation/verification';
 
 const SAV = styled.SafeAreaView`
   flex: 1;
@@ -63,14 +65,18 @@ const TextCenter = styled.Text`
 const ButtonContainer = styled.View`
   flex: 1;
   width: 100%;
-  padding-right: 25;
-  padding-left: 25;
-  padding-bottom: 25;
+  padding-right: 25px;
+  padding-left: 25px;
+  padding-bottom: 25px;
 `;
 
+type NavigationProp = StackNavigationProp<
+  VerificationStackParamList,
+  'VerificationDonation'
+>;
+
 export const SmsDonateScreen: React.FC = () => {
-  const navigation = useNavigation();
-  const { goBack } = useNavigation();
+  const { navigate, goBack, popToTop } = useNavigation<NavigationProp>();
   const { refetch: refetchMe } = useContext(AuthContext);
 
   useEffect(() => {
@@ -81,11 +87,12 @@ export const SmsDonateScreen: React.FC = () => {
 
   const onClose = () => {
     refetchMe();
+    popToTop();
     goBack();
   };
 
   const onDonate = async () => {
-    navigation.navigate('Donate');
+    navigate('Donate');
     refetchMe();
   };
 

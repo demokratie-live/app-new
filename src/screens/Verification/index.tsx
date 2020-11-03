@@ -54,6 +54,7 @@ export type VerificationNavigationProps = StackNavigationProp<
 export const VerificationStart: React.FC = () => {
   const navigation = useNavigation<VerificationNavigationProps>();
   const { countdown, expireTime } = useContext(VerificationContext);
+
   const authCodeExpires = expireTime > new Date();
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">

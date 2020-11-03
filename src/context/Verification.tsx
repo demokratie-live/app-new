@@ -8,6 +8,7 @@ interface InitialStateInterface {
   setResendTime: (value: string) => void;
   expireTime: Date;
   setExpireTime: (value: string) => void;
+  remove: () => void;
 }
 
 const defaults: InitialStateInterface = {
@@ -25,10 +26,13 @@ const defaults: InitialStateInterface = {
   },
   setExpireTime: () => {
     throw new Error(
-      'VerificationContext: setResendTime function is not defined',
+      'VerificationContext: setExpireTime function is not defined',
     );
   },
   expireTime: new Date(),
+  remove: () => {
+    throw new Error('VerificationContext: remove function is not defined');
+  },
 };
 
 export const VerificationContext = createContext<InitialStateInterface>(
@@ -101,6 +105,14 @@ export const VerificationProvider: FC = ({ children }) => {
     });
   };
 
+  const remove = () => {
+    AsyncStorage.multiRemove([
+      'auth_token',
+      'auth_refreshToken',
+      'auth_phoneHash',
+    ]);
+  };
+
   return (
     <VerificationContext.Provider
       value={{
@@ -110,6 +122,7 @@ export const VerificationProvider: FC = ({ children }) => {
         expireTime,
         setResendTime,
         setExpireTime,
+        remove,
       }}>
       {children}
     </VerificationContext.Provider>

@@ -4,14 +4,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { BundestagTabNavigator } from './TabNavigation';
 import styled from 'styled-components/native';
 import { ProcedureDetailScreen } from 'screens/Procedure';
+import { VoteSelection } from 'generated/graphql';
+import { VotingScreen } from 'screens/Voting';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
   Procedure: { procedureId: string; title: string };
   Voting: {
-    //   selection: VoteSelection.YES | VoteSelection.ABSTINATION | VoteSelection.NO;
+    selection: VoteSelection.Yes | VoteSelection.Abstination | VoteSelection.No;
     procedureId: string;
-    procedureObjId: string;
     title: string;
   };
   Filter: undefined;
@@ -45,6 +46,7 @@ export const BundestagStackNavigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="Procedure" component={ProcedureDetailScreen} />
+      <Stack.Screen name="Voting" component={VotingScreen} />
     </Navigator>
   );
 };

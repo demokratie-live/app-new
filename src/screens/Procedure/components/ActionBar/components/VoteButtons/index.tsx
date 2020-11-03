@@ -1,3 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { VoteSelection } from 'generated/graphql';
+import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import React from 'react';
 import styled from 'styled-components/native';
 import VoteButton from './VoteButton';
@@ -18,9 +22,18 @@ const VoteButtonLabel = styled.Text`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-interface Props {}
+type VoteVerificationScreenNavigationProp = StackNavigationProp<
+  BundestagStackNavigatorParamList,
+  'Voting'
+>;
 
-export const VoteButtons: React.FC<Props> = ({}) => {
+interface Props {
+  procedureId: string;
+  title: string;
+}
+
+export const VoteButtons: React.FC<Props> = ({ procedureId, title }) => {
+  const { navigate } = useNavigation<VoteVerificationScreenNavigationProp>();
   return (
     <Container>
       <VoteButtonWrapper>
@@ -29,12 +42,11 @@ export const VoteButtons: React.FC<Props> = ({}) => {
           selection="YES"
           voteSelection={'YES'}
           onPress={() => {
-            // navigation.navigate('Voting', {
-            //   selection: VoteSelection.YES,
-            //   procedureId,
-            //   procedureObjId,
-            //   title,
-            // });
+            navigate('Voting', {
+              selection: VoteSelection.Yes,
+              procedureId,
+              title,
+            });
           }}
         />
         <VoteButtonLabel>{true ? 'Zustimmen' : 'Zugestimmt'}</VoteButtonLabel>
@@ -46,15 +58,14 @@ export const VoteButtons: React.FC<Props> = ({}) => {
           selection="ABSTINATION"
           voteSelection={'ABSTINATION'}
           onPress={() => {
-            // navigation.navigate('Voting', {
-            //   selection: VoteSelection.YES,
-            //   procedureId,
-            //   procedureObjId,
-            //   title,
-            // });
+            navigate('Voting', {
+              selection: VoteSelection.Abstination,
+              procedureId,
+              title,
+            });
           }}
         />
-        <VoteButtonLabel>{true ? 'Zustimmen' : 'Zugestimmt'}</VoteButtonLabel>
+        <VoteButtonLabel>Enthalten</VoteButtonLabel>
       </VoteButtonWrapper>
 
       <VoteButtonWrapper>
@@ -63,15 +74,14 @@ export const VoteButtons: React.FC<Props> = ({}) => {
           selection="NO"
           voteSelection={'NO'}
           onPress={() => {
-            // navigation.navigate('Voting', {
-            //   selection: VoteSelection.YES,
-            //   procedureId,
-            //   procedureObjId,
-            //   title,
-            // });
+            navigate('Voting', {
+              selection: VoteSelection.No,
+              procedureId,
+              title,
+            });
           }}
         />
-        <VoteButtonLabel>{true ? 'Zustimmen' : 'Zugestimmt'}</VoteButtonLabel>
+        <VoteButtonLabel>{true ? 'Ablehnen' : 'Abgelehnt'}</VoteButtonLabel>
       </VoteButtonWrapper>
     </Container>
   );
