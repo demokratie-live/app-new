@@ -506,7 +506,20 @@ export type MeQuery = (
 
 export type DetailActionBarFragment = (
   { __typename?: 'Procedure' }
-  & Pick<Procedure, 'procedureId' | 'title' | 'type' | 'voted'>
+  & Pick<Procedure, 'procedureId' | 'title' | 'type' | 'voted' | 'notify'>
+);
+
+export type ToggleNotificationMutationVariables = Exact<{
+  procedureId: Scalars['String'];
+}>;
+
+
+export type ToggleNotificationMutation = (
+  { __typename?: 'Mutation' }
+  & { toggleNotification?: Maybe<(
+    { __typename?: 'Procedure' }
+    & Pick<Procedure, 'procedureId' | 'notify'>
+  )> }
 );
 
 export type CountryMapConstituenciesQueryVariables = Exact<{
@@ -529,26 +542,17 @@ export type CountryMapConstituenciesQuery = (
   ) }
 );
 
-export type CommunityVoteResultsQueryVariables = Exact<{
-  procedureId: Scalars['ID'];
-  constituencies?: Maybe<Array<Scalars['String']>>;
-}>;
-
-
-export type CommunityVoteResultsQuery = (
-  { __typename?: 'Query' }
-  & { procedure: (
-    { __typename?: 'Procedure' }
-    & Pick<Procedure, 'procedureId' | 'voted'>
-    & { communityVotes?: Maybe<(
-      { __typename?: 'CommunityVotes' }
-      & Pick<CommunityVotes, 'yes' | 'no' | 'abstination' | 'total'>
-      & { constituencies: Array<(
-        { __typename?: 'CommunityConstituencyVotes' }
-        & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'total' | 'constituency'>
-      )> }
+export type CommunityVoteResultsFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, 'procedureId' | 'voted'>
+  & { communityVotes?: Maybe<(
+    { __typename?: 'CommunityVotes' }
+    & Pick<CommunityVotes, 'yes' | 'no' | 'abstination' | 'total'>
+    & { constituencies: Array<(
+      { __typename?: 'CommunityConstituencyVotes' }
+      & Pick<CommunityConstituencyVotes, 'yes' | 'no' | 'abstination' | 'total' | 'constituency'>
     )> }
-  ) }
+  )> }
 );
 
 export type ImportantDocumentFragment = (
@@ -646,10 +650,13 @@ export type ProcedureDetailsFragment = (
   { __typename?: 'Procedure' }
   & Pick<Procedure, 'procedureId' | 'subjectGroups' | 'currentStatus' | 'type' | 'submissionDate' | 'voteDate' | 'abstract'>
   & ImportantDocumentsFragment
+  & DetailActionBarFragment
+  & CommunityVoteResultsFragment
 );
 
 export type ProcedureDetailQueryVariables = Exact<{
   id: Scalars['ID'];
+  constituencies?: Maybe<Array<Scalars['String']>>;
 }>;
 
 
@@ -659,10 +666,12 @@ export type ProcedureDetailQuery = (
     { __typename?: 'Procedure' }
     & Pick<Procedure, 'procedureId'>
     & ListItemFragment
-    & CommunityVotesPieChartFragment
     & GovernmentVotesPieChartFragment
     & ProcedureDetailsFragment
     & ProcedureHistoryFragment
+  ), communityVotesProcedure: (
+    { __typename?: 'Procedure' }
+    & CommunityVotesPieChartFragment
   ) }
 );
 
@@ -724,14 +733,6 @@ export const ListItemFragmentDoc = gql`
 }
     ${VoteIndexFragmentDoc}
 ${VoteDateFragmentDoc}`;
-export const DetailActionBarFragmentDoc = gql`
-    fragment DetailActionBar on Procedure {
-  procedureId
-  title
-  type
-  voted
-}
-    `;
 export const DetailGovernmentPieChartFragmentDoc = gql`
     fragment DetailGovernmentPieChart on Procedure {
   procedureId
@@ -810,6 +811,34 @@ export const ImportantDocumentsFragmentDoc = gql`
   }
 }
     ${ImportantDocumentFragmentDoc}`;
+export const DetailActionBarFragmentDoc = gql`
+    fragment DetailActionBar on Procedure {
+  procedureId
+  title
+  type
+  voted
+  notify
+}
+    `;
+export const CommunityVoteResultsFragmentDoc = gql`
+    fragment CommunityVoteResults on Procedure {
+  procedureId
+  voted
+  communityVotes(constituencies: $constituencies) {
+    yes
+    no
+    abstination
+    total
+    constituencies {
+      yes
+      no
+      abstination
+      total
+      constituency
+    }
+  }
+}
+    `;
 export const ProcedureDetailsFragmentDoc = gql`
     fragment ProcedureDetails on Procedure {
   procedureId
@@ -820,8 +849,12 @@ export const ProcedureDetailsFragmentDoc = gql`
   voteDate
   abstract
   ...ImportantDocuments
+  ...DetailActionBar
+  ...CommunityVoteResults
 }
-    ${ImportantDocumentsFragmentDoc}`;
+    ${ImportantDocumentsFragmentDoc}
+${DetailActionBarFragmentDoc}
+${CommunityVoteResultsFragmentDoc}`;
 export const CommunityVotesPieChartFragmentDoc = gql`
     fragment CommunityVotesPieChart on Procedure {
   procedureId
@@ -876,6 +909,39 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ToggleNotificationDocument = gql`
+    mutation ToggleNotification($procedureId: String!) {
+  toggleNotification(procedureId: $procedureId) {
+    procedureId
+    notify
+  }
+}
+    `;
+export type ToggleNotificationMutationFn = Apollo.MutationFunction<ToggleNotificationMutation, ToggleNotificationMutationVariables>;
+
+/**
+ * __useToggleNotificationMutation__
+ *
+ * To run a mutation, you first call `useToggleNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleNotificationMutation, { data, loading, error }] = useToggleNotificationMutation({
+ *   variables: {
+ *      procedureId: // value for 'procedureId'
+ *   },
+ * });
+ */
+export function useToggleNotificationMutation(baseOptions?: Apollo.MutationHookOptions<ToggleNotificationMutation, ToggleNotificationMutationVariables>) {
+        return Apollo.useMutation<ToggleNotificationMutation, ToggleNotificationMutationVariables>(ToggleNotificationDocument, baseOptions);
+      }
+export type ToggleNotificationMutationHookResult = ReturnType<typeof useToggleNotificationMutation>;
+export type ToggleNotificationMutationResult = Apollo.MutationResult<ToggleNotificationMutation>;
+export type ToggleNotificationMutationOptions = Apollo.BaseMutationOptions<ToggleNotificationMutation, ToggleNotificationMutationVariables>;
 export const CountryMapConstituenciesDocument = gql`
     query CountryMapConstituencies($procedureId: ID!) {
   procedure(id: $procedureId) {
@@ -919,54 +985,6 @@ export function useCountryMapConstituenciesLazyQuery(baseOptions?: Apollo.LazyQu
 export type CountryMapConstituenciesQueryHookResult = ReturnType<typeof useCountryMapConstituenciesQuery>;
 export type CountryMapConstituenciesLazyQueryHookResult = ReturnType<typeof useCountryMapConstituenciesLazyQuery>;
 export type CountryMapConstituenciesQueryResult = Apollo.QueryResult<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>;
-export const CommunityVoteResultsDocument = gql`
-    query CommunityVoteResults($procedureId: ID!, $constituencies: [String!]) {
-  procedure(id: $procedureId) {
-    procedureId
-    voted
-    communityVotes(constituencies: $constituencies) {
-      yes
-      no
-      abstination
-      total
-      constituencies {
-        yes
-        no
-        abstination
-        total
-        constituency
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useCommunityVoteResultsQuery__
- *
- * To run a query within a React component, call `useCommunityVoteResultsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCommunityVoteResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCommunityVoteResultsQuery({
- *   variables: {
- *      procedureId: // value for 'procedureId'
- *      constituencies: // value for 'constituencies'
- *   },
- * });
- */
-export function useCommunityVoteResultsQuery(baseOptions?: Apollo.QueryHookOptions<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>) {
-        return Apollo.useQuery<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>(CommunityVoteResultsDocument, baseOptions);
-      }
-export function useCommunityVoteResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>) {
-          return Apollo.useLazyQuery<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>(CommunityVoteResultsDocument, baseOptions);
-        }
-export type CommunityVoteResultsQueryHookResult = ReturnType<typeof useCommunityVoteResultsQuery>;
-export type CommunityVoteResultsLazyQueryHookResult = ReturnType<typeof useCommunityVoteResultsLazyQuery>;
-export type CommunityVoteResultsQueryResult = Apollo.QueryResult<CommunityVoteResultsQuery, CommunityVoteResultsQueryVariables>;
 export const GovernmentVoteResultsDocument = gql`
     query GovernmentVoteResults($procedureId: ID!) {
   procedure(id: $procedureId) {
@@ -1008,21 +1026,23 @@ export type GovernmentVoteResultsQueryHookResult = ReturnType<typeof useGovernme
 export type GovernmentVoteResultsLazyQueryHookResult = ReturnType<typeof useGovernmentVoteResultsLazyQuery>;
 export type GovernmentVoteResultsQueryResult = Apollo.QueryResult<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>;
 export const ProcedureDetailDocument = gql`
-    query ProcedureDetail($id: ID!) {
+    query ProcedureDetail($id: ID!, $constituencies: [String!]) {
   procedure(id: $id) {
     procedureId
     ...ListItem
-    ...CommunityVotesPieChart
     ...GovernmentVotesPieChart
     ...ProcedureDetails
     ...ProcedureHistory
   }
+  communityVotesProcedure: procedure(id: $id) {
+    ...CommunityVotesPieChart
+  }
 }
     ${ListItemFragmentDoc}
-${CommunityVotesPieChartFragmentDoc}
 ${GovernmentVotesPieChartFragmentDoc}
 ${ProcedureDetailsFragmentDoc}
-${ProcedureHistoryFragmentDoc}`;
+${ProcedureHistoryFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}`;
 
 /**
  * __useProcedureDetailQuery__
@@ -1037,6 +1057,7 @@ ${ProcedureHistoryFragmentDoc}`;
  * const { data, loading, error } = useProcedureDetailQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      constituencies: // value for 'constituencies'
  *   },
  * });
  */

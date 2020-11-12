@@ -87,7 +87,7 @@ export const PhoneNumber: React.FC = () => {
             const res = await requestCode({
               variables: { newPhone: preparedPhoneNumber },
             });
-            console.log('res.data', res.data);
+
             if (res.data && !res.data.requestCode.succeeded) {
               setExpireTime(res.data.requestCode.expireTime);
               setResendTime(res.data.requestCode.resendTime);

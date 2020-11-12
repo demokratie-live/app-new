@@ -1,6 +1,5 @@
 import Folding from 'components/Folding';
-import { ConstituencyContext } from 'context/constituency';
-import { useCommunityVoteResultsQuery } from 'generated/graphql';
+import { CommunityVoteResultsFragment } from 'generated/graphql';
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
 import { PieChart } from '../PieChart';
@@ -11,6 +10,7 @@ import { View, useWindowDimensions } from 'react-native';
 import { ChartLegend, ChartLegendData } from 'components/Charts/ChartLegend';
 import { CountryMap } from './CountryMap';
 import { scaleLinear } from 'd3';
+import { ConstituencyContext } from 'context/constituency';
 
 const Container = styled(Carousel).attrs(({ theme }) => ({
   activeDotStyle: {
@@ -51,34 +51,30 @@ const Description = styled.Text`
   font-size: 12px;
 `;
 
-interface Props {
-  procedureId: string;
-}
+interface Props extends CommunityVoteResultsFragment {}
 
-export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
+export const CommuntiyVoteResults: React.FC<Props> = ({
+  procedureId,
+  communityVotes,
+  voted,
+}) => {
   const theme = useContext(ThemeContext);
   const { constituency } = useContext(ConstituencyContext);
   const { width } = useWindowDimensions();
-  const { data } = useCommunityVoteResultsQuery({
-    variables: {
-      procedureId,
-      constituencies: constituency ? [constituency] : [],
-    },
-  });
 
   const { voted: votedColors } = theme.colors.communityVotes;
 
   const colorRange = [votedColors.yes, votedColors.abstination, votedColors.no];
 
-  if (!data || data.procedure.communityVotes?.total === undefined) {
+  if (communityVotes?.total === undefined) {
     return null;
   }
 
-  const votesData = data.procedure.communityVotes
+  const votesData = communityVotes
     ? {
-        yes: data.procedure.communityVotes.yes,
-        abstination: data.procedure.communityVotes.abstination,
-        no: data.procedure.communityVotes.no,
+        yes: communityVotes.yes,
+        abstination: communityVotes.abstination,
+        no: communityVotes.no,
       }
     : {
         yes: 0,
@@ -86,12 +82,18 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
         no: 0,
       };
 
-  const votesDataConstituency = data.procedure.communityVotes?.constituencies[0]
+  const userConstituency =
+    constituency && communityVotes
+      ? communityVotes.constituencies.find(
+          (c) => c.constituency === constituency,
+        )
+      : undefined;
+
+  const votesDataConstituency = userConstituency
     ? {
-        yes: data.procedure.communityVotes?.constituencies[0].yes,
-        abstination:
-          data.procedure.communityVotes?.constituencies[0].abstination,
-        no: data.procedure.communityVotes?.constituencies[0].no,
+        yes: userConstituency.yes,
+        abstination: userConstituency.abstination,
+        no: userConstituency.no,
       }
     : {
         yes: 0,
@@ -109,7 +111,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
   ]);
 
   const charts: any[] = [];
-  if (data.procedure.communityVotes) {
+  if (communityVotes) {
     const legendData: ChartLegendData[] = [
       {
         label: 'Zustimmungen',
@@ -128,7 +130,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
       },
     ];
 
-    const countryTotal = data.procedure.communityVotes.total;
+    const countryTotal = communityVotes.total;
     const countryYesNoValue = (votesData.yes - votesData.no) / countryTotal;
     const countryAbstinationValue = votesData.abstination / countryTotal / 2;
     const countryColorValue =
@@ -143,11 +145,11 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
         <PieChart
           topLeftText="Bundesweit"
           innerTextBottom="Abstimmende"
-          innerTextTop={`${data.procedure.communityVotes.total}`}
+          innerTextTop={`${communityVotes.total}`}
           votesData={votesData}
           colors={colorRange}
           size={width}
-          total={data.procedure.communityVotes.total}
+          total={communityVotes.total}
           topRightSvg={
             <GermanySvgComponent
               width={60}
@@ -165,10 +167,8 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     charts.push(<CountryMap key="countryMap" procedureId={procedureId} />);
   }
 
-  if (data.procedure.communityVotes?.constituencies[0]) {
-    const DynComp = getConstituencySvg(
-      data.procedure.communityVotes?.constituencies[0].constituency,
-    );
+  if (userConstituency) {
+    const DynComp = getConstituencySvg(userConstituency.constituency);
     const legendData: ChartLegendData[] = [
       {
         label: 'Zustimmungen',
@@ -187,8 +187,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
       },
     ];
 
-    const constituencyTotal =
-      data.procedure.communityVotes?.constituencies[0].total;
+    const constituencyTotal = userConstituency.total;
     const constituencyYesNoValue =
       (votesDataConstituency.yes - votesDataConstituency.no) /
       constituencyTotal;
@@ -204,11 +203,11 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     charts.push(
       <View key="communityConstituencyChart">
         <PieChart
-          topLeftText={`Wahlkreis ${data.procedure.communityVotes?.constituencies[0].constituency}`}
+          topLeftText={`Wahlkreis ${userConstituency.constituency}`}
           colors={colorRange}
           innerTextBottom="Abstimmende"
-          innerTextTop={`${data.procedure.communityVotes?.constituencies[0].total}`}
-          total={data.procedure.communityVotes?.constituencies[0].total}
+          innerTextTop={`${userConstituency.total}`}
+          total={userConstituency.total}
           votesData={votesDataConstituency}
           size={width}
           topRightSvg={
@@ -226,7 +225,7 @@ export const CommuntiyVoteResults: React.FC<Props> = ({ procedureId }) => {
     );
   }
   return (
-    <Folding title="Communityergebis" opened={data.procedure.voted}>
+    <Folding title="Communityergebis" opened={voted}>
       <Container showsControls={false} style={{ height: width + 30 }}>
         {charts}
       </Container>

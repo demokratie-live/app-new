@@ -20,11 +20,7 @@ import { VOTE } from './graphql/mutation/vote';
 import { Vote, VoteVariables } from './graphql/mutation/__generated__/vote';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  ProcedureDetailDocument,
-  VoteSelection,
-  CommunityVoteResultsDocument,
-} from 'generated/graphql';
+import { ProcedureDetailDocument, VoteSelection } from 'generated/graphql';
 import { LocalVotesContext } from 'context/LocalVotes';
 import { ConstituencyContext } from 'context/constituency';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
@@ -85,7 +81,6 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
   const navigation = useNavigation<
     StackNavigationProp<BundestagStackNavigatorParamList, 'Voting'>
   >();
-
   const [vote] = useMutation<Vote, VoteVariables>(VOTE);
   const [isDraggable, setIsDraggable] = useState(true);
 
@@ -146,7 +141,7 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
                 useNativeDriver: true,
               }).start();
               setIsDraggable(false);
-              console.log({ constituency });
+
               vote({
                 variables: {
                   constituency,
@@ -158,13 +153,7 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
                     query: ProcedureDetailDocument,
                     variables: {
                       id: procedureId,
-                    },
-                  },
-                  {
-                    query: CommunityVoteResultsDocument,
-                    variables: {
-                      procedureId,
-                      constituencies: [constituency],
+                      constituency,
                     },
                   },
                 ],

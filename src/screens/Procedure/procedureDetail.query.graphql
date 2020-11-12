@@ -1,10 +1,12 @@
-query ProcedureDetail($id: ID!) {
+query ProcedureDetail($id: ID!, $constituencies: [String!]) {
   procedure(id: $id) {
     procedureId
     ...ListItem
-    ...CommunityVotesPieChart
     ...GovernmentVotesPieChart
     ...ProcedureDetails
     ...ProcedureHistory
+  }
+  communityVotesProcedure: procedure(id: $id) {
+    ...CommunityVotesPieChart
   }
 }

@@ -1,10 +1,16 @@
 import SvgLock from 'assets/svgs/icons/Lock';
 import { LocalVotesContext } from 'context/LocalVotes';
+import {
+  DetailActionBarFragment,
+  useToggleNotificationMutation,
+} from 'generated/graphql';
 import React, { useContext } from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
 import ActionButton from './VoteButtons/components/ActionButton';
 import VoteButton from './VoteButtons/VoteButton';
+import NativeShare from 'react-native-share';
+import { getShareLink } from 'lib/shareLink';
 
 const Container = styled.View`
   flex-direction: row;
@@ -38,14 +44,22 @@ const LockIconWrapper = styled.View`
   border-color: rgba(0, 0, 0, 0.3);
 `;
 
-interface Props {
-  procedureId: string;
-}
+interface Props extends DetailActionBarFragment {}
 
-export const PostVotedButtons: React.FC<Props> = ({ procedureId }) => {
+export const PostVotedButtons: React.FC<Props> = ({
+  procedureId,
+  notify,
+  type,
+  title,
+}) => {
   const { getLocalVoteSelection } = useContext(LocalVotesContext);
   const localVoteSelection = getLocalVoteSelection(procedureId);
-  console.log({ localVoteSelection });
+  const [toggleNotification] = useToggleNotificationMutation({
+    variables: {
+      procedureId,
+    },
+  });
+
   let voteButtonLabel = 'Abgestimmt';
   switch (localVoteSelection) {
     case 'YES':
@@ -94,8 +108,28 @@ export const PostVotedButtons: React.FC<Props> = ({ procedureId }) => {
         )}
         <VoteButtonLabel>{voteButtonLabel}</VoteButtonLabel>
       </VoteButtonWrapper>
-      <ActionButton selection="NOTIFY" onPress={showUnknownVoteNotification} />
-      <ActionButton selection="SHARE" onPress={showUnknownVoteNotification} />
+      <VoteButtonWrapper>
+        <ActionButton
+          selection="NOTIFY"
+          notify={!!notify}
+          onPress={toggleNotification}
+        />
+        <VoteButtonLabel>
+          {notify ? 'Stumm schalten' : 'Benachrichtigen'}
+        </VoteButtonLabel>
+      </VoteButtonWrapper>
+      <VoteButtonWrapper>
+        <ActionButton
+          selection="SHARE"
+          onPress={() =>
+            NativeShare.open({
+              url: getShareLink({ type, procedureId, title }),
+              failOnCancel: false,
+            })
+          }
+        />
+        <VoteButtonLabel>Teilen</VoteButtonLabel>
+      </VoteButtonWrapper>
     </Container>
   );
 };

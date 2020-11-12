@@ -11,6 +11,7 @@ import {
   ImportantDocumentsFragmentDoc,
   ProcedureHistoryFragmentDoc,
   DetailActionBarFragmentDoc,
+  CommunityVoteResultsFragmentDoc,
 } from 'generated/graphql';
 import { filter } from 'graphql-anywhere';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
@@ -99,7 +100,9 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
         <ListItemSeperator />
         <Documents {...filter(ImportantDocumentsFragmentDoc, procedure)} />
         <History {...filter(ProcedureHistoryFragmentDoc, procedure)} />
-        <CommuntiyVoteResults procedureId={procedureId} />
+        <CommuntiyVoteResults
+          {...filter(CommunityVoteResultsFragmentDoc, procedure)}
+        />
         <GovernmentVoteResults procedureId={procedureId} />
         <ActionBar {...filter(DetailActionBarFragmentDoc, procedure)} />
       </SafeAreaView>

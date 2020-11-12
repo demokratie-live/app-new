@@ -28,8 +28,7 @@ const TitleAddition = styled.Text`
 interface Props extends DetailActionBarFragment {}
 
 export const ActionBar: React.FC<Props> = (props) => {
-  const { type, voted, procedureId } = props;
-
+  const { type, voted } = props;
   return (
     <Folding
       disableCollapseing
@@ -45,7 +44,7 @@ export const ActionBar: React.FC<Props> = (props) => {
         {!voted ? (
           <VoteButtons {...filter(DetailActionBarFragmentDoc, props)} />
         ) : (
-          <PostVotedButtons procedureId={procedureId} />
+          <PostVotedButtons {...filter(DetailActionBarFragmentDoc, props)} />
         )}
       </Container>
     </Folding>
