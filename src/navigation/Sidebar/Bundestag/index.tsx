@@ -6,6 +6,9 @@ import styled from 'styled-components/native';
 import { ProcedureDetailScreen } from 'screens/Procedure';
 import { VoteSelection } from 'generated/graphql';
 import { VotingScreen } from 'screens/Voting';
+import { BurgerMenuButton } from 'components/navigation/MenuButton';
+import SvgMenu from 'assets/svgs/icons/Menu';
+import { DrawerActions } from '@react-navigation/native';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
@@ -41,9 +44,15 @@ export const BundestagStackNavigator: React.FC = () => {
       <Stack.Screen
         name="TabNavigator"
         component={BundestagTabNavigator}
-        options={{
+        options={({ navigation }) => ({
           title: 'Bundestag',
-        }}
+          headerLeft: () => (
+            <BurgerMenuButton
+              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+              <SvgMenu width={18} height={18} color="#fff" />
+            </BurgerMenuButton>
+          ),
+        })}
       />
       <Stack.Screen name="Procedure" component={ProcedureDetailScreen} />
       <Stack.Screen name="Voting" component={VotingScreen} />
