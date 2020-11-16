@@ -9,22 +9,18 @@ import { SettingsRootNavigation } from './Settings';
 import SvgFaqAndSupport from 'assets/svgs/icons/FaqAndSupport';
 import { FaqScreen } from 'screens/Faq';
 import { headerScreenOptions } from 'navigation/headerOptions';
-
-function NotificationsScreen({ navigation }: any) {
-  return (
-    // eslint-disable-next-line react-native/no-inline-styles
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
+import SvgAbout from 'assets/svgs/icons/About';
+import { AboutScreen } from 'screens/About';
+import SvgLaw from 'assets/svgs/icons/Law';
+import { CredentialsScreen } from 'screens/Credentials';
 
 export type SidebarNavigatorParamList = {
   Home: undefined;
-  Notifications: undefined;
   Settings: undefined;
   Donate: undefined;
   Faq: undefined;
+  About: undefined;
+  Credentials: undefined;
 };
 
 const Drawer = createDrawerNavigator<SidebarNavigatorParamList>();
@@ -79,11 +75,31 @@ export const Sidebar: React.FC = () => {
         component={FaqScreen}
       />
       <Drawer.Screen
-        name="Notifications"
-        component={NotificationsScreen}
         options={{
-          drawerLabel: '/Notifications',
+          ...headerScreenOptions,
+          headerShown: true,
+          title: 'About',
+          drawerLabel: 'Mehr/Über DEMOCRACY',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgAbout width={size} height={size} color={color} />
+          ),
         }}
+        name={'About'}
+        component={AboutScreen}
+      />
+      <Drawer.Screen
+        options={{
+          ...headerScreenOptions,
+          headerShown: true,
+          drawerLabel: 'Mehr/Rechtliches',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgLaw width={size} height={size} color={color} />
+          ),
+        }}
+        name={'Credentials'}
+        component={CredentialsScreen}
       />
     </Drawer.Navigator>
   );
