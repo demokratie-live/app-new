@@ -6,6 +6,8 @@ import { SidebarScreen } from 'screens/Sidebar';
 import { BundestagStackNavigator } from './Bundestag';
 import SvgSettings from 'assets/svgs/icons/Settings';
 import { SettingsRootNavigation } from './Settings';
+import SvgFaqAndSupport from 'assets/svgs/icons/FaqAndSupport';
+import { FaqScreen } from 'screens/Faq';
 
 function NotificationsScreen({ navigation }: any) {
   return (
@@ -21,6 +23,7 @@ export type SidebarNavigatorParamList = {
   Notifications: undefined;
   Settings: undefined;
   Donate: undefined;
+  Faq: undefined;
 };
 
 const Drawer = createDrawerNavigator<SidebarNavigatorParamList>();
@@ -59,6 +62,18 @@ export const Sidebar: React.FC = () => {
         }}
         name="Settings"
         component={SettingsRootNavigation}
+      />
+      <Drawer.Screen
+        options={{
+          title: 'FAQ',
+          drawerLabel: 'Mehr/FAQ & Support',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgFaqAndSupport width={size} height={size} color={color} />
+          ),
+        }}
+        name={'Faq'}
+        component={FaqScreen}
       />
       <Drawer.Screen
         name="Notifications"
