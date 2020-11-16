@@ -9,7 +9,6 @@ const Wrapper = styled.View`
   justify-content: center;
   align-items: center;
 `;
-// background-color: #4494d390;
 
 const FillBox = styled.View<{ width: number }>`
   position: absolute;

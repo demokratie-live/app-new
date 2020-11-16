@@ -4,6 +4,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import GovernmentIcon from 'screens/Sidebar/components/icons/Government';
 import { SidebarScreen } from 'screens/Sidebar';
 import { BundestagStackNavigator } from './Bundestag';
+import SvgSettings from 'assets/svgs/icons/Settings';
+import { SettingsRootNavigation } from './Settings';
 
 function NotificationsScreen({ navigation }: any) {
   return (
@@ -17,6 +19,7 @@ function NotificationsScreen({ navigation }: any) {
 export type SidebarNavigatorParamList = {
   Home: undefined;
   Notifications: undefined;
+  Settings: undefined;
   Donate: undefined;
 };
 
@@ -45,6 +48,17 @@ export const Sidebar: React.FC = () => {
           ),
           unmountOnBlur: true,
         }}
+      />
+      <Drawer.Screen
+        options={{
+          drawerLabel: 'Mehr/Settings',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgSettings width={size} height={size} color={color} />
+          ),
+        }}
+        name="Settings"
+        component={SettingsRootNavigation}
       />
       <Drawer.Screen
         name="Notifications"

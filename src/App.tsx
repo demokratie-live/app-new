@@ -11,6 +11,7 @@ import { VerificationProvider } from 'context/Verification';
 import { AuthProvider } from 'context/Auth';
 import { ConstituencyProvider } from 'context/constituency';
 import { LocalVotesProvider } from 'context/LocalVotes';
+import { NotificationsProvider } from 'context/NotificationPermission';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -24,9 +25,11 @@ const App = () => {
           <LocalVotesProvider>
             <AuthProvider>
               <VerificationProvider>
-                <ConstituencyProvider>
-                  <Navigation />
-                </ConstituencyProvider>
+                <NotificationsProvider>
+                  <ConstituencyProvider>
+                    <Navigation />
+                  </ConstituencyProvider>
+                </NotificationsProvider>
               </VerificationProvider>
             </AuthProvider>
           </LocalVotesProvider>
