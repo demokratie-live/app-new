@@ -14,12 +14,14 @@ import { Settings } from 'screens/Settings';
 import { SyncVotes } from 'screens/Settings/SyncVotes';
 import { CaptureSyncVotes } from 'screens/Settings/SyncVotes/Capture';
 import { ConstituencyScreen } from 'screens/Settings/Constituency';
+import { VerificationNavigation } from 'navigation/verification';
 
 export type SettingsRootStackParamList = {
   Settings: undefined;
   SyncVotes: undefined;
   SyncVotesCapture: undefined;
   Constituency: { goBack?: boolean };
+  Verification: undefined;
 };
 
 const SettingsRootStack = createStackNavigator<SettingsRootStackParamList>();
@@ -83,6 +85,11 @@ export const SettingsRootNavigation = () => {
         options={{
           title: 'Wahlkreissuche',
         }}
+      />
+      <SettingsRootStack.Screen
+        name="Verification"
+        component={VerificationNavigation}
+        options={{ headerShown: false }}
       />
     </SettingsRootStack.Navigator>
   );

@@ -43,12 +43,10 @@ interface List {
   data: ListData[];
 }
 
-type Props = {
-  navigation: FilterScreenNavigationProp;
-};
+type Props = {};
 
 export const Settings: React.FC<Props> = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<FilterScreenNavigationProp>();
   const { constituency } = useContext(ConstituencyContext);
   const { isVerified } = useContext(AuthContext);
   const {
@@ -62,10 +60,10 @@ export const Settings: React.FC<Props> = () => {
   const navigateTo = (screen: string) => () => {
     switch (screen) {
       case 'constituency':
-        navigation.navigate('Constituency');
+        navigation.navigate('Constituency', {});
         break;
       case 'verificate':
-        navigation.navigate('VerificationStart');
+        navigation.navigate('Verification');
         break;
       case 'SyncVotes':
         navigation.navigate('SyncVotes');
