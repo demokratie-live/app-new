@@ -8,6 +8,7 @@ import SvgSettings from 'assets/svgs/icons/Settings';
 import { SettingsRootNavigation } from './Settings';
 import SvgFaqAndSupport from 'assets/svgs/icons/FaqAndSupport';
 import { FaqScreen } from 'screens/Faq';
+import { headerScreenOptions } from 'navigation/headerOptions';
 
 function NotificationsScreen({ navigation }: any) {
   return (
@@ -65,6 +66,8 @@ export const Sidebar: React.FC = () => {
       />
       <Drawer.Screen
         options={{
+          ...headerScreenOptions,
+          headerShown: true,
           title: 'FAQ',
           drawerLabel: 'Mehr/FAQ & Support',
           gestureEnabled: true,

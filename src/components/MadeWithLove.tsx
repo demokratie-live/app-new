@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 
 const Wrapper = styled.TouchableOpacity`
-  background-color: #efeff4;
+  background-color: ${({ theme }) => theme.backgroundColor};
   align-items: center;
   padding-top: 11px;
   height: 50px;
@@ -14,7 +14,7 @@ const Text = styled.Text`
 `;
 
 const LinkColorText = styled.Text`
-  color: ${({ theme }) => theme.colors.header};
+  color: ${({ theme }) => theme.colors.primaryColoredText};
 `;
 
 export const MadeWithLove: React.FC = () => (

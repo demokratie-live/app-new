@@ -3,7 +3,7 @@ import { faqData } from './data';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { MarkdownView } from 'react-native-markdown-view';
 import { Linking, Platform } from 'react-native';
-import styled from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import deepmerge from 'deepmerge';
 import { CompositeNavigationProp } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -39,14 +39,15 @@ const website = 'https://www.democracy-deutschland.de/';
 const Wrapper = styled.ScrollView.attrs({
   scrollIndicatorInsets: { right: 1 }, // TODO do cleanfix when there is a correct solution (already closed but not solved without workaround) https://github.com/facebook/react-native/issues/26610
 })`
+  background-color: ${({ theme }) => theme.backgroundColor};
   /* padding-horizontal: 18; */
 `;
 
 const Headline = styled.Text`
-  padding-horizontal: 18;
-  padding-vertical: 18;
-  color: grey;
-  font-size: 15;
+  padding-horizontal: 18px;
+  padding-vertical: 18px;
+  color: ${({ theme }) => theme.colors.secondaryText};
+  font-size: 15px;
 `;
 
 const ContactWrapper = styled.View`
@@ -54,29 +55,30 @@ const ContactWrapper = styled.View`
   align-self: center;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 300;
+  max-width: 300px;
 `;
 
 const SocialMediaWrapper = styled.View`
-  padding-top: 25;
+  padding-top: 25px;
   align-self: center;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 300;
+  max-width: 300px;
 `;
 
 const IconWrapper = styled.TouchableOpacity`
-  width: 65;
-  height: 65;
-  border-width: 2;
-  border-radius: 33;
+  width: 65px;
+  height: 65px;
+  border-width: 2px;
+  border-radius: 33px;
   justify-content: center;
   align-items: center;
+  border-color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 const Spacer = styled.View`
-  padding-bottom: 36;
+  padding-bottom: 36px;
 `;
 
 interface MarkdownProps {
@@ -84,11 +86,24 @@ interface MarkdownProps {
 }
 
 const Markdown: React.FC<MarkdownProps> = ({ children, styles = {} }) => {
+  const theme = useTheme();
   const markdownStyles = deepmerge(
     {
       paragraph: {
-        color: '#555',
+        color: theme.colors.secondaryText,
         ...(styles.paragraph || []),
+      },
+      listItemUnorderedContent: {
+        color: theme.colors.secondaryText,
+        ...(styles.listItemUnorderedContent || []),
+      },
+      listItemBullet: {
+        color: theme.colors.secondaryText,
+        ...(styles.listItemBullet || []),
+      },
+      link: {
+        color: theme.colors.primaryColoredText,
+        ...(styles.link || []),
       },
     },
     styles,
@@ -118,12 +133,13 @@ type Props = {
 };
 
 export const FaqScreen: React.FC<Props> = ({ navigation }) => {
+  const theme = useTheme();
   return (
     <Wrapper>
       <Headline>Hier beantworten wir häufig gestellte Fragen</Headline>
       {faqData.map(({ title, text }) => (
         <Folding title={title} key={title}>
-          <Markdown>{text}</Markdown>
+          <Markdown styles={{}}>{text}</Markdown>
         </Folding>
       ))}
       <Spacer />
@@ -143,35 +159,63 @@ Bitte gib uns möglichst viele Informationen zu den von Dir gefunden Fehlern ode
       <Spacer />
       <ContactWrapper>
         <IconWrapper onPress={linking(phoneNumber)}>
-          <SvgPhone color="#000" width={30} height={30} />
+          <SvgPhone color={theme.colors.secondaryText} width={30} height={30} />
         </IconWrapper>
         <IconWrapper onPress={linking(email)}>
-          <SvgMail color="#000" width={30} height={30} />
+          <SvgMail color={theme.colors.secondaryText} width={30} height={30} />
         </IconWrapper>
         <IconWrapper onPress={linking(website)}>
-          <SvgPlanet color="#000" width={30} height={30} />
+          <SvgPlanet
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
       </ContactWrapper>
       <SocialMediaWrapper>
         <IconWrapper onPress={linking(github)}>
-          <SvgGithub color="#000" width={30} height={30} />
+          <SvgGithub
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
         <IconWrapper onPress={linking(twitter)}>
-          <SvgTwitter color="#000" width={30} height={30} />
+          <SvgTwitter
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
         <IconWrapper onPress={linking(facebook)}>
-          <SvgFacebook color="#000" width={30} height={30} />
+          <SvgFacebook
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
       </SocialMediaWrapper>
       <SocialMediaWrapper>
         <IconWrapper onPress={linking(instagram)}>
-          <SvgInstagram color="#000" width={30} height={30} />
+          <SvgInstagram
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
         <IconWrapper onPress={linking(youtube)}>
-          <SvgYoutube color="#000" width={30} height={30} />
+          <SvgYoutube
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
         <IconWrapper onPress={linking(discord)}>
-          <SvgDiscord color="#000" width={30} height={30} />
+          <SvgDiscord
+            color={theme.colors.secondaryText}
+            width={30}
+            height={30}
+          />
         </IconWrapper>
       </SocialMediaWrapper>
       <Button
