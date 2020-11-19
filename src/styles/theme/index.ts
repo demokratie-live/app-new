@@ -35,6 +35,10 @@ declare module 'styled-components' {
         no: string;
         notVoted: string;
       };
+      womCharts: {
+        matching: string;
+        notMatching: string;
+      };
       charts: {
         piePercentage: string;
       };
@@ -90,6 +94,10 @@ export const lightTheme: DefaultTheme = {
       abstination: '#46A0C3',
       no: '#D43194',
       notVoted: '#9FA2A3',
+    },
+    womCharts: {
+      matching: '#E8A945',
+      notMatching: '#B0B4B5',
     },
     charts: {
       piePercentage: '#fff',
@@ -160,6 +168,10 @@ export const darkTheme: DefaultTheme = {
       abstination: '#46A0C3aa',
       no: '#D43194aa',
       notVoted: '#9FA2A3aa',
+    },
+    womCharts: {
+      matching: '#E8A945',
+      notMatching: '#B0B4B5',
     },
     charts: {
       piePercentage: '#fffb',

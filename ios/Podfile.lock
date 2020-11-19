@@ -326,7 +326,7 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.7.3):
     - React-Core
-  - RNDeviceInfo (7.0.2):
+  - RNDeviceInfo (7.1.0):
     - React-Core
   - RNGestureHandler (1.8.0):
     - React
@@ -583,7 +583,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPushNotificationIOS: edeeea93b7210d2f918fc0e46e1a2a189b5fdacc
-  RNDeviceInfo: e1d82a27d0c1ea6278e3b141784dc38e51fc90f4
+  RNDeviceInfo: 6cf87235aa11e675b93b31aa9b88a825753eea2f
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5

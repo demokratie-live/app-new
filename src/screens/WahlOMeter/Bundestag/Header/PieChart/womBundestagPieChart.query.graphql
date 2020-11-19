@@ -1,0 +1,18 @@
+query WomBundestagPieChart(
+  $procedureIds: [String!]
+  $pageSize: Int
+  $offset: Int
+) {
+  womBundestagPieChart: proceduresByIdHavingVoteResults(
+    procedureIds: $procedureIds
+    pageSize: $pageSize
+    offset: $offset
+  ) {
+    procedures {
+      procedureId
+      voteResults {
+        governmentDecision
+      }
+    }
+  }
+}

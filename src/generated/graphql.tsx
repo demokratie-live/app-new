@@ -711,6 +711,28 @@ export type ProceduresListQuery = (
   )> }
 );
 
+export type WomBundestagPieChartQueryVariables = Exact<{
+  procedureIds?: Maybe<Array<Scalars['String']>>;
+  pageSize?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WomBundestagPieChartQuery = (
+  { __typename?: 'Query' }
+  & { womBundestagPieChart: (
+    { __typename?: 'ProceduresHavingVoteResults' }
+    & { procedures: Array<(
+      { __typename?: 'Procedure' }
+      & Pick<Procedure, 'procedureId'>
+      & { voteResults?: Maybe<(
+        { __typename?: 'VoteResult' }
+        & Pick<VoteResult, 'governmentDecision'>
+      )> }
+    )> }
+  ) }
+);
+
 export const VoteIndexFragmentDoc = gql`
     fragment VoteIndex on Procedure {
   votes
@@ -976,7 +998,7 @@ export const CountryMapConstituenciesDocument = gql`
  *   },
  * });
  */
-export function useCountryMapConstituenciesQuery(baseOptions?: Apollo.QueryHookOptions<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>) {
+export function useCountryMapConstituenciesQuery(baseOptions: Apollo.QueryHookOptions<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>) {
         return Apollo.useQuery<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>(CountryMapConstituenciesDocument, baseOptions);
       }
 export function useCountryMapConstituenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>) {
@@ -1016,7 +1038,7 @@ ${DetailDecisionTextFragmentDoc}`;
  *   },
  * });
  */
-export function useGovernmentVoteResultsQuery(baseOptions?: Apollo.QueryHookOptions<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>) {
+export function useGovernmentVoteResultsQuery(baseOptions: Apollo.QueryHookOptions<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>) {
         return Apollo.useQuery<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>(GovernmentVoteResultsDocument, baseOptions);
       }
 export function useGovernmentVoteResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GovernmentVoteResultsQuery, GovernmentVoteResultsQueryVariables>) {
@@ -1061,7 +1083,7 @@ ${CommunityVotesPieChartFragmentDoc}`;
  *   },
  * });
  */
-export function useProcedureDetailQuery(baseOptions?: Apollo.QueryHookOptions<ProcedureDetailQuery, ProcedureDetailQueryVariables>) {
+export function useProcedureDetailQuery(baseOptions: Apollo.QueryHookOptions<ProcedureDetailQuery, ProcedureDetailQueryVariables>) {
         return Apollo.useQuery<ProcedureDetailQuery, ProcedureDetailQueryVariables>(ProcedureDetailDocument, baseOptions);
       }
 export function useProcedureDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProcedureDetailQuery, ProcedureDetailQueryVariables>) {
@@ -1117,6 +1139,50 @@ export function useProceduresListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type ProceduresListQueryHookResult = ReturnType<typeof useProceduresListQuery>;
 export type ProceduresListLazyQueryHookResult = ReturnType<typeof useProceduresListLazyQuery>;
 export type ProceduresListQueryResult = Apollo.QueryResult<ProceduresListQuery, ProceduresListQueryVariables>;
+export const WomBundestagPieChartDocument = gql`
+    query WomBundestagPieChart($procedureIds: [String!], $pageSize: Int, $offset: Int) {
+  womBundestagPieChart: proceduresByIdHavingVoteResults(
+    procedureIds: $procedureIds
+    pageSize: $pageSize
+    offset: $offset
+  ) {
+    procedures {
+      procedureId
+      voteResults {
+        governmentDecision
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useWomBundestagPieChartQuery__
+ *
+ * To run a query within a React component, call `useWomBundestagPieChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomBundestagPieChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomBundestagPieChartQuery({
+ *   variables: {
+ *      procedureIds: // value for 'procedureIds'
+ *      pageSize: // value for 'pageSize'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useWomBundestagPieChartQuery(baseOptions?: Apollo.QueryHookOptions<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>) {
+        return Apollo.useQuery<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>(WomBundestagPieChartDocument, baseOptions);
+      }
+export function useWomBundestagPieChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>) {
+          return Apollo.useLazyQuery<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>(WomBundestagPieChartDocument, baseOptions);
+        }
+export type WomBundestagPieChartQueryHookResult = ReturnType<typeof useWomBundestagPieChartQuery>;
+export type WomBundestagPieChartLazyQueryHookResult = ReturnType<typeof useWomBundestagPieChartLazyQuery>;
+export type WomBundestagPieChartQueryResult = Apollo.QueryResult<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

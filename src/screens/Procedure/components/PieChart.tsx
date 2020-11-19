@@ -28,7 +28,7 @@ interface ChartEntry {
   value: number;
 }
 
-interface VotesDataEntry {
+export interface VotesDataEntry {
   [selection: string]: number;
 }
 
@@ -54,24 +54,13 @@ export const PieChart: React.FC<Props> = ({
   total,
 }) => {
   const chartSize = size - size / 5;
-  const preparedData = [
-    {
-      name: 'YES',
-      value: votesData.yes,
-    },
-    {
-      name: 'ABSTINATION',
-      value: votesData.abstination,
-    },
-    {
-      name: 'NO',
-      value: votesData.no,
-    },
-    {
-      name: 'NOT_VOTED',
-      value: votesData.notVoted,
-    },
-  ];
+  const dataLabels = Object.keys(votesData);
+
+  const preparedData = dataLabels.map((label) => ({
+    name: label,
+    value: votesData[label],
+  }));
+
   const pieObj = pie<ChartEntry>()
     .value((d) => {
       return d.value;
@@ -97,9 +86,7 @@ export const PieChart: React.FC<Props> = ({
     };
   });
 
-  const vetColors = scaleOrdinal<string>()
-    .domain(['YES', 'ABSTINATION', 'NO', 'NOT_VOTED'])
-    .range(colors);
+  const vetColors = scaleOrdinal<string>().domain(dataLabels).range(colors);
 
   return (
     <Container>
