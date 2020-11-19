@@ -90,12 +90,7 @@ export const NotificationsProvider: React.FC = ({ children }) => {
   const { appState } = useAppState({});
 
   useEffect(() => {
-    console.log('useEffect: appState, alreadyDenied', {
-      appState,
-      alreadyDenied,
-    });
     checkNotifications().then(({ status }) => {
-      console.log('useEffect: appState, alreadyDenied', { status });
       if (!alreadyDenied && status === 'blocked') {
         setAlreadyDenied(true);
         setHasPermissions(false);
@@ -107,9 +102,7 @@ export const NotificationsProvider: React.FC = ({ children }) => {
   }, [appState, alreadyDenied]);
 
   useEffect(() => {
-    console.log('useEffect: []');
     AsyncStorage.getItem('PUSH_OUTCOME_DENIED').then((value) => {
-      console.log('useEffect: []', value);
       if (value) {
         setOutcomePushsDenied(true);
       }
@@ -117,14 +110,12 @@ export const NotificationsProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect: outcomePushsDenied', { outcomePushsDenied });
     if (outcomePushsDenied) {
       AsyncStorage.setItem('PUSH_OUTCOME_DENIED', 'true');
     }
   }, [outcomePushsDenied]);
 
   useEffect(() => {
-    console.log('useEffect: data', { data });
     if (data && data.notificationSettings) {
       setNotificationSettings(data.notificationSettings);
     }
@@ -132,10 +123,8 @@ export const NotificationsProvider: React.FC = ({ children }) => {
 
   // register notification events
   useEffect(() => {
-    console.log('useEffect: sendToken', { sendToken });
     PushNotification.configure({
       onRegister: ({ token, os }) => {
-        console.log('useEffect: sendToken', { token, os });
         AsyncStorage.setItem('push-token', token);
         sendToken({
           variables: {
@@ -154,7 +143,6 @@ export const NotificationsProvider: React.FC = ({ children }) => {
 
   // resend token when neccessary
   useEffect(() => {
-    console.log('useEffect: hasPermissions', { hasPermissions });
     if (Platform.OS === 'ios' && hasPermissions) {
       AsyncStorage.getItem('push-token').then(
         (token) => !token && requestToken(),
@@ -163,9 +151,7 @@ export const NotificationsProvider: React.FC = ({ children }) => {
   }, [hasPermissions]);
 
   const requestToken = () => {
-    PushNotification.requestPermissions().then((value) => {
-      console.log(value);
-    });
+    PushNotification.requestPermissions();
   };
 
   const update = (options: UpdateNotificationSettingsVariables) => {

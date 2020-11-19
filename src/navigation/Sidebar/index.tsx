@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import GovernmentIcon from 'screens/Sidebar/components/icons/Government';
 import { SidebarScreen } from 'screens/Sidebar';
@@ -13,9 +12,12 @@ import SvgAbout from 'assets/svgs/icons/About';
 import { AboutScreen } from 'screens/About';
 import SvgLaw from 'assets/svgs/icons/Law';
 import { CredentialsScreen } from 'screens/Credentials';
+import SvgWahlOMeter from 'assets/svgs/icons/WahlOMeter';
+import { WahlOMeterNavigation } from './WahlOMeter';
 
 export type SidebarNavigatorParamList = {
   Home: undefined;
+  WahlOMeter: undefined;
   Settings: undefined;
   Donate: undefined;
   Faq: undefined;
@@ -48,6 +50,18 @@ export const Sidebar: React.FC = () => {
           ),
           unmountOnBlur: true,
         }}
+      />
+      <Drawer.Screen
+        options={{
+          drawerLabel: 'Auswertungen/Wahl-O-Meter',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgWahlOMeter width={size} height={size} color={color} />
+          ),
+          unmountOnBlur: true,
+        }}
+        name="WahlOMeter"
+        component={WahlOMeterNavigation}
       />
       <Drawer.Screen
         options={{
