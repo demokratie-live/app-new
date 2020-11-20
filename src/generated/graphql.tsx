@@ -722,6 +722,7 @@ export type WomBundestagPieChartQuery = (
   { __typename?: 'Query' }
   & { womBundestagPieChart: (
     { __typename?: 'ProceduresHavingVoteResults' }
+    & Pick<ProceduresHavingVoteResults, 'total'>
     & { procedures: Array<(
       { __typename?: 'Procedure' }
       & Pick<Procedure, 'procedureId'>
@@ -1146,6 +1147,7 @@ export const WomBundestagPieChartDocument = gql`
     pageSize: $pageSize
     offset: $offset
   ) {
+    total
     procedures {
       procedureId
       voteResults {

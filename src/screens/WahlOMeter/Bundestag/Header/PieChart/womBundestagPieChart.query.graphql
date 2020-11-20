@@ -8,6 +8,7 @@ query WomBundestagPieChart(
     pageSize: $pageSize
     offset: $offset
   ) {
+    total
     procedures {
       procedureId
       voteResults {

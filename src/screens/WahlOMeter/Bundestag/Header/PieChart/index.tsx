@@ -5,12 +5,11 @@ import {
   PieChart,
   VotesDataEntry,
 } from 'screens/Procedure/components/PieChart';
+import { ChartNote } from 'screens/WahlOMeter/components/ChartNote';
+import { VotesProgress } from 'screens/WahlOMeter/components/VotesProgress';
 import styled, { useTheme } from 'styled-components/native';
 
-const Container = styled.View`
-  background-color: teal;
-  height: 500px;
-`;
+const Container = styled.View``;
 
 interface ChartData extends VotesDataEntry {
   matches: number;
@@ -34,6 +33,10 @@ export const WomBundestagPieChart: React.FC<Props> = ({ localVotes }) => {
       pageSize: Infinity,
     },
   });
+
+  const total = data?.womBundestagPieChart.total;
+  const proceduresSum = data?.womBundestagPieChart.procedures.length;
+  const percentage = ((proceduresSum || 0) / (total || 0)) * 100;
 
   const chartData = useMemo(() => {
     return (
@@ -78,9 +81,11 @@ export const WomBundestagPieChart: React.FC<Props> = ({ localVotes }) => {
       color: theme.colors.womCharts.notMatching,
     },
   ];
-
+  console.log(percentage);
   return (
     <Container>
+      <VotesProgress completed={proceduresSum || 0} total={total || 0} />
+
       <PieChart
         colors={colors}
         innerTextBottom="Wahl-O-Meter"
@@ -90,6 +95,10 @@ export const WomBundestagPieChart: React.FC<Props> = ({ localVotes }) => {
         total={15}
       />
       <ChartLegend data={legendData} />
+      <ChartNote>
+        Hohe Übereinstimmungen Ihrer Stellungnahmen mit dem Bundestag bedeuten
+        eine inhaltliche Nähe zu den Regierungsfraktionen
+      </ChartNote>
     </Container>
   );
 };
