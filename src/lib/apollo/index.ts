@@ -5,9 +5,10 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
-import { Procedure } from 'generated/graphql';
+import { Procedure, ProceduresHavingVoteResults } from 'generated/graphql';
 import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
+import { uniqBy } from 'lodash';
 
 const httpLink: any = new HttpLink({
   uri: 'https://internal.api.democracy-app.de',
@@ -34,12 +35,44 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
               return [...existing, ...incoming];
             },
           },
+          proceduresByIdHavingVoteResults: {
+            keyArgs: ['procedureIds'],
+            merge(
+              existing: ProceduresHavingVoteResults,
+              incoming: ProceduresHavingVoteResults,
+            ): ProceduresHavingVoteResults {
+              console.log(
+                'TypePolicies: proceduresByIdHavingVoteResults',
+                existing?.procedures,
+                incoming.procedures,
+              );
+
+              return {
+                ...existing,
+                ...incoming,
+                procedures: uniqBy(
+                  [...(existing?.procedures || []), ...incoming.procedures],
+                  (procedure) => {
+                    return procedure.procedureId || (procedure as any).__ref;
+                  },
+                ),
+              };
+            },
+          },
         },
       },
       Procedure: {
         keyFields: ['procedureId'],
         fields: {
           communityVotes: {
+            merge(existing, incoming: any) {
+              if (!existing && !incoming) {
+                return null;
+              }
+              return { ...existing, ...incoming };
+            },
+          },
+          voteResults: {
             merge(existing, incoming: any) {
               if (!existing && !incoming) {
                 return null;

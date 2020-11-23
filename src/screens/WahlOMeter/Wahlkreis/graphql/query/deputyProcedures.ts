@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { procedureVoteResultPartyVoteDeviants } from '../../../Fraktionen/graphql/fragments/deviants';
+import { procedureVoteResultPartyVoteDeviants } from '../../../bck_Fraktionen/graphql/fragments/deviants';
 
 export const DEPUTY_PROCEDURES = gql`
   query DeputyProcedures(

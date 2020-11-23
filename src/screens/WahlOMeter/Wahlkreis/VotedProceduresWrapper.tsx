@@ -1,5 +1,5 @@
 import React, { useContext, ReactElement } from 'react';
-import unionBy from 'lodash.unionby';
+import unionBy from 'screens/WahlOMeter/bck_Fraktionen/node_modules/lodash.unionby';
 
 // Components
 import NoVotesPlaceholder from '../NoVotesPlaceholder';
@@ -18,9 +18,9 @@ import {
   DeputyProceduresVariables,
   DeputyProcedures_deputyProcedures_procedures_procedure,
 } from './graphql/query/__generated__/DeputyProcedures';
-import { ListItem } from '@democracy-deutschland/mobile-ui/src/components/Lists/ListItem';
-import { Row } from '@democracy-deutschland/mobile-ui/src/components/Lists/Row';
-import { ListLoading } from '@democracy-deutschland/mobile-ui/src/components/shared/ListLoading';
+import { ListItem } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/Lists/ListItem';
+import { Row } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/Lists/Row';
+import { ListLoading } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/shared/ListLoading';
 import { VoteSelection } from '../../../../__generated__/globalTypes';
 import { ChainEntry } from '../../../lib/VotesLocal';
 import { useNavigation } from '@react-navigation/core';
@@ -242,7 +242,7 @@ const VotedProceduresWrapper: React.FC<Props> = ({
                     procedures: unionBy(
                       prev.deputyProcedures[0].procedures,
                       fetchMoreResult.deputyProcedures[0].procedures,
-                      p => p.procedure.procedureId,
+                      (p) => p.procedure.procedureId,
                     ),
                   },
                 ],
@@ -250,7 +250,7 @@ const VotedProceduresWrapper: React.FC<Props> = ({
             },
           })
         }
-        keyExtractor={item => (item === 'chart' ? item : item.procedureId)}
+        keyExtractor={(item) => (item === 'chart' ? item : item.procedureId)}
       />
     );
   }

@@ -6,6 +6,7 @@ import { getTheme } from 'styles/theme';
 // import { WomParty } from 'screens/WahlOMeter/Fraktionen';
 // import Wahlkreis from 'screens/WahlOMeter/Wahlkreis';
 import { WomBundestagScreen } from 'screens/WahlOMeter/Bundestag';
+import { WomPartyScreen } from 'screens/WahlOMeter/Fraktionen';
 
 export type TopTabParamList = {
   Bundestag: undefined;
@@ -42,11 +43,7 @@ const TabViewNavigation: React.FC<Props> = () => {
       }}
       initialRouteName={'Bundestag'}>
       <TabNavigation.Screen name="Bundestag" component={WomBundestagScreen} />
-      <TabNavigation.Screen
-        name="Fraktionen"
-        component={WomBundestagScreen}
-        // component={WomParty}
-      />
+      <TabNavigation.Screen name="Fraktionen" component={WomPartyScreen} />
       <TabNavigation.Screen
         name="Wahlkreis"
         component={WomBundestagScreen}

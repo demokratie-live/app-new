@@ -62,7 +62,7 @@ export const GovernmentPieChart: React.FC<Props> = ({ voteResults }) => {
     const path = arc<PieArcDatum<ChartEntry>>()
       .outerRadius(dimensions.width / 2)
       .innerRadius(0)(value);
-    //
+
     return path;
   });
 

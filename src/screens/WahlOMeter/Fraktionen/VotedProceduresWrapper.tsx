@@ -1,12 +1,12 @@
 import React, { useContext, ReactElement } from 'react';
 import styled from 'styled-components/native';
-import unionBy from 'screens/WahlOMeter/bck_Fraktionen/node_modules/lodash.unionby';
+import unionBy from 'lodash.unionby';
 
 // GraphQL
 import { FlatList } from 'react-native';
-import { ListLoading } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/shared/ListLoading';
-import { ListItem } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/Lists/ListItem';
-import { Row } from 'screens/WahlOMeter/bck_Fraktionen/node_modules/@democracy-deutschland/mobile-ui/src/components/Lists/Row';
+import { ListLoading } from '@democracy-deutschland/mobile-ui/src/components/shared/ListLoading';
+import { ListItem } from '@democracy-deutschland/mobile-ui/src/components/Lists/ListItem';
+import { Row } from '@democracy-deutschland/mobile-ui/src/components/Lists/Row';
 import { LocalVotesContext } from '../../../context/LocalVotes';
 import { pieChartGovernmentData } from '../../../lib/helper/PieChartGovernmentData';
 import { communityVoteData } from '../../../lib/helper/PieChartCommunityData';
@@ -171,7 +171,7 @@ const VotedProceduresWrapper: React.FC<Props> = ({
             },
           })
         }
-        keyExtractor={(item) => (item === 'chart' ? item : item.procedureId)}
+        keyExtractor={item => (item === 'chart' ? item : item.procedureId)}
       />
     </Container>
   );

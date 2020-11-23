@@ -36,7 +36,6 @@ export const WomBundestagPieChart: React.FC<Props> = ({ localVotes }) => {
 
   const total = data?.womBundestagPieChart.total;
   const proceduresSum = data?.womBundestagPieChart.procedures.length;
-  const percentage = ((proceduresSum || 0) / (total || 0)) * 100;
 
   const chartData = useMemo(() => {
     return (
@@ -81,7 +80,7 @@ export const WomBundestagPieChart: React.FC<Props> = ({ localVotes }) => {
       color: theme.colors.womCharts.notMatching,
     },
   ];
-  console.log(percentage);
+
   return (
     <Container>
       <VotesProgress completed={proceduresSum || 0} total={total || 0} />

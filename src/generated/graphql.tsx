@@ -734,6 +734,71 @@ export type WomBundestagPieChartQuery = (
   ) }
 );
 
+export type WomBundestagListQueryVariables = Exact<{
+  pageSize?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WomBundestagListQuery = (
+  { __typename?: 'Query' }
+  & { womBundestagList: (
+    { __typename?: 'ProceduresHavingVoteResults' }
+    & { procedures: Array<(
+      { __typename?: 'Procedure' }
+      & ListItemFragment
+      & CommunityVotesPieChartFragment
+      & GovernmentVotesPieChartFragment
+    )> }
+  ) }
+);
+
+export type WomFractionChartQueryVariables = Exact<{
+  procedureIds?: Maybe<Array<Scalars['String']>>;
+  pageSize?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WomFractionChartQuery = (
+  { __typename?: 'Query' }
+  & { womFractionChart: (
+    { __typename?: 'ProceduresHavingVoteResults' }
+    & Pick<ProceduresHavingVoteResults, 'total'>
+    & { procedures: Array<(
+      { __typename?: 'Procedure' }
+      & Pick<Procedure, 'procedureId'>
+      & { voteResults?: Maybe<(
+        { __typename?: 'VoteResult' }
+        & Pick<VoteResult, 'namedVote'>
+        & { partyVotes: Array<(
+          { __typename?: 'PartyVote' }
+          & Pick<PartyVote, 'party' | 'main'>
+        )> }
+      )> }
+    )> }
+  ) }
+);
+
+export type WomPartyListQueryVariables = Exact<{
+  pageSize?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WomPartyListQuery = (
+  { __typename?: 'Query' }
+  & { womPartyList: (
+    { __typename?: 'ProceduresHavingVoteResults' }
+    & { procedures: Array<(
+      { __typename?: 'Procedure' }
+      & ListItemFragment
+      & CommunityVotesPieChartFragment
+      & GovernmentVotesPieChartFragment
+    )> }
+  ) }
+);
+
 export const VoteIndexFragmentDoc = gql`
     fragment VoteIndex on Procedure {
   votes
@@ -1185,6 +1250,141 @@ export function useWomBundestagPieChartLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type WomBundestagPieChartQueryHookResult = ReturnType<typeof useWomBundestagPieChartQuery>;
 export type WomBundestagPieChartLazyQueryHookResult = ReturnType<typeof useWomBundestagPieChartLazyQuery>;
 export type WomBundestagPieChartQueryResult = Apollo.QueryResult<WomBundestagPieChartQuery, WomBundestagPieChartQueryVariables>;
+export const WomBundestagListDocument = gql`
+    query WomBundestagList($pageSize: Int, $offset: Int) {
+  womBundestagList: proceduresByIdHavingVoteResults(
+    pageSize: $pageSize
+    offset: $offset
+  ) {
+    procedures {
+      ...ListItem
+      ...CommunityVotesPieChart
+      ...GovernmentVotesPieChart
+    }
+  }
+}
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
+
+/**
+ * __useWomBundestagListQuery__
+ *
+ * To run a query within a React component, call `useWomBundestagListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomBundestagListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomBundestagListQuery({
+ *   variables: {
+ *      pageSize: // value for 'pageSize'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useWomBundestagListQuery(baseOptions?: Apollo.QueryHookOptions<WomBundestagListQuery, WomBundestagListQueryVariables>) {
+        return Apollo.useQuery<WomBundestagListQuery, WomBundestagListQueryVariables>(WomBundestagListDocument, baseOptions);
+      }
+export function useWomBundestagListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomBundestagListQuery, WomBundestagListQueryVariables>) {
+          return Apollo.useLazyQuery<WomBundestagListQuery, WomBundestagListQueryVariables>(WomBundestagListDocument, baseOptions);
+        }
+export type WomBundestagListQueryHookResult = ReturnType<typeof useWomBundestagListQuery>;
+export type WomBundestagListLazyQueryHookResult = ReturnType<typeof useWomBundestagListLazyQuery>;
+export type WomBundestagListQueryResult = Apollo.QueryResult<WomBundestagListQuery, WomBundestagListQueryVariables>;
+export const WomFractionChartDocument = gql`
+    query WomFractionChart($procedureIds: [String!], $pageSize: Int, $offset: Int) {
+  womFractionChart: proceduresByIdHavingVoteResults(
+    procedureIds: $procedureIds
+    pageSize: $pageSize
+    offset: $offset
+  ) {
+    total
+    procedures {
+      procedureId
+      voteResults {
+        namedVote
+        partyVotes {
+          party
+          main
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useWomFractionChartQuery__
+ *
+ * To run a query within a React component, call `useWomFractionChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomFractionChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomFractionChartQuery({
+ *   variables: {
+ *      procedureIds: // value for 'procedureIds'
+ *      pageSize: // value for 'pageSize'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useWomFractionChartQuery(baseOptions?: Apollo.QueryHookOptions<WomFractionChartQuery, WomFractionChartQueryVariables>) {
+        return Apollo.useQuery<WomFractionChartQuery, WomFractionChartQueryVariables>(WomFractionChartDocument, baseOptions);
+      }
+export function useWomFractionChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomFractionChartQuery, WomFractionChartQueryVariables>) {
+          return Apollo.useLazyQuery<WomFractionChartQuery, WomFractionChartQueryVariables>(WomFractionChartDocument, baseOptions);
+        }
+export type WomFractionChartQueryHookResult = ReturnType<typeof useWomFractionChartQuery>;
+export type WomFractionChartLazyQueryHookResult = ReturnType<typeof useWomFractionChartLazyQuery>;
+export type WomFractionChartQueryResult = Apollo.QueryResult<WomFractionChartQuery, WomFractionChartQueryVariables>;
+export const WomPartyListDocument = gql`
+    query WomPartyList($pageSize: Int, $offset: Int) {
+  womPartyList: proceduresByIdHavingVoteResults(
+    pageSize: $pageSize
+    offset: $offset
+  ) {
+    procedures {
+      ...ListItem
+      ...CommunityVotesPieChart
+      ...GovernmentVotesPieChart
+    }
+  }
+}
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
+
+/**
+ * __useWomPartyListQuery__
+ *
+ * To run a query within a React component, call `useWomPartyListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomPartyListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomPartyListQuery({
+ *   variables: {
+ *      pageSize: // value for 'pageSize'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useWomPartyListQuery(baseOptions?: Apollo.QueryHookOptions<WomPartyListQuery, WomPartyListQueryVariables>) {
+        return Apollo.useQuery<WomPartyListQuery, WomPartyListQueryVariables>(WomPartyListDocument, baseOptions);
+      }
+export function useWomPartyListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomPartyListQuery, WomPartyListQueryVariables>) {
+          return Apollo.useLazyQuery<WomPartyListQuery, WomPartyListQueryVariables>(WomPartyListDocument, baseOptions);
+        }
+export type WomPartyListQueryHookResult = ReturnType<typeof useWomPartyListQuery>;
+export type WomPartyListLazyQueryHookResult = ReturnType<typeof useWomPartyListLazyQuery>;
+export type WomPartyListQueryResult = Apollo.QueryResult<WomPartyListQuery, WomPartyListQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {
