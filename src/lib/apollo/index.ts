@@ -32,7 +32,9 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
           procedures: {
             keyArgs: ['listTypes'],
             merge(existing: Procedure[] = [], incoming: Procedure[]) {
-              return [...existing, ...incoming];
+              return uniqBy([...existing, ...incoming], (procedure) => {
+                return procedure.procedureId || (procedure as any).__ref;
+              });
             },
           },
           proceduresByIdHavingVoteResults: {
