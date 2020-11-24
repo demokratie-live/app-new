@@ -799,6 +799,40 @@ export type WomPartyListQuery = (
   ) }
 );
 
+export type WomDeputyChartFragment = (
+  { __typename?: 'Deputy' }
+  & Pick<Deputy, '_id' | 'totalProcedures'>
+  & { procedures: Array<(
+    { __typename?: 'DeputyProcedure' }
+    & Pick<DeputyProcedure, 'decision'>
+    & { procedure: (
+      { __typename?: 'Procedure' }
+      & Pick<Procedure, 'procedureId'>
+    ) }
+  )> }
+);
+
+export type ProfilFragment = (
+  { __typename?: 'Deputy' }
+  & Pick<Deputy, '_id' | 'party' | 'imgURL' | 'name' | 'constituency'>
+);
+
+export type WomDeputyQueryVariables = Exact<{
+  constituency: Scalars['String'];
+  directCandidate?: Maybe<Scalars['Boolean']>;
+  procedureIds: Array<Scalars['String']>;
+}>;
+
+
+export type WomDeputyQuery = (
+  { __typename?: 'Query' }
+  & { womDeputy: Array<(
+    { __typename?: 'Deputy' }
+    & WomDeputyChartFragment
+    & ProfilFragment
+  )> }
+);
+
 export const VoteIndexFragmentDoc = gql`
     fragment VoteIndex on Procedure {
   votes
@@ -962,6 +996,27 @@ export const GovernmentVotesPieChartFragmentDoc = gql`
     no
     notVoted
   }
+}
+    `;
+export const WomDeputyChartFragmentDoc = gql`
+    fragment WomDeputyChart on Deputy {
+  _id
+  totalProcedures
+  procedures(procedureIds: $procedureIds) {
+    decision
+    procedure {
+      procedureId
+    }
+  }
+}
+    `;
+export const ProfilFragmentDoc = gql`
+    fragment Profil on Deputy {
+  _id
+  party
+  imgURL
+  name
+  constituency
 }
     `;
 export const MeDocument = gql`
@@ -1385,6 +1440,46 @@ export function useWomPartyListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type WomPartyListQueryHookResult = ReturnType<typeof useWomPartyListQuery>;
 export type WomPartyListLazyQueryHookResult = ReturnType<typeof useWomPartyListLazyQuery>;
 export type WomPartyListQueryResult = Apollo.QueryResult<WomPartyListQuery, WomPartyListQueryVariables>;
+export const WomDeputyDocument = gql`
+    query WomDeputy($constituency: String!, $directCandidate: Boolean, $procedureIds: [String!]!) {
+  womDeputy: deputiesOfConstituency(
+    constituency: $constituency
+    directCandidate: $directCandidate
+  ) {
+    ...WomDeputyChart
+    ...Profil
+  }
+}
+    ${WomDeputyChartFragmentDoc}
+${ProfilFragmentDoc}`;
+
+/**
+ * __useWomDeputyQuery__
+ *
+ * To run a query within a React component, call `useWomDeputyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomDeputyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomDeputyQuery({
+ *   variables: {
+ *      constituency: // value for 'constituency'
+ *      directCandidate: // value for 'directCandidate'
+ *      procedureIds: // value for 'procedureIds'
+ *   },
+ * });
+ */
+export function useWomDeputyQuery(baseOptions: Apollo.QueryHookOptions<WomDeputyQuery, WomDeputyQueryVariables>) {
+        return Apollo.useQuery<WomDeputyQuery, WomDeputyQueryVariables>(WomDeputyDocument, baseOptions);
+      }
+export function useWomDeputyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomDeputyQuery, WomDeputyQueryVariables>) {
+          return Apollo.useLazyQuery<WomDeputyQuery, WomDeputyQueryVariables>(WomDeputyDocument, baseOptions);
+        }
+export type WomDeputyQueryHookResult = ReturnType<typeof useWomDeputyQuery>;
+export type WomDeputyLazyQueryHookResult = ReturnType<typeof useWomDeputyLazyQuery>;
+export type WomDeputyQueryResult = Apollo.QueryResult<WomDeputyQuery, WomDeputyQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {
