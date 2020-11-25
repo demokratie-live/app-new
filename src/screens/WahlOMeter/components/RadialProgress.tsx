@@ -38,7 +38,7 @@ export const RadialProgress: React.FC<Props> = ({ percentage, size }) => {
     },
     {
       name: 'incomplete',
-      value: 100 - percentage,
+      value: 1 - percentage,
     },
   ];
 
@@ -53,7 +53,7 @@ export const RadialProgress: React.FC<Props> = ({ percentage, size }) => {
   const pieEntryData = arcs.map((value) => {
     const arcGenerator = arc<PieArcDatum<ChartEntry>>()
       .outerRadius(chartSize / 2)
-      .innerRadius(chartSize / 2.3);
+      .innerRadius(chartSize / 2.5);
     const path = arcGenerator(value);
 
     const textTransform = arcGenerator.centroid(value);

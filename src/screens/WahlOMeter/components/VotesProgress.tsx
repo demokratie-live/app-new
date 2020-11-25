@@ -7,7 +7,6 @@ const Container = styled.View`
   justify-content: flex-end;
   align-items: center;
   flex-direction: row;
-  margin-bottom: -40px;
 `;
 
 const Text = styled.Text`

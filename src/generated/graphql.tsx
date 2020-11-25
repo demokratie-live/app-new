@@ -833,6 +833,32 @@ export type WomDeputyQuery = (
   )> }
 );
 
+export type WomConstituencyListQueryVariables = Exact<{
+  constituency: Scalars['String'];
+  directCandidate?: Maybe<Scalars['Boolean']>;
+  offset?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type WomConstituencyListQuery = (
+  { __typename?: 'Query' }
+  & { womConstituencyList: Array<(
+    { __typename?: 'Deputy' }
+    & Pick<Deputy, '_id' | 'totalProcedures'>
+    & { procedures: Array<(
+      { __typename?: 'DeputyProcedure' }
+      & Pick<DeputyProcedure, 'decision'>
+      & { procedure: (
+        { __typename?: 'Procedure' }
+        & ListItemFragment
+        & CommunityVotesPieChartFragment
+        & GovernmentVotesPieChartFragment
+      ) }
+    )> }
+  )> }
+);
+
 export const VoteIndexFragmentDoc = gql`
     fragment VoteIndex on Procedure {
   votes
@@ -1480,6 +1506,56 @@ export function useWomDeputyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type WomDeputyQueryHookResult = ReturnType<typeof useWomDeputyQuery>;
 export type WomDeputyLazyQueryHookResult = ReturnType<typeof useWomDeputyLazyQuery>;
 export type WomDeputyQueryResult = Apollo.QueryResult<WomDeputyQuery, WomDeputyQueryVariables>;
+export const WomConstituencyListDocument = gql`
+    query WomConstituencyList($constituency: String!, $directCandidate: Boolean, $offset: Int, $pageSize: Int) {
+  womConstituencyList: deputiesOfConstituency(
+    constituency: $constituency
+    directCandidate: $directCandidate
+  ) {
+    _id
+    totalProcedures
+    procedures(offset: $offset, pageSize: $pageSize) {
+      decision
+      procedure {
+        ...ListItem
+        ...CommunityVotesPieChart
+        ...GovernmentVotesPieChart
+      }
+    }
+  }
+}
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
+
+/**
+ * __useWomConstituencyListQuery__
+ *
+ * To run a query within a React component, call `useWomConstituencyListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWomConstituencyListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWomConstituencyListQuery({
+ *   variables: {
+ *      constituency: // value for 'constituency'
+ *      directCandidate: // value for 'directCandidate'
+ *      offset: // value for 'offset'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useWomConstituencyListQuery(baseOptions: Apollo.QueryHookOptions<WomConstituencyListQuery, WomConstituencyListQueryVariables>) {
+        return Apollo.useQuery<WomConstituencyListQuery, WomConstituencyListQueryVariables>(WomConstituencyListDocument, baseOptions);
+      }
+export function useWomConstituencyListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WomConstituencyListQuery, WomConstituencyListQueryVariables>) {
+          return Apollo.useLazyQuery<WomConstituencyListQuery, WomConstituencyListQueryVariables>(WomConstituencyListDocument, baseOptions);
+        }
+export type WomConstituencyListQueryHookResult = ReturnType<typeof useWomConstituencyListQuery>;
+export type WomConstituencyListLazyQueryHookResult = ReturnType<typeof useWomConstituencyListLazyQuery>;
+export type WomConstituencyListQueryResult = Apollo.QueryResult<WomConstituencyListQuery, WomConstituencyListQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

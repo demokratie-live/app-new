@@ -27,7 +27,6 @@ export const WomDeputyChart: React.FC<Props> = ({ procedures }) => {
   const { width, height } = useWindowDimensions();
   const { localVotes } = useContext(LocalVotesContext);
   const theme = useContext(ThemeContext);
-  console.log({ procedures });
   const chartWidth = Math.min(width, height) - 2 * 11;
 
   const data: BarData = procedures.reduce<BarData>(

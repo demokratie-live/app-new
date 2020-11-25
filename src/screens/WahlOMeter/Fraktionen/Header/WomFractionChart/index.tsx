@@ -5,6 +5,12 @@ import styled, { ThemeContext } from 'styled-components/native';
 import { ChartLegend } from 'components/Charts/ChartLegend';
 import { ChartLegendData } from '../../../../../components/Charts/ChartLegend';
 import { useWindowDimensions } from 'react-native';
+import { ChartNote } from 'screens/WahlOMeter/components/ChartNote';
+import { VotesProgress } from 'screens/WahlOMeter/components/VotesProgress';
+
+const ChartWrapper = styled.View`
+  align-self: center;
+`;
 
 interface LocalVote {
   procedureId: string;
@@ -15,22 +21,19 @@ interface Props {
   localVotes: LocalVote[];
 }
 
-const Container = styled.View`
-  align-items: center;
-`;
+const Container = styled.View``;
 
 const Placeholder = styled.ActivityIndicator``;
 
 export const WomFractionChart: React.FC<Props> = ({ localVotes }) => {
   const [selectedParty, setSelectedParty] = useState(0);
   const { width, height } = useWindowDimensions();
-  const { data, error } = useWomFractionChartQuery({
+  const { data } = useWomFractionChartQuery({
     variables: {
       pageSize: Infinity,
       procedureIds: localVotes.map(({ procedureId }) => procedureId),
     },
   });
-  console.log({ error, data });
   const theme = useContext(ThemeContext);
 
   const chartData = useMemo(() => {
@@ -97,13 +100,24 @@ export const WomFractionChart: React.FC<Props> = ({ localVotes }) => {
 
   return (
     <Container>
-      <FractionBarChart
-        data={chartData}
-        size={size - 48}
-        setSelectedParty={setSelectedParty}
-        selectedParty={selectedParty}
+      <VotesProgress
+        completed={data?.womFractionChart.procedures.length || 0}
+        total={data?.womFractionChart.total || 0}
       />
+      <ChartWrapper>
+        <FractionBarChart
+          data={chartData}
+          size={size - 48}
+          setSelectedParty={setSelectedParty}
+          selectedParty={selectedParty}
+        />
+      </ChartWrapper>
       <ChartLegend data={chartLegendData} />
+      <ChartNote>
+        Hohe Übereinstimmungen Ihrer Stellungnahmen mit mehreren Parteien
+        bedeuten nicht zwangsläufig eine inhaltliche Nähe dieser Parteien
+        zueinander
+      </ChartNote>
     </Container>
   );
 };

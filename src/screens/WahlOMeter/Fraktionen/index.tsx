@@ -38,15 +38,12 @@ export const WomPartyScreen: React.FC = () => {
 
   const currentProcedureLength = data?.womBundestagList.procedures.length || 0;
   const onEndReached = useCallback(() => {
-    console.log('onEndReached');
     if (!loading && hasMoreData) {
       fetchMore({
         variables: {
           offset: currentProcedureLength,
         },
       }).then(({ data: fetchMoreData }) => {
-        console.log({ fetchMoreData });
-
         if (fetchMoreData.womBundestagList.procedures.length === 0) {
           setHasMoreData(false);
         }
@@ -62,8 +59,6 @@ export const WomPartyScreen: React.FC = () => {
   }, [loading]);
 
   const refreshing = networkStatus === NetworkStatus.refetch;
-
-  console.log('rerender', { loading, hasMoreData, refreshing });
 
   return (
     <Wrapper>

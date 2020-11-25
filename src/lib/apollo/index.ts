@@ -5,12 +5,17 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
-import { Procedure, ProceduresHavingVoteResults } from 'generated/graphql';
+import {
+  DeputyProcedure,
+  Procedure,
+  ProceduresHavingVoteResults,
+} from 'generated/graphql';
 import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
 import { uniqBy } from 'lodash';
 
 const httpLink: any = new HttpLink({
+  // uri: 'http://192.168.0.237:3001',
   uri: 'https://internal.api.democracy-app.de',
 });
 
@@ -43,12 +48,6 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
               existing: ProceduresHavingVoteResults,
               incoming: ProceduresHavingVoteResults,
             ): ProceduresHavingVoteResults {
-              console.log(
-                'TypePolicies: proceduresByIdHavingVoteResults',
-                existing?.procedures,
-                incoming.procedures,
-              );
-
               return {
                 ...existing,
                 ...incoming,
@@ -86,6 +85,25 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       },
       CommunityConstituencyVotes: {
         keyFields: ['constituency'],
+      },
+      Deputy: {
+        keyFields: ['_id'],
+        fields: {
+          procedures: {
+            keyArgs: ['procedureIds'],
+            merge(
+              existing: DeputyProcedure[] = [],
+              incoming: DeputyProcedure[],
+            ) {
+              return uniqBy([...existing, ...incoming], (deputyProcedure) => {
+                return (
+                  deputyProcedure.procedure.procedureId ||
+                  (deputyProcedure.procedure as any).__ref
+                );
+              });
+            },
+          },
+        },
       },
     },
   }),
