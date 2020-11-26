@@ -1,5 +1,6 @@
 import { LocalVotesContext } from 'context/LocalVotes';
 import React, { useContext } from 'react';
+import { NoVotesPlaceholder } from 'screens/WahlOMeter/NoVotesPlaceholder';
 import { WomBundestagPieChart } from './PieChart';
 
 export const WomBundestagHeader: React.FC = () => {
@@ -8,6 +9,10 @@ export const WomBundestagHeader: React.FC = () => {
     procedureId,
     selection,
   }));
+
+  if (localVotes.length === 0) {
+    return <NoVotesPlaceholder subline="Bundestag" />;
+  }
 
   return <WomBundestagPieChart localVotes={localDecisions} />;
 };

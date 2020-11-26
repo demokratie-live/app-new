@@ -21,8 +21,14 @@ const Wrapper = styled.View`
 const ChartWrapper = styled.View`
   align-items: center;
 `;
+interface LocalVote {
+  procedureId: string;
+  selection: 'YES' | 'NO' | 'ABSTINATION';
+}
 
-interface Props {}
+interface Props {
+  localVotes: LocalVote[];
+}
 
 export const WomDeputy: React.FC<Props> = () => {
   const { constituency } = useContext(ConstituencyContext);

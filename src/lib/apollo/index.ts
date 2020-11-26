@@ -3,6 +3,7 @@ import {
   ApolloLink,
   HttpLink,
   InMemoryCache,
+  makeVar,
   NormalizedCacheObject,
 } from '@apollo/client';
 import {
@@ -13,6 +14,7 @@ import {
 import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
 import { uniqBy } from 'lodash';
+import VotesLocal from 'lib/VotesLocal';
 
 const httpLink: any = new HttpLink({
   // uri: 'http://192.168.0.237:3001',
@@ -82,6 +84,34 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
               return { ...existing, ...incoming };
             },
           },
+          voted(existing, { storage, readField }) {
+            if (!storage.var) {
+              storage.var = makeVar<boolean>(existing);
+              const procedureId = readField('procedureId') as string;
+              VotesLocal.getVote(procedureId).then((voted) =>
+                storage.var(!!voted),
+              );
+              // NetInfo.addEventListener(({ isConnected }: NetInfoState) =>
+              //   storage.var(isConnected),
+              // );
+            }
+            return storage.var();
+          },
+          // voted: {
+          // read: asyncRead(async (existing, { readField }) => {
+          //   if (existing) {
+          //     return existing;
+          //   }
+          //   const procedureId = readField('procedureId') as string;
+          //   const votedLocal = await VotesLocal.getVote(procedureId);
+          //   return !!votedLocal;
+          // }, ``),
+          // read: (existing, { readField }) => {
+          //   const procedureId = readField('procedureId') as string;
+          //   VotesLocal.getVote(procedureId).then(console.log);
+          //   return existing;
+          // },
+          // },
         },
       },
       CommunityConstituencyVotes: {
