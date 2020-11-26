@@ -16,7 +16,8 @@ import { uniqBy } from 'lodash';
 
 const httpLink: any = new HttpLink({
   // uri: 'http://192.168.0.237:3001',
-  uri: 'https://internal.api.democracy-app.de',
+  // uri: 'https://internal.api.democracy-app.de',
+  uri: 'https://api.democracy-app.de',
 });
 
 const link = ApolloLink.from([
@@ -35,7 +36,7 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       Query: {
         fields: {
           procedures: {
-            keyArgs: ['listTypes'],
+            keyArgs: ['listTypes', 'filter'],
             merge(existing: Procedure[] = [], incoming: Procedure[]) {
               return uniqBy([...existing, ...incoming], (procedure) => {
                 return procedure.procedureId || (procedure as any).__ref;

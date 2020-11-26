@@ -52,12 +52,7 @@ export const WahlOMeterNavigation = () => {
         component={TabView}
         options={{
           title: 'Wahl-O-Meter',
-          headerTintColor: '#fff',
-          headerStyle: {
-            backgroundColor: '#4494D3',
-            elevation: 0,
-            shadowOpacity: 0,
-          },
+          ...headerScreenOptions,
           headerLeft: () => (
             <BurgerMenuButton
               onPress={navigation.toggleDrawer}

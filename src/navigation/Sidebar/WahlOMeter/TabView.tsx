@@ -8,6 +8,7 @@ import { getTheme } from 'styles/theme';
 import { WomBundestagScreen } from 'screens/WahlOMeter/Bundestag';
 import { WomPartyScreen } from 'screens/WahlOMeter/Fraktionen';
 import { WomConstituencyScreen } from 'screens/WahlOMeter/Wahlkreis';
+import { useTheme } from 'styled-components';
 
 export type TopTabParamList = {
   Bundestag: undefined;
@@ -28,18 +29,19 @@ interface Props {
 }
 
 const TabViewNavigation: React.FC<Props> = () => {
+  const theme = useTheme();
   return (
     <TabNavigation.Navigator
       lazy={true}
       tabBarOptions={{
         scrollEnabled: false,
         indicatorStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: getTheme().colors.primaryText,
         },
-        activeTintColor: 'rgb(255,255,255)',
-        inactiveTintColor: getTheme().colors.primaryText,
+        activeTintColor: getTheme().colors.primaryText,
+        inactiveTintColor: getTheme().colors.secondaryText,
         style: {
-          backgroundColor: '#4494D3',
+          backgroundColor: theme.colors.header,
         },
       }}
       initialRouteName={'Bundestag'}>

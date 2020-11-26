@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -24,6 +24,7 @@ import { ListItemSeperator } from 'components/ListItem/components/ListItemSepera
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NetworkStatus } from '@apollo/client';
+import { ListFilterContext } from 'context/ListFilter';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagTabNavigatorParamList,
@@ -51,6 +52,7 @@ export const ProcedureList: React.FC<Props> = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ProfileScreenRouteProp>();
   const [hasMoreData, setHasMoreData] = useState(true);
+  const { proceduresFilter } = useContext(ListFilterContext);
 
   const {
     data,
@@ -62,6 +64,7 @@ export const ProcedureList: React.FC<Props> = () => {
     variables: {
       listTypes: [route.params.list],
       pageSize: 10,
+      filter: proceduresFilter,
     },
     notifyOnNetworkStatusChange: true,
   });
