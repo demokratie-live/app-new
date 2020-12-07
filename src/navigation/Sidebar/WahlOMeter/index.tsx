@@ -15,6 +15,7 @@ import { VotingScreen } from 'screens/Voting';
 import { SidebarNavigatorParamList } from '..';
 import { RootStackParamList } from 'navigation';
 import { ConstituencyScreen } from 'screens/Settings/Constituency';
+import { OutcomePushs } from 'screens/Voting/OutcomePushs';
 
 export type WahlOMeterStackParamList = {
   TabView: undefined;
@@ -26,6 +27,7 @@ export type WahlOMeterStackParamList = {
   };
   MemberProfil: undefined;
   Constituency: { goBack?: boolean };
+  OutcomePush: { finishAction: () => void; title: string; procedureId: string };
 };
 
 const WahlOMeterStack = createStackNavigator<WahlOMeterStackParamList>();
@@ -83,6 +85,7 @@ export const WahlOMeterNavigation = () => {
           title: 'Wahlkreissuche',
         }}
       />
+      <WahlOMeterStack.Screen name="OutcomePush" component={OutcomePushs} />
       {/* <WahlOMeterStack.Screen
         name="MemberProfil"
         component={MemberProfil}

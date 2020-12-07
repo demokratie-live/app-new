@@ -27,6 +27,7 @@ import { LocalVotesContext } from 'context/LocalVotes';
 import { ConstituencyContext } from 'context/constituency';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import VoteButton from 'screens/Procedure/components/ActionBar/components/VoteButtons/VoteButton';
+import { NotificationsContext } from 'context/NotificationPermission';
 
 const Wrapper = styled.View`
   flex: 1;
@@ -77,9 +78,18 @@ interface Props {
   title: string;
 }
 
-export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
+export const BalloutBox: React.FC<Props> = ({
+  selection,
+  procedureId,
+  title,
+}) => {
   const { setLocalVote } = useContext(LocalVotesContext);
   const { constituency } = useContext(ConstituencyContext);
+  const {
+    notificationSettings,
+    hasPermissions,
+    outcomePushsDenied,
+  } = useContext(NotificationsContext);
   const navigation = useNavigation<
     StackNavigationProp<BundestagStackNavigatorParamList, 'Voting'>
   >();
@@ -172,26 +182,24 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
                     constituency,
                     selection,
                   });
-                  navigation.goBack();
-                  // TODO activate pushs
-                  // if (
-                  //   (!notificationSettings.outcomePushs ||
-                  //     !notificationSettings.enabled ||
-                  //     !hasPermissions) &&
-                  //   !outcomePushsDenied
-                  // ) {
-                  //   navigation.replace('OutcomePush', {
-                  //     finishAction: () => navigation.goBack(),
-                  //     procedureId: procedureId,
-                  //     title,
-                  //   });
-                  // } else {
-                  //   navigation.goBack();
-                  // }
+                  if (
+                    (!notificationSettings.outcomePushs ||
+                      !notificationSettings.enabled ||
+                      !hasPermissions) &&
+                    !outcomePushsDenied
+                  ) {
+                    navigation.replace('OutcomePush', {
+                      finishAction: () => navigation.goBack(),
+                      procedureId: procedureId,
+                      title,
+                    });
+                  } else {
+                    navigation.goBack();
+                  }
                 })
                 .catch((err) => {
                   navigation.goBack();
-                  console.log(err);
+                  console.log('##err##err##err##', err);
                   throw err;
                 });
             } else {
@@ -214,10 +222,15 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
       isDraggable,
       vote,
       constituency,
+      procedureId,
       selection,
       setLocalVote,
-      procedureId,
       navigation,
+      notificationSettings.outcomePushs,
+      notificationSettings.enabled,
+      hasPermissions,
+      outcomePushsDenied,
+      title,
       previewAnimation,
     ],
   );

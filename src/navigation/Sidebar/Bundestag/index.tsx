@@ -14,6 +14,7 @@ import { BundestagRightHeader } from './Header/Right';
 import { FilterScreen } from 'screens/Filter';
 import { ListFilterProvider } from 'context/ListFilter';
 import { SearchScreen } from 'screens/Search';
+import { OutcomePushs } from 'screens/Voting/OutcomePushs';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
@@ -61,6 +62,7 @@ export const BundestagStackNavigator: React.FC = () => {
         <Stack.Screen name="Voting" component={VotingScreen} />
         <Stack.Screen name="Filter" component={FilterScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="OutcomePush" component={OutcomePushs} />
       </Navigator>
     </ListFilterProvider>
   );
