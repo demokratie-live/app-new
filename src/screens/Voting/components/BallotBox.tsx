@@ -18,6 +18,7 @@ import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
+  GovernmentVoteResultsDocument,
   ProcedureDetailDocument,
   useVoteMutation,
   VoteSelection,
@@ -154,7 +155,13 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
                     query: ProcedureDetailDocument,
                     variables: {
                       id: procedureId,
-                      constituency,
+                      constituencies: [constituency],
+                    },
+                  },
+                  {
+                    query: GovernmentVoteResultsDocument,
+                    variables: {
+                      procedureId,
                     },
                   },
                 ],
@@ -184,6 +191,7 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
                 })
                 .catch((err) => {
                   navigation.goBack();
+                  console.log(err);
                   throw err;
                 });
             } else {
