@@ -9,7 +9,7 @@ import { VotingScreen } from 'screens/Voting';
 import { BurgerMenuButton } from 'components/navigation/MenuButton';
 import SvgMenu from 'assets/svgs/icons/Menu';
 import { DrawerActions } from '@react-navigation/native';
-import { headerScreenOptions } from 'navigation/headerOptions';
+import { getHeaderScreenOptions } from 'navigation/headerOptions';
 import { BundestagRightHeader } from './Header/Right';
 import { FilterScreen } from 'screens/Filter';
 import { ListFilterProvider } from 'context/ListFilter';
@@ -32,9 +32,9 @@ export type BundestagStackNavigatorParamList = {
 
 const Stack = createStackNavigator<BundestagStackNavigatorParamList>();
 
-const Navigator = styled(Stack.Navigator).attrs(({}) => ({
+const Navigator = styled(Stack.Navigator).attrs(({ theme }) => ({
   screenOptions: {
-    ...headerScreenOptions,
+    ...getHeaderScreenOptions(theme),
   },
 }))``;
 

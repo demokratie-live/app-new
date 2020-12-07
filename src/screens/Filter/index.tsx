@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { SectionList, View, Alert } from 'react-native';
 import Checkbox from './components/Checkbox';
 import { StackNavigationProp } from '@react-navigation/stack';
-import styled from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import { AuthContext } from 'context/Auth';
 import { ListFilterContext } from 'context/ListFilter';
@@ -60,6 +60,7 @@ type Props = {
 };
 
 export const FilterScreen: React.FC<Props> = ({ navigation }) => {
+  const theme = useTheme();
   const { isVerified } = useContext(AuthContext);
   const { filter, setFilter } = useContext(ListFilterContext);
   const [data, setData] = useState<FilterData[]>(filter);
@@ -174,8 +175,9 @@ export const FilterScreen: React.FC<Props> = ({ navigation }) => {
         sections={data}
         renderSectionHeader={({ section: { title, name } }) => {
           const sectionValue = getValue({ type: name });
-          const mainCheckboxColor = sectionValue ? '#1c659f' : '#fff';
-          const mainCheckboxDisabledColor = sectionValue ? '#1c659f' : '#fff';
+          const mainCheckboxColor = sectionValue
+            ? '#1c659f'
+            : theme.colors.header;
           return (
             <View>
               <Segment text={title} />
@@ -197,14 +199,18 @@ export const FilterScreen: React.FC<Props> = ({ navigation }) => {
                 <Checkbox
                   value={sectionValue === true}
                   color={mainCheckboxColor}
-                  disabledColor={mainCheckboxDisabledColor}
-                  disabledCheckmarkColor={mainCheckboxDisabledColor}
+                  disabledColor={mainCheckboxColor}
+                  disabledCheckmarkColor={mainCheckboxColor}
                 />
               </Row>
             </View>
           );
         }}
         renderItem={({ item: { title: subtitle, name: subName }, section }) => {
+          const sectionValue = getValue({ type: subName! });
+          const mainCheckboxColor = sectionValue
+            ? '#1c659f'
+            : theme.colors.header;
           return (
             <ListRowMain>
               <ListRowSub key={subtitle}>
@@ -229,6 +235,9 @@ export const FilterScreen: React.FC<Props> = ({ navigation }) => {
                   }}>
                   <TitleSub>{subtitle}</TitleSub>
                   <Checkbox
+                    color={mainCheckboxColor}
+                    disabledColor={mainCheckboxColor}
+                    disabledCheckmarkColor={mainCheckboxColor}
                     value={getValue({
                       type: section.name,
                       subType: subName || subtitle,

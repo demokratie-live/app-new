@@ -31,7 +31,7 @@ const QuotWrapper = styled.View`
 
 const Quot = styled.Text`
   font-size: 100px;
-  color: #4494d3;
+  color: ${({ theme }) => theme.colors.header};
   top: -18px;
 `;
 

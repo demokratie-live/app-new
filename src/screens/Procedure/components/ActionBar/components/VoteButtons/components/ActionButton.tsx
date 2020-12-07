@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ImageSourcePropType, TouchableOpacity } from 'react-native';
 import SvgShare from 'assets/svgs/icons/Share';
 import { LockIcon } from './Lock';
 import SvgBell from './Bell';
@@ -22,8 +21,6 @@ const VoteIconButtonWrapper = styled.TouchableOpacity<
       return 'grey';
     }
     switch (selection) {
-      case 'ACTIVITY_INDEX':
-        return '#4494d3';
       case 'NOTIFY':
         return '#f5a623';
       case 'SHARE':
@@ -32,19 +29,6 @@ const VoteIconButtonWrapper = styled.TouchableOpacity<
         return 'grey';
     }
   }};
-`;
-
-const VoteIconButton = styled.Image.attrs<{ source: ImageSourcePropType }>(
-  ({ source }) => ({
-    flex: 1,
-    source,
-    resizeMode: 'contain',
-    width: null,
-    height: null,
-  }),
-)`
-  width: 45;
-  height: 45;
 `;
 
 interface Props {
@@ -67,16 +51,6 @@ const ActionButton: React.FC<Props> = ({
   let styleWrapper;
   let Icon;
   switch (selection) {
-    case 'ACTIVITY_INDEX':
-      styleWrapper = {
-        borderColor: '#4494d3',
-      };
-      Icon = (
-        <TouchableOpacity onPress={onPress}>
-          <VoteIconButton source={require('../assets/arrowUp.png')} />
-        </TouchableOpacity>
-      );
-      break;
     case 'NOTIFY':
       styleWrapper = {
         borderColor: '#f5a623',

@@ -4,13 +4,12 @@ import styled from 'styled-components/native';
 
 const Wrapper = styled.TouchableOpacity`
   flex-direction: row;
-  background-color: #fff;
   height: 44px;
   align-items: center;
   padding-left: 16px;
   padding-right: 18px;
   border-bottom-width: 1px;
-  border-bottom-color: #c8c7cc;
+  border-bottom-color: ${({ theme }) => theme.colors.womCharts.notMatching};
   font-size: 17px;
 `;
 
@@ -28,7 +27,7 @@ const Description = styled.Text`
 `;
 
 const Arrow = styled(SvgArrow).attrs(() => ({
-  color: 'rgb(180, 180, 180)',
+  color: 'rgba(180, 180, 180, 0.5)',
   width: 17,
   height: 17,
 }))`

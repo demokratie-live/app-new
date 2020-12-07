@@ -7,7 +7,7 @@ import SvgSettings from 'assets/svgs/icons/Settings';
 import { SettingsRootNavigation } from './Settings';
 import SvgFaqAndSupport from 'assets/svgs/icons/FaqAndSupport';
 import { FaqScreen } from 'screens/Faq';
-import { headerScreenOptions } from 'navigation/headerOptions';
+import { getHeaderScreenOptions } from 'navigation/headerOptions';
 import SvgAbout from 'assets/svgs/icons/About';
 import { AboutScreen } from 'screens/About';
 import SvgLaw from 'assets/svgs/icons/Law';
@@ -15,6 +15,7 @@ import { CredentialsScreen } from 'screens/Credentials';
 import SvgWahlOMeter from 'assets/svgs/icons/WahlOMeter';
 import { WahlOMeterNavigation } from './WahlOMeter';
 import { DevScreen } from 'screens/Dev';
+import styled from 'styled-components/native';
 
 export type SidebarNavigatorParamList = {
   Home: undefined;
@@ -29,9 +30,15 @@ export type SidebarNavigatorParamList = {
 
 const Drawer = createDrawerNavigator<SidebarNavigatorParamList>();
 
+const Navigator = styled(Drawer.Navigator).attrs(({ theme }) => ({
+  screenOptions: {
+    ...getHeaderScreenOptions(theme),
+  },
+}))``;
+
 export const Sidebar: React.FC = () => {
   return (
-    <Drawer.Navigator
+    <Navigator
       drawerContent={(props: any) => <SidebarScreen {...props} />}
       drawerType={'back'}
       overlayColor="1"
@@ -78,7 +85,6 @@ export const Sidebar: React.FC = () => {
       />
       <Drawer.Screen
         options={{
-          ...headerScreenOptions,
           headerShown: true,
           title: 'FAQ',
           drawerLabel: 'Mehr/FAQ & Support',
@@ -92,7 +98,6 @@ export const Sidebar: React.FC = () => {
       />
       <Drawer.Screen
         options={{
-          ...headerScreenOptions,
           headerShown: true,
           title: 'About',
           drawerLabel: 'Mehr/Über DEMOCRACY',
@@ -106,7 +111,6 @@ export const Sidebar: React.FC = () => {
       />
       <Drawer.Screen
         options={{
-          ...headerScreenOptions,
           headerShown: true,
           drawerLabel: 'Mehr/Rechtliches',
           gestureEnabled: true,
@@ -119,7 +123,6 @@ export const Sidebar: React.FC = () => {
       />
       <Drawer.Screen
         options={{
-          ...headerScreenOptions,
           headerShown: true,
           drawerLabel: 'Dev/Dev',
           gestureEnabled: true,
@@ -130,6 +133,6 @@ export const Sidebar: React.FC = () => {
         name={'Dev'}
         component={DevScreen}
       />
-    </Drawer.Navigator>
+    </Navigator>
   );
 };

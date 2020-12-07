@@ -34,7 +34,7 @@ const Wrapper = styled.View`
   flex-direction: row;
   align-items: center;
   padding-horizontal: 18px;
-  background-color: #fafafa;
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const DropZone = styled.TouchableOpacity`

@@ -15,7 +15,7 @@ import { WomPartyHeader } from 'screens/WahlOMeter/Fraktionen/Header';
 
 const Wrapper = styled.View`
   flex: 1;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const ScrollWrapper = styled.ScrollView.attrs({
@@ -33,6 +33,7 @@ const Title = styled.Text`
   padding-horizontal: 18px;
   font-size: 34px;
   padding-bottom: 9px;
+  color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 const WarnWrapper = styled.View`
@@ -40,26 +41,25 @@ const WarnWrapper = styled.View`
   left: 0;
   right: 0;
   bottom: 130px;
-  background-color: rgba(0, 0, 0, 0);
 `;
 
 const WarnTextWrapper = styled.View`
   align-items: center;
   justify-content: center;
   padding-vertical: 11px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.2);
   opacity: 0.9;
 `;
 
 const WarnText = styled.Text`
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: ${({ theme }) => theme.colors.secondaryText};
   font-size: 13px;
 `;
 
 const BalloutBoxWrapper = styled.View`
   height: 130px;
-  background-color: rgba(250, 250, 250, 0.9);
+  background-color: ${({ theme }) => theme.colors.secondaryText};
   border-top-width: 1px;
   border-top-color: rgba(68, 148, 211, 0.1);
 `;
@@ -89,8 +89,6 @@ export const VotingScreen: React.FC<Props> = ({ route }) => {
   };
 
   const { selection, procedureId, title } = route.params;
-
-  let Content = <ActivityIndicator size="large" />;
 
   return (
     <Wrapper>

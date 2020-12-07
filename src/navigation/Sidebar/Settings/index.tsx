@@ -52,7 +52,7 @@ export const SettingsRootNavigation = () => {
           title: 'Settings',
           headerTintColor: '#fff',
           headerStyle: {
-            backgroundColor: '#4494D3',
+            backgroundColor: theme.colors.header,
             elevation: 0,
             shadowOpacity: 0,
           },

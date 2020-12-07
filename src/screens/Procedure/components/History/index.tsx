@@ -23,11 +23,13 @@ const Icon = styled.View<IconProps>`
   width: 19px;
   height: 19px;
   border-radius: 9px;
-  background-color: ${({ currentStatus, state }) => {
+  background-color: ${({ currentStatus, state, theme }) => {
     if (state === '2. Beratung / 3. Beratung' || state === '1. Beratung') {
       return '#9b9b9b';
     }
-    return currentStatus === state ? '#0076ff' : '#4494d3';
+    return currentStatus === state
+      ? theme.colors.header
+      : theme.colors.primaryText;
   }};
 `;
 

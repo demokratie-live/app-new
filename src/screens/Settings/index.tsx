@@ -19,6 +19,7 @@ const Wrapper = styled.View`
 `;
 
 const Text = styled.Text`
+  color: ${({ theme }) => theme.colors.primaryText};
   font-size: 17px;
   margin-right: auto;
 `;
