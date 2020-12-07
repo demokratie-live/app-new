@@ -11,6 +11,7 @@ import { RouteProp } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
+import { WomPartyHeader } from 'screens/WahlOMeter/Fraktionen/Header';
 
 const Wrapper = styled.View`
   flex: 1;
@@ -93,9 +94,9 @@ export const VotingScreen: React.FC<Props> = ({ route }) => {
 
   return (
     <Wrapper>
-      <ScrollWrapper onScroll={onScroll}>
+      <ScrollWrapper onScroll={onScroll} scrollEventThrottle={1000}>
         <Title>Schon gewusst?</Title>
-        {Content}
+        <WomPartyHeader />
       </ScrollWrapper>
       <WarnWrapper pointerEvents="none">
         <Fade visible={showWarning}>
