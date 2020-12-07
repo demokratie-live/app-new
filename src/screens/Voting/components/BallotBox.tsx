@@ -15,12 +15,13 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 
-import { useMutation } from '@apollo/client';
-import { VOTE } from './graphql/mutation/vote';
-import { Vote, VoteVariables } from './graphql/mutation/__generated__/vote';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { ProcedureDetailDocument, VoteSelection } from 'generated/graphql';
+import {
+  ProcedureDetailDocument,
+  useVoteMutation,
+  VoteSelection,
+} from 'generated/graphql';
 import { LocalVotesContext } from 'context/LocalVotes';
 import { ConstituencyContext } from 'context/constituency';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
@@ -81,7 +82,7 @@ export const BalloutBox: React.FC<Props> = ({ selection, procedureId }) => {
   const navigation = useNavigation<
     StackNavigationProp<BundestagStackNavigatorParamList, 'Voting'>
   >();
-  const [vote] = useMutation<Vote, VoteVariables>(VOTE);
+  const [vote] = useVoteMutation();
   const [isDraggable, setIsDraggable] = useState(true);
 
   const pan = React.useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;

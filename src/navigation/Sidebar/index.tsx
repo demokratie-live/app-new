@@ -14,6 +14,7 @@ import SvgLaw from 'assets/svgs/icons/Law';
 import { CredentialsScreen } from 'screens/Credentials';
 import SvgWahlOMeter from 'assets/svgs/icons/WahlOMeter';
 import { WahlOMeterNavigation } from './WahlOMeter';
+import { DevScreen } from 'screens/Dev';
 
 export type SidebarNavigatorParamList = {
   Home: undefined;
@@ -23,6 +24,7 @@ export type SidebarNavigatorParamList = {
   Faq: undefined;
   About: undefined;
   Credentials: undefined;
+  Dev: undefined;
 };
 
 const Drawer = createDrawerNavigator<SidebarNavigatorParamList>();
@@ -114,6 +116,19 @@ export const Sidebar: React.FC = () => {
         }}
         name={'Credentials'}
         component={CredentialsScreen}
+      />
+      <Drawer.Screen
+        options={{
+          ...headerScreenOptions,
+          headerShown: true,
+          drawerLabel: 'Dev/Dev',
+          gestureEnabled: true,
+          drawerIcon: ({ color, size }) => (
+            <SvgLaw width={size} height={size} color={color} />
+          ),
+        }}
+        name={'Dev'}
+        component={DevScreen}
       />
     </Drawer.Navigator>
   );

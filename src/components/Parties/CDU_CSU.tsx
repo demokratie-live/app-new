@@ -3,7 +3,7 @@ import Svg, { G, Path } from 'react-native-svg';
 import PropTypes from 'prop-types';
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 
-export const CduCsu = (props: any) => (
+const CduCsu = (props: any) => (
   <Svg
     width="1em"
     height={(props.width / 851) * 227}

@@ -14,6 +14,7 @@ import { ProcedureDetailScreen } from 'screens/Procedure';
 import { VotingScreen } from 'screens/Voting';
 import { SidebarNavigatorParamList } from '..';
 import { RootStackParamList } from 'navigation';
+import { ConstituencyScreen } from 'screens/Settings/Constituency';
 
 export type WahlOMeterStackParamList = {
   TabView: undefined;
@@ -24,6 +25,7 @@ export type WahlOMeterStackParamList = {
     procedureObjId: string;
   };
   MemberProfil: undefined;
+  Constituency: { goBack?: boolean };
 };
 
 const WahlOMeterStack = createStackNavigator<WahlOMeterStackParamList>();
@@ -72,6 +74,13 @@ export const WahlOMeterNavigation = () => {
         component={VotingScreen}
         options={{
           title: 'Wahlurne',
+        }}
+      />
+      <WahlOMeterStack.Screen
+        name="Constituency"
+        component={ConstituencyScreen}
+        options={{
+          title: 'Wahlkreissuche',
         }}
       />
       {/* <WahlOMeterStack.Screen

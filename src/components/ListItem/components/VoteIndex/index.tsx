@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { VoteIndexFragmentDoc, VoteIndexFragment } from 'generated/graphql';
+import { VoteIndexFragment } from 'generated/graphql';
 
 interface Props extends VoteIndexFragment {}
 
@@ -13,5 +13,3 @@ const Number = styled.Text<Pick<Props, 'voted'>>`
 export const VotesIndex: React.FC<Props> = ({ votes, voted }) => (
   <Number voted={voted}>{votes}</Number>
 );
-
-export { VoteIndexFragmentDoc };

@@ -9,6 +9,8 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
+  src/generated/possible-types.ts:
+    plugins:
       - 'fragment-matcher'
   ./graphql.schema.json:
     plugins:

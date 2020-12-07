@@ -4,7 +4,7 @@ import Svg, { G, Rect, Text } from 'react-native-svg';
 import { ThemeContext } from 'styled-components';
 import { FractionBar } from './FractionBar';
 
-export interface PartyData {
+interface PartyData {
   party: string;
   deviants: {
     yes: number;

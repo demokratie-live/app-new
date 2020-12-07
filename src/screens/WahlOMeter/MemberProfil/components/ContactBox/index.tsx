@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { linking } from '../../../../../lib/linking';
 import { Contacts } from '../..';
-import PlanetIcon from '@democracy-deutschland/mobile-ui/src/components/Icons/Planet';
-import FacebookIcon from '@democracy-deutschland/mobile-ui/src/components/Icons/Facebook';
-import TwitterIcon from '@democracy-deutschland/mobile-ui/src/components/Icons/Twitter';
-import MailIcon from '@democracy-deutschland/mobile-ui/src/components/Icons/Mail';
-import InstagramIcon from '@democracy-deutschland/mobile-ui/src/components/Icons/Instagram';
+import SvgMail from 'assets/svgs/icons/Mail';
+import SvgFacebook from 'assets/svgs/icons/Facebook';
+import SvgTwitter from 'assets/svgs/icons/Twitter';
+import SvgInstagram from 'assets/svgs/icons/Instagram';
+import SvgPlanet from 'assets/svgs/icons/Planet';
 
 const ContactWrapper = styled.View`
   flex-wrap: wrap;
@@ -63,7 +63,7 @@ class ContactBox extends React.PureComponent<Props> {
         return (
           <ServiceWrapper key={url}>
             <IconWrapper onPress={linking(email)}>
-              <MailIcon width={40} height={40} color="#000" />
+              <SvgMail width={40} height={40} color="#000" />
             </IconWrapper>
           </ServiceWrapper>
         );
@@ -74,7 +74,7 @@ class ContactBox extends React.PureComponent<Props> {
         return (
           <ServiceWrapper key={url}>
             <IconWrapper onPress={linking(url)}>
-              <FacebookIcon width={40} height={40} color="#000" />
+              <SvgFacebook width={40} height={40} color="#000" />
             </IconWrapper>
             {!!username && <Username>{username}</Username>}
           </ServiceWrapper>
@@ -84,7 +84,7 @@ class ContactBox extends React.PureComponent<Props> {
         return (
           <ServiceWrapper key={url}>
             <IconWrapper onPress={linking(url)}>
-              <TwitterIcon width={40} height={40} color="#000" />
+              <SvgTwitter width={40} height={40} color="#000" />
             </IconWrapper>
             {!!username && <Username>{username}</Username>}
           </ServiceWrapper>
@@ -94,7 +94,7 @@ class ContactBox extends React.PureComponent<Props> {
         return (
           <ServiceWrapper key={url}>
             <IconWrapper onPress={linking(url)}>
-              <InstagramIcon width={40} height={40} color="#000" />
+              <SvgInstagram width={40} height={40} color="#000" />
             </IconWrapper>
             {!!username && <Username>{username}</Username>}
           </ServiceWrapper>
@@ -104,7 +104,7 @@ class ContactBox extends React.PureComponent<Props> {
         return (
           <ServiceWrapper key={url}>
             <IconWrapper onPress={linking(url)}>
-              <PlanetIcon width={40} height={40} color="#000" />
+              <SvgPlanet width={40} height={40} color="#000" />
             </IconWrapper>
             <Domain>{name}</Domain>
           </ServiceWrapper>

@@ -11,6 +11,7 @@ import {
   Procedure,
   ProceduresHavingVoteResults,
 } from 'generated/graphql';
+import introspection from 'generated/possible-types';
 import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { versionLinkMiddleware } from './Version';
 import { uniqBy } from 'lodash';
@@ -18,8 +19,8 @@ import VotesLocal from 'lib/VotesLocal';
 
 const httpLink: any = new HttpLink({
   // uri: 'http://192.168.0.237:3001',
-  // uri: 'https://internal.api.democracy-app.de',
-  uri: 'https://api.democracy-app.de',
+  uri: 'https://internal.api.democracy-app.de',
+  // uri: 'https://api.democracy-app.de',
 });
 
 const link = ApolloLink.from([
@@ -34,6 +35,7 @@ const link = ApolloLink.from([
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link,
   cache: new InMemoryCache({
+    possibleTypes: introspection.possibleTypes,
     typePolicies: {
       Query: {
         fields: {

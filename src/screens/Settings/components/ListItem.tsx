@@ -45,7 +45,7 @@ const Arrow = styled(SvgArrow).attrs(() => ({
 //   margin-top: 3;
 // `;
 
-export interface Props {
+interface Props {
   text?: string;
   arrow?: boolean;
   onPress: () => void;

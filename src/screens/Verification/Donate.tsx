@@ -92,7 +92,7 @@ export const SmsDonateScreen: React.FC = () => {
   };
 
   const onDonate = async () => {
-    navigate('Donate');
+    navigate('VerificationDonation');
     refetchMe();
   };
 

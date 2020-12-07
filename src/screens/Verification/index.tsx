@@ -46,7 +46,7 @@ export const ButtonNext = styled(Button)`
   margin-horizontal: ${({ theme }) => theme.paddings.outer};
 `;
 
-export type VerificationNavigationProps = StackNavigationProp<
+type VerificationNavigationProps = StackNavigationProp<
   VerificationStackParamList,
   'VerificationIntro'
 >;

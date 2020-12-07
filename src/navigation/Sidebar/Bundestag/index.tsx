@@ -13,6 +13,7 @@ import { headerScreenOptions } from 'navigation/headerOptions';
 import { BundestagRightHeader } from './Header/Right';
 import { FilterScreen } from 'screens/Filter';
 import { ListFilterProvider } from 'context/ListFilter';
+import { SearchScreen } from 'screens/Search';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
@@ -59,6 +60,7 @@ export const BundestagStackNavigator: React.FC = () => {
         <Stack.Screen name="Procedure" component={ProcedureDetailScreen} />
         <Stack.Screen name="Voting" component={VotingScreen} />
         <Stack.Screen name="Filter" component={FilterScreen} />
+        <Stack.Screen name="Search" component={SearchScreen} />
       </Navigator>
     </ListFilterProvider>
   );

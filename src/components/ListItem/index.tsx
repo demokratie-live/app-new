@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
-  ListItemFragmentDoc,
   ListItemFragment,
   VoteIndexFragmentDoc,
   VoteDateFragmentDoc,
@@ -77,5 +76,3 @@ export const ListItem: React.FC<Props> = ({
     </Container>
   );
 };
-
-export { ListItemFragmentDoc };

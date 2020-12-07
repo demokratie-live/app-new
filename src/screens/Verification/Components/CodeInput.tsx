@@ -49,5 +49,3 @@ export const CodeInput: React.FC<Props> = ({ code, onChange }) => {
     </Container>
   );
 };
-
-export default CodeInput;

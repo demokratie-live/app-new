@@ -2,21 +2,19 @@ import React, { useContext, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import ContactBox from './components/ContactBox';
 // Components
-import PartyComponent from '../../Bundestag/Procedure/components/GovernmentVoteResults/Parties';
 import Chart from './Chart';
-import ChartLegend from '../../Bundestag/Procedure/components/Charts/ChartLegend';
-import Folding from '@democracy-deutschland/mobile-ui/src/components/shared/Folding';
 // GraphQL
-import { useQuery } from '@apollo/client';
-import { GET_DEPUTY_PROFILE } from './graphql/query/getDeputyProfile';
-import {
-  GetDeputyProfile,
-  GetDeputyProfileVariables,
-  GetDeputyProfile_deputiesOfConstituency_procedures,
-} from './graphql/query/__generated__/GetDeputyProfile';
 import { ConstituencyContext } from '../../../context/Constituency';
 import { useNavigation } from '@react-navigation/core';
-import { styled } from '../../../styles';
+import styled from 'styled-components/native';
+import { PartyLogo } from 'components/Parties';
+import {
+  DeputyProcedure,
+  Procedure,
+  useGetDeputyProfileQuery,
+} from 'generated/graphql';
+import { ChartLegend } from 'components/Charts/ChartLegend';
+import Folding from 'components/Folding';
 
 const ScrollWrapper = styled.ScrollView.attrs({
   contentContainerStyle: {
@@ -46,7 +44,7 @@ const MemberImage = styled.Image.attrs({
   border-radius: 142;
 `;
 
-const Party = styled(PartyComponent)`
+const Party = styled(PartyLogo)`
   position: absolute;
   right: 0;
   bottom: 30;
@@ -61,7 +59,7 @@ const TextGrey = styled(Text)`
 `;
 
 const TextLighGrey = styled(Text)`
-  color: ${({ theme }) => theme.textColors.secondary};
+  color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 const SegmentWrapper = styled.View`
@@ -78,10 +76,7 @@ export interface Contacts {
 export const MemberProfil = () => {
   const navigation = useNavigation();
   const { constituency } = useContext(ConstituencyContext);
-  const { data, loading } = useQuery<
-    GetDeputyProfile,
-    GetDeputyProfileVariables
-  >(GET_DEPUTY_PROFILE, {
+  const { data, loading } = useGetDeputyProfileQuery({
     variables: {
       constituency,
       directCandidate: true,
@@ -127,7 +122,13 @@ export const MemberProfil = () => {
   };
 
   const getProcedureCountByDecision = (
-    procedures: GetDeputyProfile_deputiesOfConstituency_procedures[],
+    procedures: ({
+      __typename?: 'DeputyProcedure' | undefined;
+    } & Pick<DeputyProcedure, 'decision'> & {
+        procedure: {
+          __typename?: 'Procedure' | undefined;
+        } & Pick<Procedure, 'procedureId'>;
+      })[],
   ) => {
     return procedures.reduce(
       (prev, { decision }) => {
@@ -162,13 +163,13 @@ export const MemberProfil = () => {
     contacts = contact.email
       ? [
           { name: 'email', URL: contact.email },
-          ...contact.links.map(link => ({
+          ...contact.links.map((link) => ({
             ...link,
             username: link.username ? link.username : undefined,
           })),
         ]
       : [
-          ...contact.links.map(link => ({
+          ...contact.links.map((link) => ({
             ...link,
             username: link.username ? link.username : undefined,
           })),

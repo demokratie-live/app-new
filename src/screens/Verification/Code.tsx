@@ -5,7 +5,7 @@ import { sha256 } from 'react-native-sha256';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Description from './Components/Description';
-import CodeInput from './Components/CodeInput';
+import { CodeInput } from './Components/CodeInput';
 
 // GraphQL
 import REQUEST_CODE from './graphql/mutation/requestCode';

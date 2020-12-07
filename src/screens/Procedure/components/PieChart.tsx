@@ -41,6 +41,7 @@ interface Props {
   topLeftText?: string;
   topRightSvg?: any;
   total: number;
+  hidePercentage?: boolean;
 }
 
 export const PieChart: React.FC<Props> = ({
@@ -52,6 +53,7 @@ export const PieChart: React.FC<Props> = ({
   topLeftText,
   topRightSvg,
   total,
+  hidePercentage = false,
 }) => {
   const chartSize = size - size / 5;
   const dataLabels = Object.keys(votesData);
@@ -109,7 +111,7 @@ export const PieChart: React.FC<Props> = ({
                     strokeWidth={chartSize / 100}
                     d={path}
                   />
-                  {percentage > 3 && (
+                  {!hidePercentage && percentage > 3 && (
                     <Text
                       y="6"
                       transform={{ translate: textTransform }}

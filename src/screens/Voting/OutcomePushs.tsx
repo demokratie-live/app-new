@@ -1,25 +1,22 @@
 import React, { useState, useContext } from 'react';
-import { styled } from '../../../../styles';
-import { Button } from '@democracy-deutschland/mobile-ui/src/components/Button';
 import { useRoute, RouteProp } from '@react-navigation/core';
-import SvgIconAppIos from '@democracy-deutschland/mobile-ui/src/components/Icons/IconAppIos';
-import SvgNewMarker from '@democracy-deutschland/mobile-ui/src/components/Icons/Newmarker';
 import { Dimensions, Switch, View } from 'react-native';
-import { NotificationsContext } from '../../../../context/NotificationPermission';
-import { BundestagRootStackParamList } from '../../../../routes/Sidebar/Bundestag';
-import { TOGGLE_NOTIFICATION } from '../../../Bundestag/Procedure/graphql/muatation/toggleNotification';
-import { PROCEDURE } from '../../../Bundestag/Procedure/graphql/query/Procedure';
-import { useMutation } from '@apollo/client';
+import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
+import styled from 'styled-components/native';
 import {
-  ToggleNotification,
-  ToggleNotificationVariables,
-} from '../../../Bundestag/Procedure/graphql/muatation/__generated__/ToggleNotification';
-import { defaultNotificationData } from '../../../modals/Introduction/PushInstructions/data';
-import { NotificationBox } from '../../../modals/Introduction/PushInstructions/NotificationBox';
+  ProcedureDetailDocument,
+  useToggleNotificationMutation,
+} from 'generated/graphql';
+import { NotificationsContext } from 'context/NotificationPermission';
+import { defaultNotificationData } from 'assets/data/defaultNotificationData';
+import SvgNewmarker from 'assets/svgs/icons/Newmarker';
+import SvgIconappios from 'assets/svgs/icons/IconAppIos';
+import { NotificationBox } from 'components/NotificationBox';
+import { Button } from 'components/Botton';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
-type RoutePropOP = RouteProp<BundestagRootStackParamList, 'OutcomePush'>;
+type RoutePropOP = RouteProp<BundestagStackNavigatorParamList, 'OutcomePush'>;
 
 const ScrollView = styled.ScrollView.attrs({
   contentContainerStyle: {
@@ -69,16 +66,13 @@ interface Props {
 export const OutcomePushs: React.FC<Props> = ({ finishAction }) => {
   const route = useRoute<RoutePropOP>();
 
-  const [toggleNotification] = useMutation<
-    ToggleNotification,
-    ToggleNotificationVariables
-  >(TOGGLE_NOTIFICATION, {
+  const [toggleNotification] = useToggleNotificationMutation({
     variables: {
       procedureId: route.params.procedureId,
     },
     refetchQueries: [
       {
-        query: PROCEDURE,
+        query: ProcedureDetailDocument,
         variables: {
           id: route.params.procedureId,
         },
@@ -121,13 +115,13 @@ export const OutcomePushs: React.FC<Props> = ({ finishAction }) => {
   return (
     <ScrollView>
       <View style={{ paddingTop: 36, alignItems: 'center' }}>
-        <SvgNewMarker
+        <SvgNewmarker
           width={58}
           height={35}
           color="#f568c4"
           style={{ position: 'absolute', left: 0, top: 36 }}
         />
-        <SvgIconAppIos width={73} height={73} />
+        <SvgIconappios width={73} height={73} />
         <Headline>Ergebnisse erhalten</Headline>
         <Subtitle>
           Werde nach Deiner Abstimmung automatisch über das offizielle Ergebnis

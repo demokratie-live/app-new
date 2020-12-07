@@ -2,6 +2,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -711,6 +713,69 @@ export type ProceduresListQuery = (
   )> }
 );
 
+export type FinishSearchMutationVariables = Exact<{
+  term: Scalars['String'];
+}>;
+
+
+export type FinishSearchMutation = (
+  { __typename?: 'Mutation' }
+  & { finishSearch: (
+    { __typename?: 'SearchTerm' }
+    & Pick<SearchTerm, 'term'>
+  ) }
+);
+
+export type MostSearchedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MostSearchedQuery = (
+  { __typename?: 'Query' }
+  & { mostSearched: Array<(
+    { __typename?: 'SearchTerm' }
+    & Pick<SearchTerm, 'term'>
+  )> }
+);
+
+export type SearchProceduresQueryVariables = Exact<{
+  term: Scalars['String'];
+}>;
+
+
+export type SearchProceduresQuery = (
+  { __typename?: 'Query' }
+  & { searchProceduresAutocomplete: (
+    { __typename?: 'SearchProcedures' }
+    & Pick<SearchProcedures, 'autocomplete'>
+    & { procedures: Array<(
+      { __typename?: 'Procedure' }
+      & Pick<Procedure, '_id' | 'title' | 'procedureId' | 'sessionTOPHeading' | 'subjectGroups' | 'tags' | 'abstract' | 'voteDate' | 'votedGovernment' | 'submissionDate' | 'completed' | 'voted' | 'type'>
+      & { voteResults?: Maybe<(
+        { __typename?: 'VoteResult' }
+        & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'governmentDecision'>
+      )>, communityVotes?: Maybe<(
+        { __typename?: 'CommunityVotes' }
+        & Pick<CommunityVotes, 'yes' | 'abstination' | 'no' | 'total'>
+      )> }
+    )> }
+  ) }
+);
+
+export type VoteMutationVariables = Exact<{
+  procedure: Scalars['ID'];
+  selection: VoteSelection;
+  constituency?: Maybe<Scalars['String']>;
+}>;
+
+
+export type VoteMutation = (
+  { __typename?: 'Mutation' }
+  & { vote: (
+    { __typename?: 'Vote' }
+    & Pick<Vote, 'voted'>
+  ) }
+);
+
 export type WomBundestagPieChartQueryVariables = Exact<{
   procedureIds?: Maybe<Array<Scalars['String']>>;
   pageSize?: Maybe<Scalars['Int']>;
@@ -797,6 +862,35 @@ export type WomPartyListQuery = (
       & GovernmentVotesPieChartFragment
     )> }
   ) }
+);
+
+export type GetDeputyProfileQueryVariables = Exact<{
+  constituency: Scalars['String'];
+  directCandidate?: Maybe<Scalars['Boolean']>;
+}>;
+
+
+export type GetDeputyProfileQuery = (
+  { __typename?: 'Query' }
+  & { deputiesOfConstituency: Array<(
+    { __typename?: 'Deputy' }
+    & Pick<Deputy, '_id' | 'name' | 'imgURL' | 'party' | 'job' | 'biography' | 'totalProcedures'>
+    & { procedures: Array<(
+      { __typename?: 'DeputyProcedure' }
+      & Pick<DeputyProcedure, 'decision'>
+      & { procedure: (
+        { __typename?: 'Procedure' }
+        & Pick<Procedure, 'procedureId'>
+      ) }
+    )>, contact?: Maybe<(
+      { __typename?: 'DeputyContact' }
+      & Pick<DeputyContact, 'address' | 'email'>
+      & { links: Array<(
+        { __typename?: 'DeputyLink' }
+        & Pick<DeputyLink, 'name' | 'URL' | 'username'>
+      )> }
+    )> }
+  )> }
 );
 
 export type WomDeputyChartFragment = (
@@ -1286,6 +1380,164 @@ export function useProceduresListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type ProceduresListQueryHookResult = ReturnType<typeof useProceduresListQuery>;
 export type ProceduresListLazyQueryHookResult = ReturnType<typeof useProceduresListLazyQuery>;
 export type ProceduresListQueryResult = Apollo.QueryResult<ProceduresListQuery, ProceduresListQueryVariables>;
+export const FinishSearchDocument = gql`
+    mutation FinishSearch($term: String!) {
+  finishSearch(term: $term) {
+    term
+  }
+}
+    `;
+export type FinishSearchMutationFn = Apollo.MutationFunction<FinishSearchMutation, FinishSearchMutationVariables>;
+
+/**
+ * __useFinishSearchMutation__
+ *
+ * To run a mutation, you first call `useFinishSearchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFinishSearchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [finishSearchMutation, { data, loading, error }] = useFinishSearchMutation({
+ *   variables: {
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useFinishSearchMutation(baseOptions?: Apollo.MutationHookOptions<FinishSearchMutation, FinishSearchMutationVariables>) {
+        return Apollo.useMutation<FinishSearchMutation, FinishSearchMutationVariables>(FinishSearchDocument, baseOptions);
+      }
+export type FinishSearchMutationHookResult = ReturnType<typeof useFinishSearchMutation>;
+export type FinishSearchMutationResult = Apollo.MutationResult<FinishSearchMutation>;
+export type FinishSearchMutationOptions = Apollo.BaseMutationOptions<FinishSearchMutation, FinishSearchMutationVariables>;
+export const MostSearchedDocument = gql`
+    query MostSearched {
+  mostSearched {
+    term
+  }
+}
+    `;
+
+/**
+ * __useMostSearchedQuery__
+ *
+ * To run a query within a React component, call `useMostSearchedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMostSearchedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMostSearchedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMostSearchedQuery(baseOptions?: Apollo.QueryHookOptions<MostSearchedQuery, MostSearchedQueryVariables>) {
+        return Apollo.useQuery<MostSearchedQuery, MostSearchedQueryVariables>(MostSearchedDocument, baseOptions);
+      }
+export function useMostSearchedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MostSearchedQuery, MostSearchedQueryVariables>) {
+          return Apollo.useLazyQuery<MostSearchedQuery, MostSearchedQueryVariables>(MostSearchedDocument, baseOptions);
+        }
+export type MostSearchedQueryHookResult = ReturnType<typeof useMostSearchedQuery>;
+export type MostSearchedLazyQueryHookResult = ReturnType<typeof useMostSearchedLazyQuery>;
+export type MostSearchedQueryResult = Apollo.QueryResult<MostSearchedQuery, MostSearchedQueryVariables>;
+export const SearchProceduresDocument = gql`
+    query SearchProcedures($term: String!) {
+  searchProceduresAutocomplete(term: $term) {
+    procedures {
+      _id
+      title
+      procedureId
+      sessionTOPHeading
+      subjectGroups
+      tags
+      abstract
+      voteDate
+      votedGovernment
+      submissionDate
+      completed
+      voted
+      type
+      voteResults {
+        yes
+        abstination
+        no
+        governmentDecision
+      }
+      communityVotes {
+        yes
+        abstination
+        no
+        total
+      }
+    }
+    autocomplete
+  }
+}
+    `;
+
+/**
+ * __useSearchProceduresQuery__
+ *
+ * To run a query within a React component, call `useSearchProceduresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchProceduresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchProceduresQuery({
+ *   variables: {
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useSearchProceduresQuery(baseOptions: Apollo.QueryHookOptions<SearchProceduresQuery, SearchProceduresQueryVariables>) {
+        return Apollo.useQuery<SearchProceduresQuery, SearchProceduresQueryVariables>(SearchProceduresDocument, baseOptions);
+      }
+export function useSearchProceduresLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchProceduresQuery, SearchProceduresQueryVariables>) {
+          return Apollo.useLazyQuery<SearchProceduresQuery, SearchProceduresQueryVariables>(SearchProceduresDocument, baseOptions);
+        }
+export type SearchProceduresQueryHookResult = ReturnType<typeof useSearchProceduresQuery>;
+export type SearchProceduresLazyQueryHookResult = ReturnType<typeof useSearchProceduresLazyQuery>;
+export type SearchProceduresQueryResult = Apollo.QueryResult<SearchProceduresQuery, SearchProceduresQueryVariables>;
+export const VoteDocument = gql`
+    mutation Vote($procedure: ID!, $selection: VoteSelection!, $constituency: String) {
+  vote(procedure: $procedure, selection: $selection, constituency: $constituency) {
+    voted
+  }
+}
+    `;
+export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
+
+/**
+ * __useVoteMutation__
+ *
+ * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteMutation, { data, loading, error }] = useVoteMutation({
+ *   variables: {
+ *      procedure: // value for 'procedure'
+ *      selection: // value for 'selection'
+ *      constituency: // value for 'constituency'
+ *   },
+ * });
+ */
+export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
+        return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, baseOptions);
+      }
+export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export const WomBundestagPieChartDocument = gql`
     query WomBundestagPieChart($procedureIds: [String!], $pageSize: Int, $offset: Int) {
   womBundestagPieChart: proceduresByIdHavingVoteResults(
@@ -1466,6 +1718,64 @@ export function useWomPartyListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type WomPartyListQueryHookResult = ReturnType<typeof useWomPartyListQuery>;
 export type WomPartyListLazyQueryHookResult = ReturnType<typeof useWomPartyListLazyQuery>;
 export type WomPartyListQueryResult = Apollo.QueryResult<WomPartyListQuery, WomPartyListQueryVariables>;
+export const GetDeputyProfileDocument = gql`
+    query GetDeputyProfile($constituency: String!, $directCandidate: Boolean) {
+  deputiesOfConstituency(
+    constituency: $constituency
+    directCandidate: $directCandidate
+  ) {
+    _id
+    name
+    imgURL
+    party
+    job
+    biography
+    totalProcedures
+    procedures {
+      decision
+      procedure {
+        procedureId
+      }
+    }
+    contact {
+      address
+      email
+      links {
+        name
+        URL
+        username
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDeputyProfileQuery__
+ *
+ * To run a query within a React component, call `useGetDeputyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeputyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeputyProfileQuery({
+ *   variables: {
+ *      constituency: // value for 'constituency'
+ *      directCandidate: // value for 'directCandidate'
+ *   },
+ * });
+ */
+export function useGetDeputyProfileQuery(baseOptions: Apollo.QueryHookOptions<GetDeputyProfileQuery, GetDeputyProfileQueryVariables>) {
+        return Apollo.useQuery<GetDeputyProfileQuery, GetDeputyProfileQueryVariables>(GetDeputyProfileDocument, baseOptions);
+      }
+export function useGetDeputyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDeputyProfileQuery, GetDeputyProfileQueryVariables>) {
+          return Apollo.useLazyQuery<GetDeputyProfileQuery, GetDeputyProfileQueryVariables>(GetDeputyProfileDocument, baseOptions);
+        }
+export type GetDeputyProfileQueryHookResult = ReturnType<typeof useGetDeputyProfileQuery>;
+export type GetDeputyProfileLazyQueryHookResult = ReturnType<typeof useGetDeputyProfileLazyQuery>;
+export type GetDeputyProfileQueryResult = Apollo.QueryResult<GetDeputyProfileQuery, GetDeputyProfileQueryVariables>;
 export const WomDeputyDocument = gql`
     query WomDeputy($constituency: String!, $directCandidate: Boolean, $procedureIds: [String!]!) {
   womDeputy: deputiesOfConstituency(
@@ -1556,22 +1866,3 @@ export function useWomConstituencyListLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type WomConstituencyListQueryHookResult = ReturnType<typeof useWomConstituencyListQuery>;
 export type WomConstituencyListLazyQueryHookResult = ReturnType<typeof useWomConstituencyListLazyQuery>;
 export type WomConstituencyListQueryResult = Apollo.QueryResult<WomConstituencyListQuery, WomConstituencyListQueryVariables>;
-
-      export interface IntrospectionResultData {
-        __schema: {
-          types: {
-            kind: string;
-            name: string;
-            possibleTypes: {
-              name: string;
-            }[];
-          }[];
-        };
-      }
-      const result: IntrospectionResultData = {
-  "__schema": {
-    "types": []
-  }
-};
-      export default result;
-    
