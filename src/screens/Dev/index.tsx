@@ -13,8 +13,18 @@ export const DevScreen: React.FC = () => {
     AsyncStorage.clear();
   };
 
+  const clearAuth = () => {
+    AsyncStorage.multiRemove(['auth_token', 'auth_refreshToken']);
+  };
+
   return (
     <Container>
+      <Button
+        onPress={clearAuth}
+        text="clear Auth"
+        textColor="white"
+        backgroundColor="blue"
+      />
       <Button
         onPress={clearAsyncStorage}
         text="clear AsyncStorage"

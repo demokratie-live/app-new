@@ -28,6 +28,9 @@ export const CommunityPieChart: React.FC<Props> = ({
   procedureId,
   selectionFull,
 }) => {
+  if (procedureId === '267762') {
+    console.log(communityVotes);
+  }
   const themeContext = useContext(ThemeContext);
   const { getLocalVoteSelection } = useContext(LocalVotesContext);
   const [dimensions] = useState<{
@@ -43,7 +46,7 @@ export const CommunityPieChart: React.FC<Props> = ({
   }, [getLocalVoteSelection, procedureId, voted]);
 
   const preparedData = useMemo<ChartEntry[]>(() => {
-    if (communityVotes || selectionFull) {
+    if (communityVotes || voteDecision) {
       return [
         {
           name: 'YES',

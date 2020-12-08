@@ -68,7 +68,7 @@ export const ProcedureDetailScreen: React.FC<Props> = ({
   }, [navigation, title]);
 
   if (!data) {
-    return <Text>…loading</Text>;
+    return <Container />;
   }
 
   const refreshing = networkStatus === NetworkStatus.refetch;

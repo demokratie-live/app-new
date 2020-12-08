@@ -49,7 +49,6 @@ export const authLinkMiddleware = setContext(async (_, { headers }) => {
 export const authLinkAfterware = new ApolloLink((operation, forward) =>
   forward(operation).map((response) => {
     const res = operation.getContext().response;
-
     // Do we have a response?
     if (res) {
       const { headers } = res;

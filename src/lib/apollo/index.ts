@@ -11,9 +11,9 @@ import { typePolicies } from './typePolicies';
 import { versionLinkMiddleware } from './Version';
 
 const httpLink: any = new HttpLink({
-  // uri: 'http://192.168.0.237:3001',
+  uri: 'http://192.168.0.237:3001',
   // uri: 'https://internal.api.democracy-app.de',
-  uri: 'https://api.democracy-app.de',
+  // uri: 'https://api.democracy-app.de',
 });
 
 const link = ApolloLink.from([
