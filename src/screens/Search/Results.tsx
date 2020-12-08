@@ -6,6 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import SearchBar from 'react-native-search-bar';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
 import {
+  CommunityVotesPieChartFragmentDoc,
+  GovernmentVotesPieChartFragmentDoc,
   Procedure,
   useFinishSearchMutation,
   useMostSearchedQuery,
@@ -14,6 +16,9 @@ import {
 import { SearchContext } from 'context/Search';
 import { ListItem } from 'components/ListItem';
 import { Segment } from 'components/Segment';
+import { GovernmentPieChart } from 'screens/ProcedureList/components/GovernmentPieChart';
+import { CommunityPieChart } from 'screens/ProcedureList/components/CommunityPieChart';
+import { filter } from 'graphql-anywhere';
 
 const isProcedureGuard = (
   searchItem: string | Procedure,
@@ -37,9 +42,9 @@ const Text = styled.Text`
 
 const Row = styled.TouchableOpacity`
   justify-content: center;
-  height: 40px;
   border-bottom-color: ${({ theme }) => theme.colors.secondaryText};
   border-bottom-width: 1px;
+  min-height: 35px;
 `;
 
 const ActivityIndicator = styled.ActivityIndicator.attrs(() => ({
@@ -118,18 +123,8 @@ export const Results: React.FC<Props> = ({ searchBarRef }) => {
         procedureId: item.procedureId,
         title: item.type || item.procedureId,
       });
-      // this.props.navigateTo({
-      //   screen: 'democracy.Detail',
-      //   title: 'Abstimmung'.toUpperCase(),
-      //   passProps: { ...item },
-      // });
     } else if (typeof item === 'string') {
       setTerm(item);
-      // this.props.addToSearchHistory({
-      //   variables: {
-      //     term: item,
-      //   },
-      // });
     }
   };
 
@@ -184,6 +179,16 @@ export const Results: React.FC<Props> = ({ searchBarRef }) => {
                     votes={
                       item.communityVotes ? item.communityVotes.total || 0 : 0
                     }
+                    renderPieCharts={[
+                      <GovernmentPieChart
+                        key={`government-piechart-${item.procedureId}`}
+                        {...filter(GovernmentVotesPieChartFragmentDoc, item)}
+                      />,
+                      <CommunityPieChart
+                        key={`community-piechart-${item.procedureId}`}
+                        {...filter(CommunityVotesPieChartFragmentDoc, item)}
+                      />,
+                    ]}
                   />
                 )}
                 {title === 'Zuletzt gesucht' && <ListText>{item}</ListText>}

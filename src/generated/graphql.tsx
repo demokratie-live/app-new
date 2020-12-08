@@ -749,14 +749,10 @@ export type SearchProceduresQuery = (
     & Pick<SearchProcedures, 'autocomplete'>
     & { procedures: Array<(
       { __typename?: 'Procedure' }
-      & Pick<Procedure, '_id' | 'title' | 'procedureId' | 'sessionTOPHeading' | 'subjectGroups' | 'tags' | 'abstract' | 'voteDate' | 'votedGovernment' | 'submissionDate' | 'completed' | 'voted' | 'type'>
-      & { voteResults?: Maybe<(
-        { __typename?: 'VoteResult' }
-        & Pick<VoteResult, 'yes' | 'abstination' | 'no' | 'governmentDecision'>
-      )>, communityVotes?: Maybe<(
-        { __typename?: 'CommunityVotes' }
-        & Pick<CommunityVotes, 'yes' | 'abstination' | 'no' | 'total'>
-      )> }
+      & Pick<Procedure, '_id' | 'procedureId'>
+      & ListItemFragment
+      & CommunityVotesPieChartFragment
+      & GovernmentVotesPieChartFragment
     )> }
   ) }
 );
@@ -1449,35 +1445,17 @@ export const SearchProceduresDocument = gql`
   searchProceduresAutocomplete(term: $term) {
     procedures {
       _id
-      title
       procedureId
-      sessionTOPHeading
-      subjectGroups
-      tags
-      abstract
-      voteDate
-      votedGovernment
-      submissionDate
-      completed
-      voted
-      type
-      voteResults {
-        yes
-        abstination
-        no
-        governmentDecision
-      }
-      communityVotes {
-        yes
-        abstination
-        no
-        total
-      }
+      ...ListItem
+      ...CommunityVotesPieChart
+      ...GovernmentVotesPieChart
     }
     autocomplete
   }
 }
-    `;
+    ${ListItemFragmentDoc}
+${CommunityVotesPieChartFragmentDoc}
+${GovernmentVotesPieChartFragmentDoc}`;
 
 /**
  * __useSearchProceduresQuery__

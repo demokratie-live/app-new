@@ -63,7 +63,7 @@ export const CommunityPieChart: React.FC<Props> = ({
     .value((d) => {
       return d.value;
     })
-    .sort(({ name }) => domain.indexOf(name));
+    .sort(({ name }) => domain.indexOf(name.toLowerCase()));
 
   const arcs = pieObj(preparedData);
 
