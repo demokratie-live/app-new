@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { ActivityIndicator, FlatList } from 'react-native';
 import { Procedure, useWomConstituencyListQuery } from 'generated/graphql';
 import { useNavigation } from '@react-navigation/native';
-import { renderItem } from 'screens/WahlOMeter/Fraktionen/renderListItem';
+import { renderItem } from './renderListItem';
 import { NetworkStatus } from '@apollo/client';
 import { ListItemSeperator } from 'components/ListItem/components/ListItemSeperator';
 import { WomConstituencyHeader } from './Header';
@@ -29,7 +29,6 @@ export const WomConstituencyList: React.FC = () => {
     fetchMore,
     refetch,
     networkStatus,
-    error,
   } = useWomConstituencyListQuery({
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -71,9 +70,9 @@ export const WomConstituencyList: React.FC = () => {
     <Wrapper>
       <List
         data={
-          (data?.womConstituencyList[0]?.procedures.map(
-            ({ procedure }) => procedure,
-          ) as Procedure[]) || []
+          ((data?.womConstituencyList[0]?.procedures.map(
+            ({ procedure, decision }) => ({ ...procedure, decision }),
+          ) as unknown) as (Procedure & { decision: string })[]) || []
         }
         renderItem={renderItem({ navigation })}
         onRefresh={refetch}

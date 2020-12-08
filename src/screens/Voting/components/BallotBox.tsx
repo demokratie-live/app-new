@@ -199,7 +199,6 @@ export const BalloutBox: React.FC<Props> = ({
                 })
                 .catch((err) => {
                   navigation.goBack();
-                  console.log('##err##err##err##', err);
                   throw err;
                 });
             } else {

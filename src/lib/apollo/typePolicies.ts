@@ -71,18 +71,6 @@ export const typePolicies: TypePolicies = {
           }
           return storage.var();
         },
-        // merge(existing, incoming, { storage, readField }) {
-        //   // if (!storage.var) {
-        //   //   storage.var = makeVar<boolean>(existing);
-        //   //   const procedureId = readField('procedureId') as string;
-        //   //   VotesLocal.getVote(procedureId).then((voted) =>
-        //   //     storage.var(!!voted || incoming),
-        //   //   );
-        //   //   storage.var(incoming);
-        //   // }
-        //   console.log('merge', incoming);
-        //   return incoming;
-        // },
       },
     },
   },

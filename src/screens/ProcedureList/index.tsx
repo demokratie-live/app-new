@@ -13,7 +13,6 @@ import {
   CommunityVotesPieChartFragmentDoc,
   GovernmentVotesPieChartFragmentDoc,
 } from 'generated/graphql';
-import { ListItem } from 'components/ListItem';
 import { filter } from 'graphql-anywhere';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BundestagTabNavigatorParamList } from 'navigation/Sidebar/Bundestag/TabNavigation';
@@ -25,6 +24,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NetworkStatus } from '@apollo/client';
 import { ListFilterContext } from 'context/ListFilter';
+import { ProcedureListItem } from './ListItem';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagTabNavigatorParamList,
@@ -86,35 +86,9 @@ export const ProcedureList: React.FC<Props> = () => {
     }
   }, [currentProcedureLength, fetchMore, hasMoreData, loading]);
 
-  const renderItem: ListRenderItem<Procedure> = useCallback(
-    ({ item }) => {
-      return (
-        <TouchableOpacity
-          key={item.procedureId}
-          onPress={() =>
-            navigation.navigate('Procedure', {
-              procedureId: item.procedureId,
-              title: item.title,
-            })
-          }>
-          <ListItem
-            {...filter(ListItemFragmentDoc, item)}
-            renderPieCharts={[
-              <GovernmentPieChart
-                key={`government-piechart-${item.procedureId}`}
-                {...filter(GovernmentVotesPieChartFragmentDoc, item)}
-              />,
-              <CommunityPieChart
-                key={`community-piechart-${item.procedureId}`}
-                {...filter(CommunityVotesPieChartFragmentDoc, item)}
-              />,
-            ]}
-          />
-        </TouchableOpacity>
-      );
-    },
-    [navigation],
-  );
+  const renderItem: ListRenderItem<Procedure> = useCallback(({ item }) => {
+    return <ProcedureListItem {...item} />;
+  }, []);
 
   const renderListFooterComponent = useCallback(() => {
     if (loading) {

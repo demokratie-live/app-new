@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { ListItem } from 'components/ListItem';
 import {
   CommunityVotesPieChartFragmentDoc,
   GovernmentVotesPieChartFragmentDoc,
@@ -6,18 +8,12 @@ import {
 } from 'generated/graphql';
 import { filter } from 'graphql-anywhere';
 import React from 'react';
-import { ListRenderItem, TouchableOpacity } from 'react-native';
-import { CommunityPieChart } from 'screens/ProcedureList/components/CommunityPieChart';
-import { GovernmentPieChart } from 'screens/ProcedureList/components/GovernmentPieChart';
-import { ListItem } from '../../../components/ListItem';
+import { TouchableOpacity } from 'react-native';
+import { CommunityPieChart } from './components/CommunityPieChart';
+import { GovernmentPieChart } from './components/GovernmentPieChart';
 
-interface Props {
-  navigation: any;
-}
-
-export const renderItem: ({
-  navigation,
-}: Props) => ListRenderItem<Procedure> = ({ navigation }) => ({ item }) => {
+export const ProcedureListItem: React.FC<Procedure> = React.memo((item) => {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       key={item.procedureId}
@@ -37,10 +33,9 @@ export const renderItem: ({
           <CommunityPieChart
             key={`community-piechart-${item.procedureId}`}
             {...filter(CommunityVotesPieChartFragmentDoc, item)}
-            selectionFull
           />,
         ]}
       />
     </TouchableOpacity>
   );
-};
+});

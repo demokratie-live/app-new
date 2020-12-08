@@ -17,7 +17,9 @@ interface Props {
 
 export const renderItem: ({
   navigation,
-}: Props) => ListRenderItem<Procedure> = ({ navigation }) => ({ item }) => {
+}: Props) => ListRenderItem<Procedure & { decision?: string }> = ({
+  navigation,
+}) => ({ item }) => {
   return (
     <TouchableOpacity
       key={item.procedureId}
@@ -33,6 +35,8 @@ export const renderItem: ({
           <GovernmentPieChart
             key={`government-piechart-${item.procedureId}`}
             {...filter(GovernmentVotesPieChartFragmentDoc, item)}
+            decision={item.decision}
+            decisionFull
           />,
           <CommunityPieChart
             key={`community-piechart-${item.procedureId}`}

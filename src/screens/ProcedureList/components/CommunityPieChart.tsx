@@ -16,7 +16,9 @@ interface ChartEntry {
   value: number;
 }
 
-interface Props extends CommunityVotesPieChartFragment {}
+interface Props extends CommunityVotesPieChartFragment {
+  selectionFull?: boolean;
+}
 
 const domain = ['yes', 'abstination', 'no'];
 
@@ -24,6 +26,7 @@ export const CommunityPieChart: React.FC<Props> = ({
   communityVotes,
   voted,
   procedureId,
+  selectionFull,
 }) => {
   const themeContext = useContext(ThemeContext);
   const { getLocalVoteSelection } = useContext(LocalVotesContext);
@@ -40,24 +43,39 @@ export const CommunityPieChart: React.FC<Props> = ({
   }, [getLocalVoteSelection, procedureId, voted]);
 
   const preparedData = useMemo<ChartEntry[]>(() => {
-    if (communityVotes) {
+    if (communityVotes || selectionFull) {
       return [
         {
           name: 'YES',
-          value: communityVotes.yes,
+          value:
+            !selectionFull && communityVotes
+              ? communityVotes.yes
+              : voteDecision === 'YES'
+              ? 1
+              : 0,
         },
         {
           name: 'ABSTINATION',
-          value: communityVotes.abstination,
+          value:
+            !selectionFull && communityVotes
+              ? communityVotes.abstination
+              : voteDecision === 'ABSTINATION'
+              ? 1
+              : 0,
         },
         {
           name: 'NO',
-          value: communityVotes.no,
+          value:
+            !selectionFull && communityVotes
+              ? communityVotes.no
+              : voteDecision === 'NO'
+              ? 1
+              : 0,
         },
       ];
     }
     return [];
-  }, [communityVotes]);
+  }, [communityVotes, selectionFull, voteDecision]);
 
   const pieObj = pie<ChartEntry>()
     .value((d) => {

@@ -15,11 +15,18 @@ interface ChartEntry {
   value: number;
 }
 
-interface Props extends GovernmentVotesPieChartFragment {}
+interface Props extends GovernmentVotesPieChartFragment {
+  decision?: string;
+  decisionFull?: boolean;
+}
 
 const domain = ['yes', 'abstination', 'no', 'notVoted'];
 
-export const GovernmentPieChart: React.FC<Props> = ({ voteResults }) => {
+export const GovernmentPieChart: React.FC<Props> = ({
+  voteResults,
+  decision,
+  decisionFull,
+}) => {
   const themeContext = useContext(ThemeContext);
   const [dimensions] = useState<{
     width: number;
@@ -31,24 +38,32 @@ export const GovernmentPieChart: React.FC<Props> = ({ voteResults }) => {
       return [
         {
           name: 'yes',
-          value: voteResults.yes,
+          value: !decisionFull ? voteResults.yes : decision === 'YES' ? 1 : 0,
         },
         {
           name: 'abstination',
-          value: voteResults.abstination,
+          value: !decisionFull
+            ? voteResults.abstination
+            : decision === 'ABSTINATION'
+            ? 1
+            : 0,
         },
         {
           name: 'no',
-          value: voteResults.no,
+          value: !decisionFull ? voteResults.no : decision === 'NO' ? 1 : 0,
         },
         {
           name: 'notVoted',
-          value: voteResults.notVoted || 0,
+          value: !decisionFull
+            ? voteResults.notVoted || 0
+            : decision === 'NOT_VOTED'
+            ? 1
+            : 0,
         },
       ];
     }
     return [];
-  }, [voteResults]);
+  }, [decision, decisionFull, voteResults]);
 
   const pieObj = pie<ChartEntry>()
     .value((d) => {
