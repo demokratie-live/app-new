@@ -7,7 +7,10 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/core';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import TabView from './TabView';
 import { VoteSelection } from 'generated/graphql';
-import { headerScreenOptions } from 'navigation/headerOptions';
+import {
+  getHeaderScreenOptions,
+  headerScreenOptions,
+} from 'navigation/headerOptions';
 import { BurgerMenuButton } from 'components/navigation/MenuButton';
 import SvgMenu from 'assets/svgs/icons/Menu';
 import { ProcedureDetailScreen } from 'screens/Procedure';
@@ -16,6 +19,7 @@ import { SidebarNavigatorParamList } from '..';
 import { RootStackParamList } from 'navigation';
 import { ConstituencyScreen } from 'screens/Settings/Constituency';
 import { OutcomePushs } from 'screens/Voting/OutcomePushs';
+import styled from 'styled-components/native';
 
 export type WahlOMeterStackParamList = {
   TabView: undefined;
@@ -37,19 +41,16 @@ type WahlOMeterNavigationProps = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>
 >;
 
+const Navigator = styled(WahlOMeterStack.Navigator).attrs(({ theme }) => ({
+  screenOptions: {
+    ...getHeaderScreenOptions(theme),
+  },
+}))``;
+
 export const WahlOMeterNavigation = () => {
   const navigation = useNavigation<WahlOMeterNavigationProps>();
   return (
-    <WahlOMeterStack.Navigator
-      screenOptions={{
-        // headerStyle: {
-        //   backgroundColor: theme.colors.background.header,
-        //   elevation: 0,
-        //   shadowOpacity: 0,
-        // },
-        headerBackTitleVisible: false,
-        headerTintColor: '#fff',
-      }}>
+    <Navigator>
       <WahlOMeterStack.Screen
         name="TabView"
         component={TabView}
@@ -91,6 +92,6 @@ export const WahlOMeterNavigation = () => {
           title: '',
         }}
       /> */}
-    </WahlOMeterStack.Navigator>
+    </Navigator>
   );
 };

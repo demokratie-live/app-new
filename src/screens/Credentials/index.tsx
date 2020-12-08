@@ -34,21 +34,21 @@ const ContactWrapper = styled.View`
   align-self: center;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 300;
+  max-width: 300px;
 `;
 
 const IconWrapper = styled.TouchableOpacity`
-  width: 65;
-  height: 65;
-  border-width: 2;
-  border-radius: 33;
+  width: 65px;
+  height: 65px;
+  border-width: 2px;
+  border-radius: 33px;
   justify-content: center;
   align-items: center;
   border-color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 const Spacer = styled.View`
-  padding-bottom: 36;
+  padding-bottom: 36px;
 `;
 
 const FoldingContent = styled.View`

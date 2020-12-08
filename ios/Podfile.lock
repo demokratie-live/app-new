@@ -72,7 +72,7 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
-  - Permission-Notifications (2.2.2):
+  - Permission-Notifications (3.0.0):
     - RNPermissions
   - RCTRequired (0.63.2)
   - RCTTypeSafety (0.63.2):
@@ -324,15 +324,15 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPushNotificationIOS (1.7.4):
+  - RNCPushNotificationIOS (1.8.0):
     - React-Core
-  - RNDeviceInfo (7.1.0):
+  - RNDeviceInfo (7.2.1):
     - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
   - RNKeychain (6.2.0):
     - React
-  - RNPermissions (2.2.2):
+  - RNPermissions (3.0.0):
     - React-Core
   - RNRate (1.2.4):
     - React
@@ -378,7 +378,7 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (~> 0.41.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
+  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -453,7 +453,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   Permission-Notifications:
-    :path: "../node_modules/react-native-permissions/ios/Notifications.podspec"
+    :path: "../node_modules/react-native-permissions/ios/Notifications"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -557,7 +557,7 @@ SPEC CHECKSUMS:
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
+  Permission-Notifications: 5c69bf2f6c1e30345af4f25e2981dc1c8dafbc22
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
   React: e1c65dd41cb9db13b99f24608e47dd595f28ca9a
@@ -587,11 +587,11 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNCPushNotificationIOS: 8fdfa22a6ecb1dfcc2316939f73335bfd6470044
-  RNDeviceInfo: 6cf87235aa11e675b93b31aa9b88a825753eea2f
+  RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
+  RNDeviceInfo: ae953cf4af2775e45597304fc9513a7931ef81ff
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
-  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNPermissions: 99dd8d4a30ff13509b949ca63cd1f69edc461775
   RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
@@ -602,6 +602,6 @@ SPEC CHECKSUMS:
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7c9886dd2e3b8e58c85fe94b1d64948ce7c33aca
+PODFILE CHECKSUM: 2ae5e19d9aac3eac2303d139a54b828147a32f57
 
 COCOAPODS: 1.10.0
