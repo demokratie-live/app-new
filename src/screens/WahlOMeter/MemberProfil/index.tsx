@@ -4,7 +4,6 @@ import ContactBox from './components/ContactBox';
 // Components
 import Chart from './Chart';
 // GraphQL
-import { ConstituencyContext } from '../../../context/Constituency';
 import { useNavigation } from '@react-navigation/core';
 import styled from 'styled-components/native';
 import { PartyLogo } from 'components/Parties';
@@ -15,6 +14,7 @@ import {
 } from 'generated/graphql';
 import { ChartLegend } from 'components/Charts/ChartLegend';
 import Folding from 'components/Folding';
+import { ConstituencyContext } from 'context/constituency';
 
 const ScrollWrapper = styled.ScrollView.attrs({
   contentContainerStyle: {

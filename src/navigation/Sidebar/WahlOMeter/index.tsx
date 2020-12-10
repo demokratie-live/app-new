@@ -17,6 +17,7 @@ import { RootStackParamList } from 'navigation';
 import { ConstituencyScreen } from 'screens/Settings/Constituency';
 import { OutcomePushs } from 'screens/Voting/OutcomePushs';
 import styled from 'styled-components/native';
+import { MemberProfil } from 'screens/WahlOMeter/MemberProfil';
 
 export type WahlOMeterStackParamList = {
   TabView: undefined;
@@ -82,13 +83,13 @@ export const WahlOMeterNavigation = () => {
         }}
       />
       <WahlOMeterStack.Screen name="OutcomePush" component={OutcomePushs} />
-      {/* <WahlOMeterStack.Screen
+      <WahlOMeterStack.Screen
         name="MemberProfil"
         component={MemberProfil}
         options={{
           title: '',
         }}
-      /> */}
+      />
     </Navigator>
   );
 };

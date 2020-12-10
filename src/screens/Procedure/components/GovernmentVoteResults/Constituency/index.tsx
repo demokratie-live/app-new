@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  DetailDecisionTextFragment,
   DetailVoteResultConstituencyFragment,
   DetailVoteResultConstituencyFragmentDoc,
 } from 'generated/graphql';
