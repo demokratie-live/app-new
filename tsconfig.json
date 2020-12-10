@@ -78,7 +78,8 @@
             "padding-vertical",
             "margin-horizontal",
             "margin-vertical",
-            "resize-mode"
+            "resize-mode",
+            "shadow-color"
           ]
         }
       }

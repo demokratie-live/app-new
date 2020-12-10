@@ -16,6 +16,7 @@ import SvgWahlOMeter from 'assets/svgs/icons/WahlOMeter';
 import { WahlOMeterNavigation } from './WahlOMeter';
 import { DevScreen } from 'screens/Dev';
 import styled from 'styled-components/native';
+import { DonateScreen } from 'screens/Donate';
 
 export type SidebarNavigatorParamList = {
   Home: undefined;
@@ -120,6 +121,15 @@ export const Sidebar: React.FC = () => {
         }}
         name={'Credentials'}
         component={CredentialsScreen}
+      />
+      <Drawer.Screen
+        options={{
+          headerShown: true,
+          drawerLabel: 'hide/Donate',
+          gestureEnabled: true,
+        }}
+        name={'Donate'}
+        component={DonateScreen}
       />
       <Drawer.Screen
         options={{
