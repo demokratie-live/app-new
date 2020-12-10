@@ -15,6 +15,7 @@ import { FilterScreen } from 'screens/Filter';
 import { ListFilterProvider } from 'context/ListFilter';
 import { SearchScreen } from 'screens/Search';
 import { OutcomePushs } from 'screens/Voting/OutcomePushs';
+import { ConstituencyScreen } from 'screens/Settings/Constituency';
 
 export type BundestagStackNavigatorParamList = {
   TabNavigator: undefined;
@@ -28,6 +29,7 @@ export type BundestagStackNavigatorParamList = {
   Search: undefined;
   MemberProfil: undefined;
   OutcomePush: { finishAction: () => void; title: string; procedureId: string };
+  Constituency: { goBack?: boolean };
 };
 
 const Stack = createStackNavigator<BundestagStackNavigatorParamList>();
@@ -63,6 +65,13 @@ export const BundestagStackNavigator: React.FC = () => {
         <Stack.Screen name="Filter" component={FilterScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
         <Stack.Screen name="OutcomePush" component={OutcomePushs} />
+        <Stack.Screen
+          name="Constituency"
+          component={ConstituencyScreen}
+          options={{
+            title: 'Wahlkreissuche',
+          }}
+        />
       </Navigator>
     </ListFilterProvider>
   );

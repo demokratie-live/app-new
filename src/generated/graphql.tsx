@@ -583,6 +583,22 @@ export type DetailGovernmentPieChartFragment = (
   )> }
 );
 
+export type DetailVoteResultConstituencyFragment = (
+  { __typename?: 'Procedure' }
+  & Pick<Procedure, '_id' | 'procedureId'>
+  & { voteResults?: Maybe<(
+    { __typename?: 'VoteResult' }
+    & { deputyVotes: Array<(
+      { __typename?: 'DeputyVote' }
+      & Pick<DeputyVote, 'decision'>
+      & { deputy: (
+        { __typename?: 'Deputy' }
+        & Pick<Deputy, '_id' | 'imgURL' | 'name' | 'party' | 'constituency'>
+      ) }
+    )> }
+  )> }
+);
+
 export type DetailDecisionBarChartFragment = (
   { __typename?: 'Procedure' }
   & Pick<Procedure, 'procedureId'>
@@ -628,6 +644,7 @@ export type DetailFractionChartFragment = (
 
 export type GovernmentVoteResultsQueryVariables = Exact<{
   procedureId: Scalars['ID'];
+  constituencies: Array<Scalars['String']>;
 }>;
 
 
@@ -640,6 +657,7 @@ export type GovernmentVoteResultsQuery = (
     & DetailFractionChartFragment
     & DetailDecisionBarChartFragment
     & DetailDecisionTextFragment
+    & DetailVoteResultConstituencyFragment
   ) }
 );
 
@@ -986,6 +1004,24 @@ export const DetailGovernmentPieChartFragmentDoc = gql`
   }
 }
     `;
+export const DetailVoteResultConstituencyFragmentDoc = gql`
+    fragment DetailVoteResultConstituency on Procedure {
+  _id
+  procedureId
+  voteResults {
+    deputyVotes(constituencies: $constituencies, directCandidate: true) {
+      deputy {
+        _id
+        imgURL
+        name
+        party
+        constituency
+      }
+      decision
+    }
+  }
+}
+    `;
 export const DetailDecisionBarChartFragmentDoc = gql`
     fragment DetailDecisionBarChart on Procedure {
   procedureId
@@ -1245,19 +1281,21 @@ export type CountryMapConstituenciesQueryHookResult = ReturnType<typeof useCount
 export type CountryMapConstituenciesLazyQueryHookResult = ReturnType<typeof useCountryMapConstituenciesLazyQuery>;
 export type CountryMapConstituenciesQueryResult = Apollo.QueryResult<CountryMapConstituenciesQuery, CountryMapConstituenciesQueryVariables>;
 export const GovernmentVoteResultsDocument = gql`
-    query GovernmentVoteResults($procedureId: ID!) {
+    query GovernmentVoteResults($procedureId: ID!, $constituencies: [String!]!) {
   procedure(id: $procedureId) {
     voted
     ...DetailGovernmentPieChart
     ...DetailFractionChart
     ...DetailDecisionBarChart
     ...DetailDecisionText
+    ...DetailVoteResultConstituency
   }
 }
     ${DetailGovernmentPieChartFragmentDoc}
 ${DetailFractionChartFragmentDoc}
 ${DetailDecisionBarChartFragmentDoc}
-${DetailDecisionTextFragmentDoc}`;
+${DetailDecisionTextFragmentDoc}
+${DetailVoteResultConstituencyFragmentDoc}`;
 
 /**
  * __useGovernmentVoteResultsQuery__
@@ -1272,6 +1310,7 @@ ${DetailDecisionTextFragmentDoc}`;
  * const { data, loading, error } = useGovernmentVoteResultsQuery({
  *   variables: {
  *      procedureId: // value for 'procedureId'
+ *      constituencies: // value for 'constituencies'
  *   },
  * });
  */

@@ -1,9 +1,10 @@
-query GovernmentVoteResults($procedureId: ID!) {
+query GovernmentVoteResults($procedureId: ID!, $constituencies: [String!]!) {
   procedure(id: $procedureId) {
     voted
     ...DetailGovernmentPieChart
     ...DetailFractionChart
     ...DetailDecisionBarChart
     ...DetailDecisionText
+    ...DetailVoteResultConstituency
   }
 }

@@ -7,10 +7,7 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/core';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import TabView from './TabView';
 import { VoteSelection } from 'generated/graphql';
-import {
-  getHeaderScreenOptions,
-  headerScreenOptions,
-} from 'navigation/headerOptions';
+import { getHeaderScreenOptions } from 'navigation/headerOptions';
 import { BurgerMenuButton } from 'components/navigation/MenuButton';
 import SvgMenu from 'assets/svgs/icons/Menu';
 import { ProcedureDetailScreen } from 'screens/Procedure';

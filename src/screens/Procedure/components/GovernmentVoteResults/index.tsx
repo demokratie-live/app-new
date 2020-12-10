@@ -4,9 +4,10 @@ import {
   DetailDecisionTextFragmentDoc,
   DetailFractionChartFragmentDoc,
   DetailGovernmentPieChartFragmentDoc,
+  DetailVoteResultConstituencyFragmentDoc,
   useGovernmentVoteResultsQuery,
 } from 'generated/graphql';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import Carousel from 'pinar';
 import { Dimensions } from 'react-native';
@@ -15,6 +16,8 @@ import { filter } from 'graphql-anywhere';
 import { DetailFractionChart } from './DetailFractionChart';
 import { DetailDecisionBarChart } from './DetailDecisionBarChart';
 import { DetailDecisionText } from './DetailDecisionText';
+import { DetailVoteResultConstituency } from './Constituency';
+import { ConstituencyContext } from 'context/constituency';
 
 const Container = styled(Carousel).attrs(({ theme }) => ({
   activeDotStyle: {
@@ -64,6 +67,7 @@ interface Props {
 }
 
 export const GovernmentVoteResults: React.FC<Props> = ({ procedureId }) => {
+  const { constituency } = useContext(ConstituencyContext);
   const [dimensions, setDimensions] = useState<{
     width: number;
     height: number;
@@ -71,6 +75,7 @@ export const GovernmentVoteResults: React.FC<Props> = ({ procedureId }) => {
   const { data } = useGovernmentVoteResultsQuery({
     variables: {
       procedureId,
+      constituencies: constituency ? [constituency] : [],
     },
   });
 
@@ -124,6 +129,15 @@ export const GovernmentVoteResults: React.FC<Props> = ({ procedureId }) => {
         <DetailDecisionText
           key="fractionChart"
           {...filter(DetailDecisionTextFragmentDoc, {
+            ...data.procedure,
+          })}
+        />,
+      );
+    } else {
+      charts.push(
+        <DetailVoteResultConstituency
+          key="constituencyVoteResult"
+          {...filter(DetailVoteResultConstituencyFragmentDoc, {
             ...data.procedure,
           })}
         />,
