@@ -12,6 +12,7 @@ import { VerificationStackParamList } from 'navigation/verification';
 
 const SAV = styled.SafeAreaView`
   flex: 1;
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const Container = styled.ScrollView.attrs(() => ({
@@ -22,7 +23,6 @@ const Container = styled.ScrollView.attrs(() => ({
   },
 }))`
   flex: 1;
-  background: #fff;
   padding-top: ${() => {
     if (DeviceInfo.getModel() === 'iPhone X') {
       return 36;
@@ -33,7 +33,7 @@ const Container = styled.ScrollView.attrs(() => ({
 `;
 
 const TextHead = styled.Text`
-  color: #000;
+  color: ${({ theme }) => theme.colors.primaryText};
   font-size: 22px;
   padding-top: 25px;
   text-align: center;

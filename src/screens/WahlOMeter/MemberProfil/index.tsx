@@ -24,7 +24,7 @@ const ScrollWrapper = styled.ScrollView.attrs({
   },
 })`
   flex-grow: 1;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const MemberImageWrapper = styled.View`
