@@ -51,14 +51,14 @@ export const CountryMap: React.FC<Props> = ({ procedureId }) => {
                 : yesNoValue > 0
                 ? yesNoValue - abstinationValue
                 : yesNoValue + abstinationValue;
-            const colorRange = scaleLinear().domain([-1, 0, 1]).range([
-              // @ts-ignore
-              theme.colors.communityVotes.voted.no,
-              // @ts-ignore
-              theme.colors.communityVotes.voted.abstination,
-              // @ts-ignore
-              theme.colors.communityVotes.voted.yes,
-            ]);
+            const colorRange = scaleLinear()
+              .domain([-1, 0, 1])
+              .range([
+                (theme.colors.communityVotes.voted.no as unknown) as number,
+                (theme.colors.communityVotes.voted
+                  .abstination as unknown) as number,
+                (theme.colors.communityVotes.voted.yes as unknown) as number,
+              ]);
             const opacityRange = scaleLinear().domain([0, 1]).range([0.3, 1]);
             return (
               <G

@@ -101,14 +101,13 @@ export const CommuntiyVoteResults: React.FC<Props> = ({
         no: 0,
       };
 
-  const colorGenerator = scaleLinear().domain([-1, 0, 1]).range([
-    // @ts-ignore
-    theme.colors.communityVotes.voted.no,
-    // @ts-ignore
-    theme.colors.communityVotes.voted.abstination,
-    // @ts-ignore
-    theme.colors.communityVotes.voted.yes,
-  ]);
+  const colorGenerator = scaleLinear()
+    .domain([-1, 0, 1])
+    .range([
+      (theme.colors.communityVotes.voted.no as unknown) as number,
+      (theme.colors.communityVotes.voted.abstination as unknown) as number,
+      (theme.colors.communityVotes.voted.yes as unknown) as number,
+    ]);
 
   const charts: any[] = [];
   if (communityVotes) {
