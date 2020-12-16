@@ -103,13 +103,13 @@
       "size" : "40x40"
     },
     {
-      "filename" : "Icon-Small-50x50@1x.png",
+      "filename" : "Icon-App-50x50@1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "50x50"
     },
     {
-      "filename" : "Icon-Small-50x50@2x.png",
+      "filename" : "Icon-App-50x50@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "50x50"
@@ -145,7 +145,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "AppStore Kopie.png",
+      "filename" : "Icon-App.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'DemocracyApp' do
+abstract_target 'App' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
@@ -13,9 +13,20 @@ target 'DemocracyApp' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
 
-  target 'DemocracyAppTests' do
-    inherit! :complete
-    # Pods for testing
+  target 'DemocracyApp' do
+    # Production-specific pods
+    target 'DemocracyAppTests' do
+      inherit! :complete
+      # Pods for testing
+    end
+  end
+
+  target 'DemocracyAppAlpha' do
+    # Alpha-specific pods
+  end
+
+  target 'DemocracyAppInternal' do
+    # Internal-specific pods
   end
 
   # Enables Flipper.

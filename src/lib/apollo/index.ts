@@ -9,11 +9,10 @@ import introspection from 'generated/possible-types';
 import { authLinkAfterware, authLinkMiddleware } from './Auth';
 import { typePolicies } from './typePolicies';
 import { versionLinkMiddleware } from './Version';
+import Config from 'react-native-config';
 
 const httpLink: any = new HttpLink({
-  // uri: 'http://192.168.0.237:3001',
-  uri: 'https://internal.api.democracy-app.de',
-  // uri: 'https://api.democracy-app.de',
+  uri: Config.API_ENDPOINT,
 });
 
 const link = ApolloLink.from([
