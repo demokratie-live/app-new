@@ -106,6 +106,8 @@ platform :ios do
       app_identifier: app_identifier
     )
 
-    delete_keychain(name: "temporary_keychain")
+    if ENV['TRAVIS']
+      delete_keychain(name: "temporary_keychain")
+    end
   end
 end
