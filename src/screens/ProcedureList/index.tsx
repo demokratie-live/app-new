@@ -1,30 +1,16 @@
 import React, { useCallback, useContext, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  ListRenderItem,
-  Text,
-} from 'react-native';
+import { ActivityIndicator, FlatList, ListRenderItem } from 'react-native';
 import styled from 'styled-components/native';
-import {
-  useProceduresListQuery,
-  ListItemFragmentDoc,
-  Procedure,
-  CommunityVotesPieChartFragmentDoc,
-  GovernmentVotesPieChartFragmentDoc,
-} from 'generated/graphql';
-import { filter } from 'graphql-anywhere';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useProceduresListQuery, Procedure } from 'generated/graphql';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { BundestagTabNavigatorParamList } from 'navigation/Sidebar/Bundestag/TabNavigation';
 import { BundestagStackNavigatorParamList } from 'navigation/Sidebar/Bundestag';
-import { CommunityPieChart } from './components/CommunityPieChart';
-import { GovernmentPieChart } from './components/GovernmentPieChart';
 import { ListItemSeperator } from 'components/ListItem/components/ListItemSeperator';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NetworkStatus } from '@apollo/client';
 import { ListFilterContext } from 'context/ListFilter';
 import { ProcedureListItem } from './ListItem';
+import { ListItemContentLoader } from 'components/ListItem/ContentLoader';
 
 type ProfileScreenRouteProp = RouteProp<
   BundestagTabNavigatorParamList,
@@ -49,7 +35,6 @@ const Container = styled(FlatList as new () => FlatList<Procedure>)`
 type Props = {};
 
 export const ProcedureList: React.FC<Props> = () => {
-  const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ProfileScreenRouteProp>();
   const [hasMoreData, setHasMoreData] = useState(true);
   const { proceduresFilter } = useContext(ListFilterContext);
@@ -102,7 +87,13 @@ export const ProcedureList: React.FC<Props> = () => {
   if (!data) {
     return (
       <LoadingContainer>
-        <Text>…Loading</Text>
+        <ListItemContentLoader />
+        <ListItemContentLoader />
+        <ListItemContentLoader />
+        <ListItemContentLoader />
+        <ListItemContentLoader />
+        <ListItemContentLoader />
+        <ListItemContentLoader />
       </LoadingContainer>
     );
   }
