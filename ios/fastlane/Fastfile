@@ -56,9 +56,9 @@ platform :ios do
         skip_confirmation: true,
       )
     else	
-      match(
-        type: "appstore"
-      )
+      # match(
+      #   type: "appstore"
+      # )
     end
   end
 
@@ -92,7 +92,7 @@ platform :ios do
     build_app(
       workspace: "DemocracyApp.xcworkspace", 
       scheme: scheme_name,
-      clean: true,
+      # clean: true,
     )
 
     # upload_to_browserstack_app_live(
