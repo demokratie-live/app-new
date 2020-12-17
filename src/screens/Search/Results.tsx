@@ -31,7 +31,7 @@ const isProcedureGuard = (
 
 const ListText = styled.Text`
   font-size: 18px;
-  color: grey;
+  color: ${({ theme }) => theme.colors.primaryText};
   padding-left: 8px;
 `;
 
@@ -48,6 +48,7 @@ const Row = styled.TouchableOpacity`
 const ItemSeperator = styled.View`
   height: 1px;
   background-color: ${({ theme }) => theme.colors.secondaryText};
+  opacity: 0.5;
 `;
 
 const ActivityIndicator = styled.ActivityIndicator.attrs(() => ({
