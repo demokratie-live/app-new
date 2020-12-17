@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import SearchBar from 'react-native-search-bar';
 import { debounce } from 'lodash';
 import { Platform } from 'react-native';
-import styled from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import { SearchContext } from 'context/Search';
 import { useFinishSearchMutation } from 'generated/graphql';
 
@@ -15,6 +15,7 @@ interface Props {
 }
 
 export const SearchHeader: React.FC<Props> = ({ searchBarRef }) => {
+  const theme = useTheme();
   const { setTerm, term, addToHistory } = useContext(SearchContext);
   const [executeFinishSearch] = useFinishSearchMutation();
 
@@ -44,7 +45,7 @@ export const SearchHeader: React.FC<Props> = ({ searchBarRef }) => {
         onSearchButtonPress={finishSearch}
         showsCancelButton={false}
         showsCancelButtonWhileEditing={false}
-        textFieldBackgroundColor="rgba(255,255,255,.5)"
+        textFieldBackgroundColor={theme.backgroundColor}
         hideBackground
       />
     </Wrapper>

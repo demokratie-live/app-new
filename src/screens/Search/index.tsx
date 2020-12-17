@@ -12,7 +12,7 @@ const Wrapper = styled.KeyboardAvoidingView.attrs({
   keyboardShouldPersistTaps: 'never',
 })`
   flex: 1;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 export const SearchScreen: React.FC = () => {

@@ -42,9 +42,12 @@ const Text = styled.Text`
 
 const Row = styled.TouchableOpacity`
   justify-content: center;
-  border-bottom-color: ${({ theme }) => theme.colors.secondaryText};
-  border-bottom-width: 1px;
   min-height: 35px;
+`;
+
+const ItemSeperator = styled.View`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
 const ActivityIndicator = styled.ActivityIndicator.attrs(() => ({
@@ -209,6 +212,7 @@ export const Results: React.FC<Props> = ({ searchBarRef }) => {
             }
             return null;
           }}
+          ItemSeparatorComponent={() => <ItemSeperator />}
         />
       )}
     </>
